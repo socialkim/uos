@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>시립대 4회차 프롬프트 데스크</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+
+:root{
+  --ground:#FFFFFF;
+  --surface:#F7F6F5;
+  --surface-2:#F0EEEC;
+  --ink:#181818;
+  --ink-2:#3A3735;
+  --muted:#6E6A68;
+  --faint:#A5A09D;
+  --line:#E6E3E1;
+  --line-strong:#D6D2CF;
+  --accent:#FF5A4F;
+  --accent-ink:#B8352B;
+  --accent-wash:#FFF1EF;
+  --accent-line:#FFD6D1;
+  --panel:#1C1B1A;
+  --panel-ink:#F1EEEC;
+  --panel-line:#3A3735;
+  --ok:#2E7D5B;
+  --shadow:0 1px 2px rgba(24,24,24,.05), 0 8px 24px -12px rgba(24,24,24,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#151413;
+    --surface:#1E1C1B;
+    --surface-2:#252221;
+    --ink:#EDEAE8;
+    --ink-2:#D3CECB;
+    --muted:#9A9491;
+    --faint:#6E6865;
+    --line:#2E2B29;
+    --line-strong:#3D3936;
+    --accent:#FF6B60;
+    --accent-ink:#FF9086;
+    --accent-wash:#2A1B19;
+    --accent-line:#4A2C28;
+    --panel:#0E0D0D;
+    --panel-ink:#EDEAE8;
+    --panel-line:#2B2827;
+    --ok:#5FBF95;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#151413;
+  --surface:#1E1C1B;
+  --surface-2:#252221;
+  --ink:#EDEAE8;
+  --ink-2:#D3CECB;
+  --muted:#9A9491;
+  --faint:#6E6865;
+  --line:#2E2B29;
+  --line-strong:#3D3936;
+  --accent:#FF6B60;
+  --accent-ink:#FF9086;
+  --accent-wash:#2A1B19;
+  --accent-line:#4A2C28;
+  --panel:#0E0D0D;
+  --panel-ink:#EDEAE8;
+  --panel-line:#2B2827;
+  --ok:#5FBF95;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans KR","Malgun Gothic",system-ui,sans-serif;
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:"IBM Plex Mono","Consolas",monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ── top bar ─────────────────────────────── */
+.bar{position:sticky;top:0;z-index:50;background:var(--ground);border-bottom:1px solid var(--line)}
+.bar-in{display:flex;align-items:center;gap:16px;height:56px}
+.brand{display:flex;align-items:baseline;gap:10px;flex-shrink:0}
+.brand b{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.brand span{font-size:11px;color:var(--faint);letter-spacing:.08em}
+.search{flex:1;min-width:120px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:0 12px;height:34px}
+.search input{flex:1;min-width:0;background:none;border:none;outline:none;color:var(--ink);font:inherit;font-size:13.5px}
+.search input::placeholder{color:var(--faint)}
+.search svg{flex-shrink:0;color:var(--faint)}
+.tog{width:34px;height:34px;border:1px solid var(--line);border-radius:7px;display:grid;place-items:center;color:var(--muted);flex-shrink:0}
+.tog:hover{color:var(--ink);border-color:var(--line-strong)}
+.filters{display:flex;gap:6px;overflow-x:auto;padding:0 0 12px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:5px 12px;border:1px solid var(--line);border-radius:99px;font-size:12.5px;color:var(--muted);white-space:nowrap;transition:.12s}
+.chip:hover{border-color:var(--line-strong);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.chip .n{font-size:11px;opacity:.55;margin-left:5px;font-variant-numeric:tabular-nums}
+
+/* ── hero ─────────────────────────────── */
+.hero{padding:44px 0 30px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent-ink);font-weight:600;text-transform:uppercase}
+.hero h1{font-size:clamp(26px,4vw,38px);margin:12px 0 10px;line-height:1.22}
+.hero .sub{color:var(--muted);font-size:15px;max-width:62ch}
+.stats{display:flex;flex-wrap:wrap;gap:0;margin-top:24px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{flex:1 1 130px;padding:14px 18px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat b{display:block;font-size:26px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:11.5px;color:var(--muted)}
+
+/* ── sections ─────────────────────────── */
+section{padding:44px 0}
+section + section{border-top:1px solid var(--line)}
+.shead{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.shead h2{font-size:20px}
+.shead .tag{font-size:11px;letter-spacing:.12em;color:var(--faint)}
+.slead{color:var(--muted);font-size:13.5px;margin-bottom:24px;max-width:70ch}
+
+/* ── flow ─────────────────────────────── */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.flow > div{background:var(--ground);padding:18px 16px 20px}
+.flow .num{font-size:11px;letter-spacing:.1em;color:var(--accent-ink);font-weight:600}
+.flow h3{font-size:14.5px;margin:8px 0 8px}
+.flow ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.flow li{font-size:12px;color:var(--muted);padding-left:9px;position:relative}
+.flow li::before{content:"";position:absolute;left:0;top:9px;width:3px;height:3px;border-radius:50%;background:var(--faint)}
+.flow .min{margin-top:10px;font-size:11px;color:var(--faint)}
+
+/* ── checklist ────────────────────────── */
+.checks{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.check{display:flex;align-items:flex-start;gap:13px;background:var(--ground);padding:14px 18px;text-align:left;width:100%;transition:.12s}
+.check:hover{background:var(--surface)}
+.box{flex-shrink:0;width:19px;height:19px;border:1.5px solid var(--line-strong);border-radius:5px;margin-top:2px;display:grid;place-items:center;transition:.12s}
+.box svg{opacity:0;color:var(--ground);width:11px;height:11px}
+.check[aria-pressed="true"] .box{background:var(--ok);border-color:var(--ok)}
+.check[aria-pressed="true"] .box svg{opacity:1}
+.check[aria-pressed="true"] .ctitle{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--line-strong)}
+.ctitle{display:block;font-size:14px;font-weight:500;transition:.12s}
+.cdesc{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.cdesc a{color:var(--accent-ink);text-underline-offset:2px}
+
+/* ── prompt cards ─────────────────────── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;align-items:start}
+.card{border:1px solid var(--line);border-radius:11px;background:var(--ground);overflow:hidden;display:flex;flex-direction:column}
+.card.warn{border-color:var(--accent-line);background:var(--accent-wash)}
+.chead{padding:15px 17px 12px;display:flex;flex-direction:column;gap:7px}
+.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sref{font-size:10.5px;letter-spacing:.06em;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.badge{font-size:10.5px;padding:1px 7px;border-radius:99px;background:var(--surface-2);color:var(--muted)}
+.badge.hot{background:var(--accent-wash);color:var(--accent-ink);border:1px solid var(--accent-line)}
+.card h3{font-size:15px;line-height:1.35}
+.cbody{padding:0 17px 15px;display:flex;flex-direction:column;gap:9px;flex:1}
+.note{padding:11px 17px 14px;border-top:1px dashed var(--line);font-size:12px;color:var(--muted);line-height:1.5}
+.note b{color:var(--ink-2);font-weight:600}
+
+.pblock{position:relative;background:var(--panel);border:1px solid var(--panel-line);border-radius:8px;padding:13px 44px 13px 15px;color:var(--panel-ink);font-size:13.5px;line-height:1.62;white-space:pre-wrap;word-break:break-word}
+.pblock.op{font-family:"IBM Plex Mono","Consolas",monospace;font-size:13px}
+.pblock .lbl{display:block;font-size:10.5px;letter-spacing:.06em;color:var(--faint);margin-bottom:5px;font-family:"IBM Plex Mono",monospace}
+.cp{position:absolute;top:9px;right:9px;width:26px;height:26px;border-radius:6px;border:1px solid var(--panel-line);display:grid;place-items:center;color:#8E8885;transition:.12s}
+.cp:hover{color:var(--panel-ink);border-color:#5A5451;background:rgba(255,255,255,.05)}
+.cp.done{color:var(--ok);border-color:var(--ok)}
+.cp svg{width:13px;height:13px}
+
+.steps{display:flex;flex-direction:column;gap:9px}
+.step{display:flex;gap:11px;align-items:flex-start}
+.sn{flex-shrink:0;width:21px;height:21px;border-radius:50%;background:var(--surface-2);color:var(--muted);font-size:11px;font-weight:600;display:grid;place-items:center;margin-top:9px;font-family:"IBM Plex Mono",monospace}
+.step.reset .sn{background:var(--accent);color:#fff}
+.step > .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.stag{font-size:11px;color:var(--faint)}
+.step.reset .stag{color:var(--accent-ink);font-weight:500}
+
+.swap{display:flex;flex-direction:column;gap:5px;padding:11px 0;border-bottom:1px solid var(--line)}
+.swap:last-child{border-bottom:none;padding-bottom:0}
+.bad{font-size:12.5px;color:var(--faint);text-decoration:line-through;text-decoration-color:var(--line-strong);padding-left:15px;position:relative}
+.bad::before{content:"×";position:absolute;left:0;top:-1px;color:var(--faint);text-decoration:none;font-size:13px}
+.swap .pblock{font-size:13px;padding:11px 42px 11px 13px}
+.eff{font-size:11.5px;color:var(--muted);padding-left:2px}
+
+/* ── builder ──────────────────────────── */
+.bwrap{border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.bpick{padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px;background:var(--surface)}
+.bcol h4{margin:0 0 9px;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.bcol h4 em{font-style:normal;font-family:"IBM Plex Mono",monospace;color:var(--accent-ink);margin-right:5px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{padding:4px 11px;border:1px solid var(--line-strong);border-radius:99px;font-size:12.5px;background:var(--ground);color:var(--ink-2);transition:.12s}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.bout{padding:18px;border-top:1px solid var(--line);background:var(--ground)}
+.bout .pblock{min-height:76px}
+.bhint{font-size:12px;color:var(--muted);margin-top:10px}
+
+/* ── padlet ───────────────────────────── */
+.pads{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.pad{border:1px solid var(--line);border-radius:11px;padding:18px}
+.pad .no{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent-ink);font-weight:600}
+.pad h3{font-size:15px;margin:7px 0 9px}
+.pad ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.pad li{font-size:12.5px;color:var(--muted);padding-left:14px;position:relative}
+.pad li::before{content:"—";position:absolute;left:0;color:var(--faint)}
+.pad .when{margin-top:12px;font-size:11.5px;color:var(--faint);font-family:"IBM Plex Mono",monospace}
+
+/* ── misc ─────────────────────────────── */
+.empty{padding:56px 0;text-align:center;color:var(--muted);font-size:14px}
+footer{border-top:1px solid var(--line);padding:30px 0 46px;color:var(--faint);font-size:12px;display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);background:var(--ink);color:var(--ground);padding:9px 18px;border-radius:99px;font-size:13px;opacity:0;pointer-events:none;transition:.18s;z-index:99;box-shadow:var(--shadow)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:860px){
+  .flow{grid-template-columns:repeat(2,1fr)}
+  .stat{flex-basis:50%}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .flow{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .brand span{display:none}
+}
+
+
+/* ── 3주차 추가 ───────────────────────── */
+.flow .min b{color:var(--ink-2);font-weight:600}
+.gone{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:18px}
+.gone > div{background:var(--ground);padding:12px 14px}
+.gone .d{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--faint)}
+.gone .n{font-size:13.5px;font-weight:600;margin:3px 0 2px}
+.gone .w{font-size:12px;color:var(--muted)}
+.gone .k{display:inline-block;font-size:10.5px;padding:0 6px;border-radius:99px;margin-left:4px;vertical-align:1px}
+.k.end{background:var(--accent-wash);color:var(--accent-ink);border:1px solid var(--accent-line)}
+.k.ren{background:var(--surface-2);color:var(--muted)}
+
+/* picker */
+.pick{border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.pick-in{padding:18px;background:var(--surface);display:grid;grid-template-columns:1.3fr 1fr;gap:22px}
+@media (max-width:760px){.pick-in{grid-template-columns:1fr}}
+.pick h4{margin:0 0 9px;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.pick h4 em{font-style:normal;font-family:"IBM Plex Mono",monospace;color:var(--accent-ink);margin-right:5px}
+.pick-out{padding:18px;border-top:1px solid var(--line);background:var(--ground)}
+.recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.rec{border:1px solid var(--line);border-radius:10px;padding:13px 15px;display:flex;flex-direction:column;gap:6px}
+.rec.top{border-color:var(--accent-line);background:var(--accent-wash)}
+.rec .rk{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent-ink);font-weight:600}
+.rec h5{margin:0;font-size:15px}
+.rec p{font-size:12.5px;color:var(--muted);line-height:1.5}
+.rec .why{color:var(--ink-2)}
+.rec a{font-size:12px;color:var(--accent-ink);text-underline-offset:2px}
+.rec .warn{color:var(--accent-ink)}
+.phint{font-size:12px;color:var(--muted);margin-top:12px}
+
+/* tool cards */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;align-items:start}
+.tool{border:1px solid var(--line);border-radius:11px;padding:15px 17px;display:flex;flex-direction:column;gap:8px;background:var(--ground)}
+.tool .top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.tool h3{font-size:16px}
+.tool .by{font-size:11.5px;color:var(--faint)}
+.tool dl{margin:0;display:grid;grid-template-columns:62px 1fr;gap:4px 10px;font-size:12.5px;line-height:1.5}
+.tool dt{color:var(--faint)}
+.tool dd{margin:0;color:var(--ink-2)}
+.tool dd.paid{color:var(--muted)}
+.tool dd.caution{color:var(--accent-ink)}
+.tool .go{font-size:12.5px;color:var(--accent-ink);text-underline-offset:2px;font-family:"IBM Plex Mono",monospace;word-break:break-all}
+.lvl{font-size:10.5px;padding:1px 7px;border-radius:99px;white-space:nowrap}
+.lvl.free{background:#E6F4EC;color:#2E7D5B}
+.lvl.credit{background:#FFF4DC;color:#8A5A00}
+.lvl.paid{background:var(--surface-2);color:var(--muted)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lvl.free{background:#16301F;color:#5FBF95}:root:not([data-theme="light"]) .lvl.credit{background:#33280F;color:#E0B04F}}
+:root[data-theme="dark"] .lvl.free{background:#16301F;color:#5FBF95}
+:root[data-theme="dark"] .lvl.credit{background:#33280F;color:#E0B04F}
+.tfil{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+
+/* record tables */
+.rec-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table.rt{width:100%;border-collapse:collapse;font-size:12.5px;min-width:520px}
+.rt th{background:var(--surface);color:var(--muted);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);font-size:11.5px}
+.rt td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.rt tr:last-child td{border-bottom:none}
+.rt td.c{text-align:center;width:74px}
+.mark{width:44px;height:28px;border:1px solid var(--line-strong);border-radius:6px;font-size:15px;font-weight:600;background:var(--ground)}
+.mark:hover{border-color:var(--accent)}
+.rt input{width:100%;min-width:60px;border:1px solid var(--line);border-radius:5px;padding:5px 7px;background:var(--ground);color:var(--ink);font:inherit;font-size:12.5px}
+.rt input:focus{outline:none;border-color:var(--accent)}
+.rbar{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:8px;flex-wrap:wrap}
+.btn{padding:6px 12px;border:1px solid var(--line-strong);border-radius:7px;font-size:12.5px;background:var(--ground)}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.btn.pri:hover{color:var(--ground);opacity:.88}
+details.ans{font-size:12.5px;color:var(--muted);border:1px dashed var(--line-strong);border-radius:8px;padding:8px 12px}
+details.ans summary{cursor:pointer;color:var(--ink-2);font-weight:500}
+details.ans p{margin-top:6px;line-height:1.6}
+
+/* stack builder */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.slot{border:1px solid var(--line);border-radius:10px;padding:13px 14px}
+.slot h4{margin:0 0 8px;font-size:12.5px;color:var(--muted);font-weight:600}
+.slot select,.slot input{width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:7px 8px;background:var(--ground);color:var(--ink);font:inherit;font-size:13px}
+.slot input{margin-top:7px}
+.padlink{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;padding:8px 14px;border-radius:8px;background:var(--accent-wash);border:1px solid var(--accent-line);color:var(--accent-ink);text-decoration:none}
+
+.card.wide{grid-column:1/-1}
+.card.wide .rt td:first-child{min-width:220px}
+
+/* ── 필터 구분 (프롬프트 = 검정 / 도구 = 코랄) ── */
+.flab{font-size:10.5px;letter-spacing:.1em;color:var(--faint);align-self:center;white-space:nowrap;padding-right:2px;text-transform:uppercase}
+.filters .flab{padding-bottom:0;align-self:center}
+.tfil{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.fchips{display:flex;gap:6px;flex-wrap:wrap}
+.chip[data-tf][aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.tfil .chip[data-tf]{border-color:var(--accent-line)}
+.tfil .chip[data-tf]:hover{border-color:var(--accent);color:var(--accent-ink)}
+.tfil .chip[data-tf][aria-pressed="true"]:hover{color:#fff}
+
+@media (max-width:620px){.lx{display:none}}
+
+/* ── 4회차 추가 ───────────────────────── */
+.flow .min b{color:var(--ink-2);font-weight:600}
+.pblock.data{max-height:260px;overflow:auto}
+.spec{border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.spec-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:14px 18px;background:var(--surface);border-bottom:1px solid var(--line)}
+.spec-top .lab{font-size:12px;color:var(--muted);font-weight:600;margin-right:4px}
+.spec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line)}
+@media (max-width:760px){.spec-grid{grid-template-columns:1fr}}
+.fld{background:var(--ground);padding:14px 18px 16px;display:flex;flex-direction:column;gap:6px}
+.fld .fh{display:flex;align-items:baseline;gap:8px}
+.fld .fh b{font-size:14px}
+.fld .fh em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent-ink);font-weight:600}
+.fld .fh span{font-size:11.5px;color:var(--faint)}
+.fld textarea,.abaf input,.abaf textarea{width:100%;min-height:74px;resize:vertical;border:1px solid var(--line-strong);border-radius:7px;padding:9px 11px;background:var(--ground);color:var(--ink);font:inherit;font-size:13.5px;line-height:1.55}
+.fld textarea:focus,.abaf input:focus,.abaf textarea:focus{outline:none;border-color:var(--accent)}
+.fld.empty textarea{border-style:dashed}
+.spec-out{padding:18px;border-top:1px solid var(--line);background:var(--ground);display:flex;flex-direction:column;gap:12px}
+.miss{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.miss .mk{font-size:11.5px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.miss .mk.on{background:#E6F4EC;border-color:#CBE8D6;color:#2E7D5B}
+.miss .mk.off{background:var(--accent-wash);border-color:var(--accent-line);color:var(--accent-ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .miss .mk.on{background:#16301F;border-color:#24503A;color:#5FBF95}}
+:root[data-theme="dark"] .miss .mk.on{background:#16301F;border-color:#24503A;color:#5FBF95}
+.miss .mt{font-size:12px;color:var(--muted);margin-left:4px}
+.spec-out .pblock{min-height:90px;max-height:420px;overflow:auto}
+.abaf{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.abaf label{font-size:12px;font-weight:600;color:var(--muted)}
+.abaf input{min-height:0}
+.terms{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.term{border:1px solid var(--line);border-radius:10px;padding:13px 15px;text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--ground);transition:.12s;min-height:86px}
+.term:hover{border-color:var(--line-strong)}
+.term b{font-size:14.5px}
+.term .df{font-size:12.5px;color:var(--muted);line-height:1.55}
+.term[aria-expanded="false"] .df{color:transparent;background:var(--surface-2);border-radius:4px;user-select:none}
+.term[aria-expanded="true"]{border-color:var(--accent-line);background:var(--accent-wash)}
+.term .tg{font-size:10.5px;font-family:"IBM Plex Mono",monospace;color:var(--faint)}
+.tbar{display:flex;gap:8px;justify-content:flex-end;margin-bottom:12px}
+.cmp td .mark{min-width:44px}
+/* ── 더 공부하기 ── */
+.dl td:first-child{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--accent-ink);white-space:nowrap}
+.dl td:nth-child(3){font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2)}
+.dl td{vertical-align:top;line-height:1.55}
+.dl table.rt{min-width:680px;font-size:13px}
+.mdintro{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-bottom:16px}
+.mdintro div{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:14px 16px;font-size:13.5px;line-height:1.65;color:var(--ink-2)}
+.mdintro b:first-child{display:block;color:var(--ink);font-size:14.5px;margin-bottom:4px}
+.mdintro code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--surface);padding:1px 5px;border-radius:4px;color:var(--accent-ink)}
+.mech{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+.mech div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6;color:var(--ink-2)}
+.mech b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:4px}
+.reads{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.rgrp{border:1px solid var(--line);border-radius:11px;padding:16px 18px}
+.rgrp h3{font-size:14px;margin:0 0 10px}
+.rgrp ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.rgrp li{font-size:13px;line-height:1.5}
+.rgrp li a{color:var(--accent-ink);text-underline-offset:2px;font-weight:500}
+.rgrp li .who{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--faint);display:block}
+.rgrp li .why{color:var(--muted);font-size:12px;display:block}
+
+.terms.rev .term[aria-expanded="false"] .df{color:var(--muted);background:none;user-select:auto}
+.terms.rev .term[aria-expanded="false"] b{color:transparent;background:var(--surface-2);border-radius:4px;user-select:none}
+
+.cmp input.one{width:100%}
+
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="wrap">
+    <div class="bar-in">
+      <div class="brand"><b>프롬프트 데스크</b><span class="mono">2026.10.02 · 4회차</span></div>
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
+        <input id="q" type="search" placeholder="실습 프롬프트 검색 (예: 퓨샷, 요구사항, 자소서)" autocomplete="off">
+      </label>
+      <button class="tog" id="tt" title="밝기 전환" aria-label="밝기 전환">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8 5.6 5.6 0 1 0 13.2 9.6z"/></svg>
+      </button>
+    </div>
+    <div class="filters" id="fl"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">AI실무활용과 스마트비즈니스 · 4회차</div>
+    <h1>프롬프트 엔지니어링 기초<br>주문에서 명세로</h1>
+    <p class="sub">오늘은 AI에게 '주문' 대신 '명세서'를 쓰는 법, 그리고 명세를 다 못 채우겠을 때 AI가 먼저 묻게 하는 법을 익힙니다. 모든 실습은 ChatGPT 무료 계정과 <b>임시 채팅</b>으로 됩니다. 파일은 올리지 않고 복사해서 붙여넣습니다.</p>
+    <div class="stats">
+      <div class="stat"><b id="st1">0</b><span>복사할 프롬프트</span></div>
+      <div class="stat"><b>2</b><span>조립기 · 생성기</span></div>
+      <div class="stat"><b>3</b><span>패들릿 업로드</span></div>
+      <div class="stat"><b>150<span style="font-size:14px">분</span></b><span>2·3·4교시 · 33-B202</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section id="s-check">
+    <div class="shead"><h2>시작 전에 확인할 것</h2><span class="tag mono">BEFORE WE START</span></div>
+    <p class="slead">오늘은 비교 실험이 많습니다. 다섯 개를 먼저 걷어내고 시작합니다. 눌러서 체크할 수 있습니다.</p>
+    <div class="checks" id="ck"></div>
+  </section>
+
+  <section id="s-flow">
+    <div class="shead"><h2>오늘의 흐름</h2><span class="tag mono">150 MIN</span></div>
+    <p class="slead">2·3주차에는 ChatGPT를 내게 맞추고 도구를 골랐습니다. 오늘은 같은 도구에서 더 나은 답을 끌어내는 '질문 설계'를 합니다.</p>
+    <div class="flow" id="fw"></div>
+  </section>
+
+  <section id="s-spec">
+    <div class="shead"><h2>명세 6칸 조립기</h2><span class="tag mono">SLIDE 24 · 40</span></div>
+    <p class="slead">칸을 채우면 아래에 프롬프트가 조립됩니다. 다 채울 필요는 없지만, <b>결과가 아쉬우면 빨간 칸부터</b> 채우세요. 위의 예시 버튼으로 시작해도 됩니다. 조립된 프롬프트는 복사해서 새 임시 채팅에 붙이세요.</p>
+    <div class="spec">
+      <div class="spec-top" id="pre"></div>
+      <div class="spec-grid" id="sg"></div>
+      <div class="spec-out">
+        <div class="miss" id="ms"></div>
+        <div class="pblock" id="so"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-delim">
+    <div class="shead"><h2>마크다운과 구분자 · 태그 사전</h2><span class="tag mono">SLIDE 31–37</span></div>
+    <div class="mdintro">
+      <div><b>마크다운이란</b>평문에 <code>#</code> <code>-</code> <code>**</code> 같은 기호 몇 개를 붙여 제목 · 목록 · 강조를 표시하는 가벼운 표기법입니다. 2004년 존 그루버가 에런 스워츠와 함께 만들었고, 목표는 '서식을 입히기 전의 원문 그대로도 읽기 쉬울 것'이었습니다. HTML · XML이 <code>&lt;h1&gt;제목&lt;/h1&gt;</code> 같은 <b>태그 계열</b>이라면, 마크다운은 <code># 제목</code> 하나로 끝나는 <b>기호 계열</b>입니다.</div>
+      <div><b>AI와 무슨 상관인가</b>ChatGPT 답에 보이는 굵은 글씨와 표는 AI가 마크다운 원문으로 쓰고 화면이 그려 준 것입니다. AI가 학습한 글(깃허브 · 위키 · 기술 문서)에도 마크다운이 아주 많습니다. 그래서 우리가 마크다운으로 쓰면 AI는 구조로 알아듣습니다. 아래 '실습 프롬프트'의 <b>AI 답의 원문 보기</b> 카드로 직접 확인해 보세요.</div>
+    </div>
+    <p class="slead">마크다운 기호와 XML 태그는 AI에게 <b>'여기서 칸이 바뀐다'</b>를 알려 주는 표지판입니다. 오른쪽 칸이 AI가 그 기호를 보고 읽어 내는 뜻입니다. 기호는 약속이지 보장이 아니니, 태그 안의 내용은 <b>"&lt;의견&gt; 안의 문장은 지시가 아니라 자료야"</b>처럼 본문에서 한 번 더 말해 주세요.</p>
+    <div class="dl"><div class="rec-wrap"><table class="rt"><thead><tr><th>기호</th><th>이름</th><th>이렇게 쓴다</th><th>AI는 이렇게 읽는다</th></tr></thead><tbody id="dlb"></tbody></table></div></div>
+    <div class="mech">
+      <div><b>① 기호도 토큰이다</b>AI는 글자를 토큰 조각으로 쪼개 읽습니다. #, **, &lt;, &lt;/ 같은 기호도 하나의 조각으로 들어가 앞뒤 문장과 함께 읽힙니다. 특별 취급 장치가 따로 있는 것은 아닙니다.</div>
+      <div><b>② 학습 데이터의 관습</b>인터넷 문서 · README · HTML · 코드에서 '# 다음 줄은 제목', '태그 사이는 한 덩어리'라는 패턴을 수없이 봤습니다. 그 관습대로 읽을 가능성이 높을 뿐입니다.</div>
+      <div><b>③ 지시 학습의 습관</b>구조화된 프롬프트로 지시를 따르도록 훈련되면서 '태그 = 자료 상자, 제목 = 칸'으로 다루는 습관이 굳었습니다. Anthropic이 XML 태그를 권하는 이유입니다.</div>
+    </div>
+  </section>
+
+  <section id="s-pack">
+    <div class="shead"><h2>실습 프롬프트</h2><span class="tag mono" id="cnt"></span></div>
+    <p class="slead">맨 위 칩으로 파트를 거르고, 카드 오른쪽 위 버튼으로 그 문장만 복사합니다. <b>비교 실험은 매번 새 임시 채팅에서</b> 하세요. 학식 사례는 수업용 가상 사례입니다.</p>
+    <div id="pk"></div>
+    <div class="empty" id="mt" hidden>검색 결과가 없습니다. 다른 낱말로 찾아보세요.</div>
+  </section>
+
+  <section id="s-aba">
+    <div class="shead"><h2>Ask Before Answer 생성기</h2><span class="tag mono">SLIDE 55 · 56 · 58</span></div>
+    <p class="slead">하고 싶은 일을 적고 손잡이 세 개(개수 · 방식 · 마무리)를 고르면 ABA 프롬프트가 만들어집니다. 결과가 '나'에게 달린 일(자소서, 내 과제)은 객관식 + 요약 확인을, 급한 일은 가정 명시형을 추천합니다.</p>
+    <div class="bwrap">
+      <div class="bpick" style="grid-template-columns:1fr">
+        <div class="abaf"><label for="at">하고 싶은 일</label><input id="at" type="text" placeholder="예: IT 컨설팅 회사 자기소개서의 지원 동기 문항을 쓰려고 해"></div>
+        <div class="abaf"><label for="ar">받고 싶은 결과물 (선택)</label><input id="ar" type="text" placeholder="예: 600자 이내, 두 문단"></div>
+      </div>
+      <div class="bpick" id="ap"></div>
+      <div class="bout">
+        <div class="pblock" id="ao"></div>
+        <p class="bhint">AI가 질문하면 생각나는 대로 답하세요. 모르면 "모르겠어, 네가 가정해줘"라고 해도 됩니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-terms">
+    <div class="shead"><h2>시험에 나오는 개념</h2><span class="tag mono">SLIDE 61 · 중간고사 10.23</span></div>
+    <p class="slead">용어만 보고 한 줄 정의를 말해 본 다음, 카드를 눌러 확인하세요. 시험처럼 <b>정의를 보고 용어를 고르는</b> 연습은 '정의 보고 용어 맞히기'를 누르세요. 다음 시간(10.16)에 심화 개념을 더해 한 번 더 정리합니다.</p>
+    <div class="tbar"><button class="btn" id="tmode">정의 보고 용어 맞히기</button><button class="btn" id="tall">모두 펼치기</button></div>
+    <div class="terms" id="tm"></div>
+  </section>
+
+  <section id="s-read">
+    <div class="shead"><h2>더 공부하기</h2><span class="tag mono">부록 · SLIDE 64–66</span></div>
+    <p class="slead">오늘 강의에 나온 개념과 기법의 원 출처입니다. 대부분 무료로 읽을 수 있습니다. 영어가 부담되면 링크를 ChatGPT에 주고 <b>명세 6칸</b>으로 요약을 시켜 보세요 — 목표: 시험 대비 · 형식: 세 줄 + 핵심 용어 · 기준: 원문 문장 인용.</p>
+    <div class="reads">
+      <div class="rgrp"><h3>개념 · 역사</h3><ul>
+        <li><span class="who">Brown 외 2020</span><a href="https://arxiv.org/abs/2005.14165" target="_blank" rel="noopener">Language Models are Few-Shot Learners (GPT-3)</a><span class="why">In-Context Learning의 출발</span></li>
+        <li><span class="who">Liu 외 2021·2023</span><a href="https://arxiv.org/abs/2107.13586" target="_blank" rel="noopener">Pre-train, Prompt, and Predict</a><span class="why">프롬프트를 NLP의 네 번째 패러다임으로 정리</span></li>
+        <li><span class="who">Reynolds · McDonell 2021</span><a href="https://arxiv.org/abs/2102.07350" target="_blank" rel="noopener">Prompt Programming for Large Language Models</a><span class="why">프롬프트 = 프로그래밍, &#x27;메타프롬프트&#x27; 제안</span></li>
+        <li><span class="who">Ouyang 외 2022</span><a href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener">Training language models to follow instructions with human feedback</a><span class="why">완성형에서 지시형으로 (InstructGPT)</span></li>
+        <li><span class="who">Schulhoff 외 2024</span><a href="https://arxiv.org/abs/2406.06608" target="_blank" rel="noopener">The Prompt Report</a><span class="why">기법 58개 · 용어 33개 체계화</span></li>
+      </ul></div>
+      <div class="rgrp"><h3>기법의 근거</h3><ul>
+        <li><span class="who">White 외 2023</span><a href="https://arxiv.org/abs/2302.11382" target="_blank" rel="noopener">A Prompt Pattern Catalog</a><span class="why">패턴 16개 · 뒤집힌 상호작용(ABA)</span></li>
+        <li><span class="who">Min 외 2022</span><a href="https://arxiv.org/abs/2202.12837" target="_blank" rel="noopener">Rethinking the Role of Demonstrations</a><span class="why">예시가 가르치는 것은 형식과 범위</span></li>
+        <li><span class="who">Zhao 외 2021</span><a href="https://arxiv.org/abs/2102.09690" target="_blank" rel="noopener">Calibrate Before Use</a><span class="why">퓨샷의 다수 라벨 · 최근 예시 편향</span></li>
+        <li><span class="who">Liu 외 2023</span><a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener">Lost in the Middle</a><span class="why">긴 맥락에서 중간을 놓친다</span></li>
+        <li><span class="who">Zheng 외 2023</span><a href="https://arxiv.org/abs/2311.10054" target="_blank" rel="noopener">Personas in System Prompts Do Not Improve Performances</a><span class="why">역할 162개 실험 — 정확도 향상 없음</span></li>
+      </ul></div>
+      <div class="rgrp"><h3>마법의 문장과 재검증</h3><ul>
+        <li><span class="who">Kojima 외 2022</span><a href="https://arxiv.org/abs/2205.11916" target="_blank" rel="noopener">Large Language Models are Zero-Shot Reasoners</a><span class="why">Let&#x27;s think step by step</span></li>
+        <li><span class="who">Zhou 외 2022</span><a href="https://arxiv.org/abs/2211.01910" target="_blank" rel="noopener">Large Language Models Are Human-Level Prompt Engineers (APE)</a><span class="why">AI가 찾은 프롬프트</span></li>
+        <li><span class="who">Yang 외 2023</span><a href="https://arxiv.org/abs/2309.03409" target="_blank" rel="noopener">Large Language Models as Optimizers (OPRO)</a><span class="why">&#x27;심호흡&#x27; 문장의 출처</span></li>
+        <li><span class="who">Wharton GAIL 2025</span><a href="https://gail.wharton.upenn.edu/research-and-insights/tech-report-chain-of-thought/" target="_blank" rel="noopener">The Decreasing Value of Chain of Thought</a><span class="why">추론 모델에서 CoT 효과 감소</span></li>
+        <li><span class="who">Wharton GAIL 2025</span><a href="https://gail.wharton.upenn.edu/research-and-insights/playing-pretend-expert-personas/" target="_blank" rel="noopener">Playing Pretend: Expert Personas</a><span class="why">전문가 역할의 재검증</span></li>
+      </ul></div>
+      <div class="rgrp"><h3>두 회사의 가이드 · 형식 연구</h3><ul>
+        <li><span class="who">Anthropic 2026</span><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices" target="_blank" rel="noopener">Prompting best practices (Claude)</a><span class="why">황금률 · 이유 설명 · XML 태그 · 긴 자료는 위에</span></li>
+        <li><span class="who">Anthropic</span><a href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener">Prompt engineering interactive tutorial</a><span class="why">따라 하며 배우는 무료 교재</span></li>
+        <li><span class="who">OpenAI 2025</span><a href="https://developers.openai.com/cookbook/examples/gpt4-1_prompting_guide" target="_blank" rel="noopener">GPT-4.1 prompting guide</a><span class="why">구분자 비교 · 긴 맥락에서 지시 위치</span></li>
+        <li><span class="who">Sclar 외 2023</span><a href="https://arxiv.org/abs/2310.11324" target="_blank" rel="noopener">Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design</a><span class="why">모양만 바꿔도 최대 76%p 차이</span></li>
+        <li><span class="who">He 외 2024</span><a href="https://arxiv.org/abs/2411.10541" target="_blank" rel="noopener">Does Prompt Formatting Have Any Impact on LLM Performance?</a><span class="why">평문 · 마크다운 · JSON · YAML 비교</span></li>
+      </ul></div>
+      <div class="rgrp"><h3>최신 가이드</h3><ul>
+        <li><span class="who">OpenAI 2026</span><a href="https://developers.openai.com/api/docs/guides/prompt-guidance" target="_blank" rel="noopener">Model guidance (GPT-5.5 · GPT-6)</a><span class="why">결과 · 성공 기준 중심 프롬프트</span></li>
+        <li><span class="who">Anthropic 2025</span><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">Effective context engineering for AI agents</a><span class="why">컨텍스트 엔지니어링</span></li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="s-padlet">
+    <div class="shead"><h2>패들릿에 올릴 것</h2><span class="tag mono">수시과제 10%</span></div>
+    <p class="slead">품질이 아니라 올렸는지를 봅니다. 먼저 학번·이름으로 글을 올리고, 이후 활동은 그 글에 댓글로 남기세요. 오늘 못 올린 분은 오늘 안에 올리면 참여로 인정됩니다.</p>
+    <div class="pads" id="pd"></div>
+    <div id="pl"></div>
+  </section>
+
+  <footer>
+    <span>서울시립대학교 경영학부 · AI실무활용과 스마트비즈니스 · 전공선택 29044(01)</span>
+    <span>김덕진 · IT커뮤니케이션연구소 소장</span>
+  </footer>
+</div>
+
+<div class="toast" id="ts">복사했습니다</div>
+
+<script>
+/* ── 수업 전에 바꿀 것 ─────────────────── */
+const PADLET_URL = "https://padlet.com/itcl/uos1002";
+
+const DATA = {"ONE_LINE": "학식 줄이 너무 길어. 해결 방법 알려줘.", "SPEC_B": "# 목표\n학생식당 점심 대기줄을 줄일 방안 3가지를 제안해줘. MIS 수업 과제의 '문제 정의' 단계에 쓸 거야.\n\n# 맥락\n서울의 한 대학 학생식당이야. 점심 11:30~13:30에 대기가 평균 20분쯤 돼(가상 수치). 이용자는 대부분 공강 50~60분 사이에 밥을 먹는 학생이야.\n\n# 조건\n- 정보시스템(IT)으로 푸는 방안을 2개 이상 넣어줘\n- 돈이 많이 드는 방안과 적게 드는 방안을 섞어줘\n\n# 형식\n표 하나: 방안 | 해결하는 원인 | 필요한 시스템 | 비용(상·중·하) | 리스크\n\n# 기준\n학생과 식당 운영자가 둘 다 받아들일 수 있어야 해. 모르는 수치는 지어내지 말고 '확인 필요'라고 적어줘.", "VOC_TEXT": "1. 12시 10분에 가면 줄이 계단까지 서 있어서 3교시 전에 못 먹고 나와요.\n2. 김치찌개는 맛있는데 매일 국 메뉴가 너무 비슷해요.\n3. 6,000원이면 밖에서 먹는 거랑 차이가 별로 없어요.\n4. 카드 단말기가 하나뿐이라 결제에서 줄이 또 막혀요.\n5. 앉을 자리가 없어서 식판 들고 5분 동안 돌아다녔어요.\n6. 키오스크에서 학생증 할인이 안 먹혀서 다시 줄 섰어요.\n7. 메뉴판 사진이랑 실제 양이 너무 달라요.\n8. 공강이 50분인데 줄 서는 데만 25분 걸려요.\n9. 비건 메뉴가 일주일에 한 번이라도 있었으면 좋겠어요.\n10. 숟가락 통이 비어 있을 때가 많아요.\n11. 품절된 메뉴를 줄 다 서고 나서야 알았어요. 미리 알려주면 좋겠어요.\n12. 가격 대비 양은 괜찮은 편이에요. 계속 이 정도만 유지해 주세요.\n13. 카카오페이나 네이버페이도 되면 좋겠어요.\n14. 테이블이 끈적해서 닦고 앉았어요.\n15. 오늘 메뉴를 앱이나 홈페이지에서 미리 볼 수 있으면 덜 헤맬 것 같아요.\n16. 저녁 운영이 18시 30분에 끝나서 너무 일러요.\n17. 여럿이 오면 한 명씩 따로 결제해야 해서 오래 걸려요.\n18. 돈가스 나오는 날은 줄이 두 배예요.\n19. 직원분들 친절해요! 감사합니다.\n20. 국물 메뉴에서 머리카락이 나왔어요. 위생 점검 부탁드려요.", "ZERO": "아래 <의견>은 학생식당 만족도 설문의 자유응답 20개야.\n각 의견을 다음 7개 분류 중 하나로 나누고, 긴급도(상·중·하)와 정보시스템으로 해결할 수 있는지(예·아니오)를 붙여서 표로 정리해줘.\n\n분류: 대기시간 / 메뉴·맛 / 가격 / 결제 / 공간·위생 / 정보 제공 / 칭찬·기타\n표: 번호 | 의견 요약 | 분류 | 긴급도 | IT로 해결\n\n<의견>\n1. 12시 10분에 가면 줄이 계단까지 서 있어서 3교시 전에 못 먹고 나와요.\n2. 김치찌개는 맛있는데 매일 국 메뉴가 너무 비슷해요.\n3. 6,000원이면 밖에서 먹는 거랑 차이가 별로 없어요.\n4. 카드 단말기가 하나뿐이라 결제에서 줄이 또 막혀요.\n5. 앉을 자리가 없어서 식판 들고 5분 동안 돌아다녔어요.\n6. 키오스크에서 학생증 할인이 안 먹혀서 다시 줄 섰어요.\n7. 메뉴판 사진이랑 실제 양이 너무 달라요.\n8. 공강이 50분인데 줄 서는 데만 25분 걸려요.\n9. 비건 메뉴가 일주일에 한 번이라도 있었으면 좋겠어요.\n10. 숟가락 통이 비어 있을 때가 많아요.\n11. 품절된 메뉴를 줄 다 서고 나서야 알았어요. 미리 알려주면 좋겠어요.\n12. 가격 대비 양은 괜찮은 편이에요. 계속 이 정도만 유지해 주세요.\n13. 카카오페이나 네이버페이도 되면 좋겠어요.\n14. 테이블이 끈적해서 닦고 앉았어요.\n15. 오늘 메뉴를 앱이나 홈페이지에서 미리 볼 수 있으면 덜 헤맬 것 같아요.\n16. 저녁 운영이 18시 30분에 끝나서 너무 일러요.\n17. 여럿이 오면 한 명씩 따로 결제해야 해서 오래 걸려요.\n18. 돈가스 나오는 날은 줄이 두 배예요.\n19. 직원분들 친절해요! 감사합니다.\n20. 국물 메뉴에서 머리카락이 나왔어요. 위생 점검 부탁드려요.\n<\/의견>", "FEW": "아래 <의견>은 학생식당 만족도 설문의 자유응답 20개야.\n각 의견을 다음 7개 분류 중 하나로 나누고, 긴급도(상·중·하)와 정보시스템으로 해결할 수 있는지(예·아니오)를 붙여서 표로 정리해줘.\n\n분류: 대기시간 / 메뉴·맛 / 가격 / 결제 / 공간·위생 / 정보 제공 / 칭찬·기타\n표: 번호 | 의견 요약 | 분류 | 긴급도 | IT로 해결\n\n<예시>\n의견: 줄 서서 다 왔는데 제육이 품절이래요.\n→ 분류: 정보 제공 | 긴급도: 중 | IT로 해결: 예\n\n의견: 학생증 할인이 키오스크에서만 안 돼요.\n→ 분류: 결제 | 긴급도: 중 | IT로 해결: 예\n\n의견: 치킨마요 나오는 날은 30분 대기예요.\n→ 분류: 대기시간 | 긴급도: 상 | IT로 해결: 예\n<\/예시>\n\n<의견>\n1. 12시 10분에 가면 줄이 계단까지 서 있어서 3교시 전에 못 먹고 나와요.\n2. 김치찌개는 맛있는데 매일 국 메뉴가 너무 비슷해요.\n3. 6,000원이면 밖에서 먹는 거랑 차이가 별로 없어요.\n4. 카드 단말기가 하나뿐이라 결제에서 줄이 또 막혀요.\n5. 앉을 자리가 없어서 식판 들고 5분 동안 돌아다녔어요.\n6. 키오스크에서 학생증 할인이 안 먹혀서 다시 줄 섰어요.\n7. 메뉴판 사진이랑 실제 양이 너무 달라요.\n8. 공강이 50분인데 줄 서는 데만 25분 걸려요.\n9. 비건 메뉴가 일주일에 한 번이라도 있었으면 좋겠어요.\n10. 숟가락 통이 비어 있을 때가 많아요.\n11. 품절된 메뉴를 줄 다 서고 나서야 알았어요. 미리 알려주면 좋겠어요.\n12. 가격 대비 양은 괜찮은 편이에요. 계속 이 정도만 유지해 주세요.\n13. 카카오페이나 네이버페이도 되면 좋겠어요.\n14. 테이블이 끈적해서 닦고 앉았어요.\n15. 오늘 메뉴를 앱이나 홈페이지에서 미리 볼 수 있으면 덜 헤맬 것 같아요.\n16. 저녁 운영이 18시 30분에 끝나서 너무 일러요.\n17. 여럿이 오면 한 명씩 따로 결제해야 해서 오래 걸려요.\n18. 돈가스 나오는 날은 줄이 두 배예요.\n19. 직원분들 친절해요! 감사합니다.\n20. 국물 메뉴에서 머리카락이 나왔어요. 위생 점검 부탁드려요.\n<\/의견>", "PERSONA": "<상황>\n학생식당에 '사전주문 시스템'(앱으로 미리 주문·결제하고 정해진 시간에 받아가기)을 도입할지 논의하는 회의야.\n<\/상황>\n\n다음 네 사람이 각자 입장에서 한 번씩 발언하게 해줘.\n1. 학생 대표 — 이용자\n2. 식당 운영 업체 점장 — 위탁 운영\n3. 학교 재무팀 과장 — 예산 담당\n4. 학교 전산팀 주무관 — 시스템 운영·보안 담당\n\n발언마다 '가장 원하는 것 1개'와 '가장 걱정하는 것 1개'를 꼭 넣어줘.\n마지막에 서로 충돌하는 요구를 표로 정리해줘: 쟁점 | 누구 vs 누구 | 충돌 이유 | 절충안", "ABA_BASE": "[하고 싶은 일]을 하려고 해.\n바로 답하지 말고, 좋은 결과를 만드는 데 꼭 필요한 정보를 먼저 질문해줘.\n- 질문은 최대 5개, 중요한 것부터\n- 한 번에 하나씩 묻고, 내 답을 들은 뒤 다음 질문\n- 충분하다고 판단되면 '이제 작성할게요'라고 말하고 결과를 만들어줘", "ABA_REQ": "너는 '학식 사전주문 시스템' 도입 프로젝트의 시스템 분석가야. 나는 학생식당 운영 업체 점장이야.\n요구사항 정의서를 만들려고 하니, 바로 쓰지 말고 먼저 나를 인터뷰해줘.\n- 질문은 한 번에 하나씩, 최대 7개\n- 질문마다 고를 수 있는 선택지 3~4개와 '기타'를 붙여줘\n- 인터뷰가 끝나면 내 답을 다섯 줄로 요약하고 맞는지 확인받아\n- 확인되면 요구사항 정의서를 표로 써줘: ID | 구분(기능/비기능) | 요구사항 | 우선순위(필수/중요/선택) | 근거(내 답)", "ABA_REQ_STU": "너는 '학식 사전주문 시스템' 도입 프로젝트의 시스템 분석가야. 나는 이 식당을 거의 매일 이용하는 학생이야.\n요구사항 정의서를 만들려고 하니, 바로 쓰지 말고 먼저 나를 인터뷰해줘.\n- 질문은 한 번에 하나씩, 최대 7개\n- 질문마다 고를 수 있는 선택지 3~4개와 '기타'를 붙여줘\n- 인터뷰가 끝나면 내 답을 다섯 줄로 요약하고 맞는지 확인받아\n- 확인되면 요구사항 정의서를 표로 써줘: ID | 구분(기능/비기능) | 요구사항 | 우선순위(필수/중요/선택) | 근거(내 답)", "ABA_MINE": [["레포트 주제 정하기", "이번 주 [과목] 레포트 주제를 정하려고 해. 바로 추천하지 말고, 나한테 맞는 주제를 고르는 데 필요한 질문을 객관식으로 하나씩, 최대 5개 해줘. 다 묻고 나면 주제 3개를 이유와 함께 추천해줘."], ["자기소개서 재료 찾기", "[회사·직무] 자기소개서의 [문항]을 쓰려고 해. 바로 쓰지 말고, 내 경험에서 쓸 재료를 끌어내는 질문을 하나씩, 최대 6개 해줘. 지어낸 경험은 넣지 말고 내가 답한 것만으로 초안을 써줘."], ["조별과제 역할 나누기", "4명이 하는 조별과제 역할을 나누려고 해. 공정하게 나누는 데 필요한 정보를 먼저 질문해줘. 한 번에 모두 물어봐도 되고, 최대 5개. 답을 받으면 역할 분담표와 마감 일정을 만들어줘."]], "ABA_VAR": [["객관식 ABA", "질문마다 고를 수 있는 선택지 3~4개와 '기타'를 붙여줘."], ["가정 명시형", "질문하지 말고, 네가 세운 가정 3가지를 먼저 밝힌 뒤 바로 작성해줘. 가정이 틀리면 내가 고칠게."], ["요약 확인형", "작성하기 전에 네가 이해한 내 요구를 다섯 줄로 요약하고, 맞는지 나한테 확인받아."]], "REFINE0": "표 형식은 그대로 두고, 비용 칸만 원 단위 숫자 범위로 바꿔줘. 재무팀 보고용이야.", "REFINE1": "좋아. 이 대화에서는 앞으로 이 표 형식을 계속 써줘.", "DELIM_BAD": "다음 의견들 분류해줘 줄이 너무 길어요 요약은 세 줄로 해줘 결제가 느려요 표로 만들어줘 가격이 비싸요", "DELIM_GOOD": "# 할 일\n아래 <의견>을 분류해줘.\n\n# 형식\n표 하나 + 세 줄 요약\n\n<의견>\n1. 줄이 너무 길어요\n2. 결제가 느려요\n3. 가격이 비싸요\n<\/의견>", "JSON_ASK": "결과를 JSON 배열로만 출력해줘. 키는 번호, 분류, 긴급도, IT로해결(true/false).", "FMT_PLAIN": "다음 학생 의견 다섯 개를 대기시간 결제 메뉴 정보 제공 중 하나로 분류하고 긴급도 상중하도 붙여서 표로 만들어줘 해결책은 쓰지 말고 분류만 해줘 1. 줄이 계단까지 서 있어요 2. 카드 단말기가 하나뿐이에요 3. 품절된 메뉴를 줄 다 서고 알았어요 4. 국 메뉴가 매일 비슷해요 5. 돈가스 나오는 날은 줄이 두 배예요", "FMT_MD": "# 할 일\n다음 학생 의견을 분류해줘.\n\n# 조건\n- 분류: 대기시간 / 결제 / 메뉴 / 정보 제공\n- 긴급도: 상 · 중 · 하\n- **해결책 말고 분류만 해줘**\n\n# 형식\n| 번호 | 분류 | 긴급도 |\n\n# 의견\n1. 줄이 계단까지 서 있어요\n2. 카드 단말기가 하나뿐이에요\n3. 품절된 메뉴를 줄 다 서고 알았어요\n4. 국 메뉴가 매일 비슷해요\n5. 돈가스 나오는 날은 줄이 두 배예요", "FMT_XML": "<지시>\n아래 <의견>을 <분류기준>에 따라 나누고 <출력형식> 그대로 답해줘. 해결책 말고 분류만 해줘.\n<\/지시>\n\n<분류기준>\n분류: 대기시간 / 결제 / 메뉴 / 정보 제공\n긴급도: 상 · 중 · 하\n<\/분류기준>\n\n<출력형식>\n| 번호 | 분류 | 긴급도 |\n<\/출력형식>\n\n<의견>\n1. 줄이 계단까지 서 있어요\n2. 카드 단말기가 하나뿐이에요\n3. 품절된 메뉴를 줄 다 서고 알았어요\n4. 국 메뉴가 매일 비슷해요\n5. 돈가스 나오는 날은 줄이 두 배예요\n<\/의견>", "PARSE_ASK": "방금 내가 보낸 프롬프트를 네가 어떻게 이해했는지 설명해줘. 지시 · 자료 · 조건 · 형식으로 나눠서, 각각 내 프롬프트의 어느 부분(기호나 태그 포함)을 보고 그렇게 판단했는지 표로 보여줘.", "ANNOT": "# 할 일\n아래 <의견>을 분류해줘.\n**해결책 말고 분류만 해줘.**\n\n# 형식\n| 번호 | 분류 | 긴급도 |\n\n---\n<의견>\n1. 줄이 너무 길어요\n2. 결제가 느려요\n<\/의견>", "DELIM_DICT": [["#  ##", "마크다운 제목", "# 목표   ## 조건", "여기서 새 칸이 시작된다 — 아래 문장들을 그 칸의 내용으로 묶는다"], ["-  1.", "목록 · 번호 목록", "- 300자 이내   1. 계획 2. 실행", "항목 하나 = 조건 하나. 번호가 있으면 순서도 지켜야 할 정보"], ["**굵게**", "강조", "**분류만 해줘**", "더 중요한 조건이라는 신호 — 남발하면 신호가 약해진다"], ["\"\"\"   ```", "따옴표 세 개 · 코드 펜스", "\"\"\"원문\"\"\"   ```코드```", "이 안은 그대로 다룰 덩어리(원문·코드) — 시작과 끝이 분명하다"], ["<태그>", "XML 태그", "<의견> … <\/의견>", "이름 붙은 상자 — 안의 것을 그 이름의 자료로 묶고, 본문에서 이름으로 가리킨다"], ["---", "구분선", "지시 --- 자료", "앞과 뒤는 다른 덩어리"], ["| 열 | 열 |", "마크다운 표", "| 방안 | 비용 |", "이 모양 그대로 출력하라는 형식 견본"], ["{ }   [ ]", "자리표시자", "{과목}   [하고 싶은 일]", "바꿔 넣을 빈칸 — 비워 두면 AI가 되묻거나 추측한다"]], "MD_RAW_ASK": "방금 답을 마크다운 원문 그대로 코드 블록 안에 보여줘. 그리고 원문에 쓰인 기호(#, -, **, | 등)가 각각 화면에서 무엇이 됐는지 표로 정리해줘."};
+
+const CHECKS=[
+ {t:"ChatGPT 로그인 확인",d:"무료 계정이면 충분합니다. 2026년 9월 기준 무료 기본 모델은 GPT-5.6 Luna이고, 텍스트 대화는 제한이 없습니다. 화면이 조금 달라도 괜찮습니다."},
+ {t:"임시 채팅 켜는 법 익히기",d:"오른쪽 위의 <b>임시 채팅</b> 버튼. 2주차에 넣은 지침·메모리가 섞이지 않아 비교가 공정해집니다. 실험할 때마다 새 임시 채팅을 여세요."},
+ {t:"생각하기(Think) 버튼 위치 확인",d:"입력창 근처에 있습니다. 2026년 8월부터 무료 계정도 제한 없이 씁니다. 비교 실험에서는 <b>양쪽을 같은 상태로</b> 맞추세요."},
+ {t:"파일 대신 붙여넣기",d:"무료 계정은 파일 업로드가 하루 3개입니다. 오늘 데이터는 전부 이 페이지에서 복사합니다. 1만 자 넘게 붙이면 첨부 파일로 바뀌는데, 오늘 데이터는 모두 그보다 짧습니다."},
+ {t:"노트북 배터리 확인",d:"강의실에 충전 케이블이 없습니다."}
+];
+const FLOW=[
+ {n:"01",t:"프롬프트란 무엇인가",m:"오프닝 포함 <b>35분</b>",i:["AI가 실제로 읽는 것","주문의 시대는 끝났다","실습 ① 한 줄 vs 명세"]},
+ {n:"02",t:"명세 6칸",m:"<b>30분</b> · 패들릿 ①",i:["목표·맥락·자료·조건·형식·기준","두 회사 가이드 비교 · 구분자 사전","실습 ② 조립기"]},
+ {n:"03",t:"예시 · 관점 · 다듬기",m:"<b>28분</b> · 패들릿 ②",i:["제로샷과 퓨샷","실습 ③ VOC 분류","이해관계자 회의"]},
+ {n:"04",t:"Ask Before Answer",m:"<b>33분</b> · 패들릿 ③",i:["AI가 먼저 묻게 하기","요구사항 인터뷰","실습 ④ 요구사항 정의서"]},
+ {n:"05",t:"정리",m:"<b>10분</b>",i:["네 줄 정리","시험에 나오는 개념","다음 시간 예고"]}
+];
+const PADS=[
+ {n:"①",t:"명세 전과 후",w:"Part 02 · 3분",i:["실습 ①의 A(한 줄)와 B(명세) 답변 캡처","실습 ②에서 조립한 6칸 프롬프트 텍스트","어떤 칸을 채웠더니 무엇이 달라졌는지 한 줄"]},
+ {n:"②",t:"예시가 바꾼 것",w:"Part 03 · 3분",i:["제로샷 분류 표와 퓨샷 분류 표 캡처","분류가 달라진 번호와 개수","어떤 예시가 어떤 경계를 정해 줬는지 한 줄","(선택) 이해관계자 회의의 충돌 표"]},
+ {n:"③",t:"AI가 한 최고의 질문",w:"Part 04 · 4분",i:["실습 ④ 요구사항 정의서 캡처","AI가 한 질문 중 '나도 생각 못 했다' 싶은 것 하나","(선택) 내 것으로 해본 ABA 한 줄 후기"]}
+];
+const PARTS=[
+ {id:"p1",name:"프롬프트란"},
+ {id:"p2",name:"명세 6칸"},
+ {id:"p3",name:"예시·관점·다듬기"},
+ {id:"p4",name:"Ask Before Answer"}
+];
+
+const CARDS=[
+/* ── PART 1 ── */
+{p:"p1",s:"S20",b:["실습 ①","A"],t:"A · 한 줄로 묻기",type:"single",
+ items:[{l:"첫 번째 임시 채팅에",v:DATA.ONE_LINE}],
+ note:"일부러 짧게 묻는 예입니다. 생각하기 버튼 상태를 B와 똑같이 맞추세요."},
+{p:"p1",s:"S20",b:["실습 ①","B"],t:"B · 명세로 묻기",type:"single",hot:true,
+ items:[{l:"두 번째 임시 채팅에",v:DATA.SPEC_B}],
+ note:"아직 6칸 중 '자료'가 없습니다. 2부에서 배웁니다. 수치는 수업용 가상 값입니다."},
+{p:"p1",s:"S20",b:["실습 ①","기록표"],t:"A와 B, 네 가지로 비교하기",type:"cmp",
+ rows:["구체적인가 (막연한 조언이 아닌가)","내 상황이 반영됐나 (공강·대학 식당)","바로 실행할 수 있나","근거나 가정이 드러나나"],
+ note:"칸을 누르면 ○ → △ → × 순서로 바뀝니다. 다 채우면 복사해서 패들릿 ①에 붙이세요."},
+
+/* ── PART 2 ── */
+{p:"p2",s:"S26",b:["⑥ 기준"],t:"그대로 가져다 쓰는 기준 문장",type:"options",
+ items:[{l:"읽는 시간",v:"교수님이 5분 안에 읽을 수 있는 분량으로 써줘."},
+        {l:"모르는 수치",v:"근거 없는 수치는 지어내지 말고 '확인 필요'라고 적어줘."},
+        {l:"확신 표시",v:"확신이 낮은 부분은 따로 표시하고 이유를 한 줄로 적어줘."},
+        {l:"개수 제한",v:"항목은 3개를 넘기지 마. 중요한 순서로."},
+        {l:"모르면 질문",v:"정보가 부족해서 추측해야 한다면, 추측하지 말고 나한테 먼저 질문해줘."}],
+ note:"2주차의 '모르면 모른다고 해'는 지금도 유효합니다. 이제는 이런 문장을 <b>⑥ 기준</b> 칸에 모아 둡니다."},
+{p:"p2",s:"S32",b:["마크다운"],t:"AI 답의 원문 보기",type:"single",
+ items:[{l:"ChatGPT가 표나 굵은 글씨로 답한 뒤, 같은 채팅에 이어서",v:DATA.MD_RAW_ASK}],
+ note:"화면에 굵게 보이던 글자 앞뒤에 <b>**</b>, 표에는 <b>|</b>, 제목 앞에는 <b>#</b>이 보입니다. AI는 처음부터 이 원문으로 쓰고 있었습니다."},
+{p:"p2",s:"S33",b:["구분자"],t:"지시와 자료를 나누기",type:"options",
+ items:[{l:"섞인 프롬프트 (나쁜 예)",v:DATA.DELIM_BAD},{l:"나눈 프롬프트",v:DATA.DELIM_GOOD}],
+ note:"둘 다 던져 보고 표 모양이 어떻게 다른지 보세요. 자료를 태그로 감싸면 자료 속 문장을 지시로 착각하지 않습니다. 5회차 '프롬프트 인젝션' 방어의 첫걸음입니다."},
+{p:"p2",s:"S37",b:["구분자","비교 실험"],t:"같은 과제, 세 가지 형식",type:"options",hot:true,
+ items:[{l:"① 평문 — 기호 없이 한 줄로",v:DATA.FMT_PLAIN},{l:"② 마크다운 — # 제목 · - 목록 · ** 강조 · | 표 |",v:DATA.FMT_MD},{l:"③ XML 태그 — <지시> <의견> 상자",v:DATA.FMT_XML}],
+ note:"세 개를 <b>각각 새 임시 채팅</b>에 넣고 표 모양 · 분류 · '해결책 말고'를 지켰는지 비교하세요. 내용은 같고 모양만 다릅니다. 연구에선 모양만 바꿔도 정확도가 크게 흔들렸습니다(Sclar 외 2023). 최신 모델일수록 차이가 작을 수 있습니다 — 차이가 없었다는 것도 결과입니다."},
+{p:"p2",s:"S36",b:["구분자","해석 묻기"],t:"AI에게 내 프롬프트를 어떻게 읽었는지 묻기",type:"options",
+ items:[{l:"예시 프롬프트 (기호가 골고루 들어 있음)",v:DATA.ANNOT},{l:"답을 받은 채팅에 이어서",v:DATA.PARSE_ASK}],
+ note:"AI가 # · ** · --- · &lt;의견&gt;을 각각 무엇으로 읽었는지 표로 받아 보세요. 단, 이 설명은 <b>사후 설명</b>입니다. 실제 내부 처리를 그대로 보여 준다는 보장은 없습니다(5회차 '생각 요약을 믿어도 될까')."},
+{p:"p2",s:"S27",b:["Anthropic","동료 테스트"],t:"신입 직원이 받았다면 헷갈릴까",type:"single",
+ items:[{l:"조립기에서 만든 프롬프트 아래에 붙여 새 채팅에",v:"아래 <프롬프트>를 이 회사 사정을 전혀 모르는 똑똑한 신입 직원이 받았다고 가정해줘.\n그 사람이 일을 시작하기 전에 되물을 만한 것, 헷갈릴 만한 표현, 빠진 정보를 각각 최대 3개씩 표로 짚어줘. 고친 프롬프트는 아직 쓰지 마.\n\n<프롬프트>\n(조립기에서 만든 프롬프트 붙여넣기)\n</프롬프트>"}],
+ note:"Anthropic 가이드의 '황금률' — 동료가 헷갈리면 AI도 헷갈립니다. 짚어 준 빈칸을 명세 6칸 중 어디에 채울지 정해 보세요."},
+{p:"p2",s:"S38",b:["⑤ 형식","JSON"],t:"시스템이 읽는 형식으로 받기",type:"single",
+ items:[{l:"분류 결과를 받은 채팅에 이어서",v:DATA.JSON_ASK}],
+ note:"JSON은 엑셀·DB·앱으로 넘기는 형식입니다. 8주차 챗봇, 9주차 에이전트에서 다시 만납니다."},
+{p:"p2",s:"S39",b:["모호한 말"],t:"이렇게 말하지 말고, 이렇게",type:"swap",
+ items:[{bad:"짧게 써줘",v:"300자 이내, 세 문장으로 써줘.",eff:"'짧게'는 사람마다 다릅니다. 숫자로 정합니다"},
+        {bad:"쉽게 설명해줘",v:"경영학부 1학년이 이해할 수준으로 설명하고, 전문용어는 괄호 안에 풀어줘.",eff:"누구에게 쉬운지를 밝힙니다"},
+        {bad:"깔끔하게 정리해줘",v:"결론을 먼저 쓰고, 표 하나와 소제목 세 개로 정리해줘.",eff:"순서와 모양을 정합니다"},
+        {bad:"공손하게 써줘",v:"교수님께 보내는 메일이야. 변명 없이 요청만 정중하게 써줘.",eff:"과한 사과를 막습니다"},
+        {bad:"자세히 알려줘",v:"항목 5개로, 항목마다 근거를 한 줄씩 붙여줘.",eff:"끝없이 길어지는 것을 막습니다"}]},
+
+/* ── PART 3 ── */
+{p:"p3",s:"S46",b:["실습 데이터"],t:"학식 만족도 설문 자유응답 20개 (가상)",type:"data",
+ items:[{l:"아래 프롬프트에 이미 들어 있습니다. 따로 쓸 때만 복사",v:DATA.VOC_TEXT}],
+ note:"수업용으로 만든 가상 의견입니다. 6번 · 11번 · 18번은 분류 경계가 애매한 의견입니다."},
+{p:"p3",s:"S46",b:["실습 ③-a","제로샷"],t:"제로샷 분류 — 예시 없이",type:"single",
+ items:[{l:"새 임시 채팅에",v:DATA.ZERO}]},
+{p:"p3",s:"S46",b:["실습 ③-a","퓨샷"],t:"퓨샷 분류 — 예시 3개와 함께",type:"single",hot:true,
+ items:[{l:"또 다른 새 임시 채팅에",v:DATA.FEW}],
+ note:"예시 세 개는 일부러 <b>경계 사례</b>로 골랐습니다. 품절은 '정보 제공', 할인 오류는 '결제', 인기 메뉴 날의 줄은 '대기시간'. 두 표에서 6·11·18번이 어떻게 갔는지 보세요."},
+{p:"p3",s:"S46",b:["선택"],t:"두 표를 AI에게 비교시키기",type:"single",
+ items:[{l:"두 표를 복사해 새 채팅에",v:"아래 <표A>는 예시 없이, <표B>는 예시를 주고 분류한 결과야.\n분류가 서로 다른 번호만 골라서 표로 보여주고, 어느 쪽이 더 일관된 기준으로 분류했는지 이유와 함께 말해줘.\n\n<표A>\n(제로샷 표 붙여넣기)\n</표A>\n\n<표B>\n(퓨샷 표 붙여넣기)\n</표B>"}],
+ note:"사람이 세는 것과 AI가 센 것이 같은지도 확인해 보세요."},
+{p:"p3",s:"S48",b:["실습 ③-b","멀티 페르소나"],t:"네 사람의 회의 — 이해관계자 분석",type:"single",hot:true,
+ items:[{l:"새 임시 채팅에",v:DATA.PERSONA}],
+ note:"결과에서 볼 것은 마지막 <b>충돌 표</b>입니다. 다음 시간 투자 의사결정 실습의 재료가 됩니다."},
+{p:"p3",s:"S48",b:["변형"],t:"한 사람을 바꿔서 다시",type:"options",
+ items:[{l:"같은 채팅에 이어서",v:"4번 전산팀 주무관 대신 '학교 앞에서 백반집을 하는 사장님'을 넣어서 회의를 다시 해줘. 충돌 표가 어떻게 달라지는지도 비교해줘."},
+        {l:"반대편 목소리 키우기",v:"이 회의에서 사전주문 시스템에 가장 강하게 반대할 사람은 누구일까? 그 사람의 입장에서 가장 강한 반대 논리 3가지를 말해줘."}]},
+{p:"p3",s:"S49",b:["다듬기"],t:"던지고 → 좁히고 → 고정한다",type:"steps",
+ items:[{l:"좁히기 · 유지 + 변경 + 이유",v:DATA.REFINE0},
+        {l:"고정하기",v:DATA.REFINE1}],
+ note:"이유('재무팀 보고용이야')를 붙이면 AI가 목적에 맞춰 다른 부분까지 손봅니다."},
+
+/* ── PART 4 ── */
+{p:"p4",s:"S55",b:["ABA","기본형"],t:"Ask Before Answer 기본형",type:"single",hot:true,
+ items:[{l:"[하고 싶은 일]만 바꾸세요",v:DATA.ABA_BASE}],
+ note:"아래 <b>ABA 생성기</b>로 개수 · 방식 · 마무리를 골라 만들 수도 있습니다."},
+{p:"p4",s:"S56",b:["ABA","변형"],t:"기본형 끝에 한 줄만 바꿔 붙이기",type:"options",
+ items:DATA.ABA_VAR.map(x=>({l:x[0],v:x[1]})),
+ note:"결과가 '나'에게 달린 일은 객관식 + 요약 확인, 일반적이거나 급한 일은 가정 명시형."},
+{p:"p4",s:"S57",b:["실습 ④","점장 버전"],t:"요구사항 인터뷰 — 나는 식당 점장",type:"single",hot:true,
+ items:[{l:"새 임시 채팅에",v:DATA.ABA_REQ}],
+ note:"점장이 된 듯 답하세요. 가상 사례라 지어내도 됩니다. 요약이 틀리면 고쳐 주고, 표가 나오면 <b>기능 / 비기능</b> 구분을 보세요."},
+{p:"p4",s:"S57",b:["실습 ④","학생 버전"],t:"요구사항 인터뷰 — 나는 이용 학생",type:"single",
+ items:[{l:"점장 역할이 어렵다면",v:DATA.ABA_REQ_STU}]},
+{p:"p4",s:"S57",b:["선택","MIS"],t:"비기능 요구사항 점검",type:"single",
+ items:[{l:"정의서를 받은 채팅에 이어서",v:"방금 정의서에서 비기능 요구사항(응답 속도, 동시 접속, 개인정보 보호, 장애 대응, 결제 보안)이 빠진 영역이 있는지 점검하고, 빠진 것은 근거와 함께 추가해줘. 추가한 줄은 ID 뒤에 (추가)라고 표시해줘."}],
+ note:"기능 요구사항 = 시스템이 '무엇을' 하나. 비기능 요구사항 = '얼마나 잘' 하나. 현업은 비기능을 잘 말하지 않습니다."},
+{p:"p4",s:"S58",b:["내 것으로"],t:"ABA를 내 과제·취업에",type:"options",
+ items:DATA.ABA_MINE.map(x=>({l:x[0],v:x[1]})),
+ note:"대괄호 부분만 바꾸세요. 자기소개서는 '지어낸 경험은 넣지 마'가 핵심입니다."}
+];
+
+const PRESETS={
+ "학식 문제 정의서":{
+  g:"아래 학생 의견을 바탕으로 '학식 사전주문 시스템' 도입 과제의 문제 정의서를 써줘. 다음 주 조별 발표의 첫 장표에 쓸 거야.",
+  c:"MIS 수업 조별과제야. 읽는 사람은 교수님과 수강생 40명. 우리 조는 사전주문 앱이 해법이라고 보지만, 문제 정의 단계에서는 해법을 먼저 말하지 않으려고 해.",
+  d:DATA.VOC_TEXT,
+  r:"- 해결책은 쓰지 말고 문제만 정의해\n- 의견에 없는 내용은 추측하지 마",
+  f:"1) 한 문장 문제 정의 2) 원인 3가지(의견 번호를 근거로) 3) 영향받는 사람 4) 측정할 지표 2개. A4 반 쪽 분량.",
+  k:"의견 번호로 근거를 댈 수 있어야 해. 근거가 약한 원인은 '추가 조사 필요'로 표시해."},
+ "레포트 개요":{
+  g:"'플랫폼 기업의 수수료 정책' 레포트 개요를 잡아줘. 오늘 밤 안에 교수님께 개요 확인을 받아야 해.",
+  c:"경영학부 전공 레포트, A4 5쪽. 교수님은 사례보다 분석 틀을 중요하게 보셔.",
+  d:"(과제 공지나 수업 자료의 핵심 문장을 여기에 붙여넣으세요)",
+  r:"- 배달앱 사례 하나를 중심으로\n- 출처가 필요한 주장은 [출처 필요]로 표시",
+  f:"제목 / 서론·본론 3절·결론 개요 / 절마다 핵심 질문 1개와 쓸 분석 틀 1개",
+  k:"개요만 보고도 논리 흐름이 보여야 해. 내가 모를 만한 용어는 괄호로 풀어줘."},
+ "자기소개서":{
+  g:"IT 컨설팅 회사 신입 자기소개서의 '지원 동기' 문항 초안을 써줘.",
+  c:"경영학부 MIS 수강생이야. 동아리 회비 관리 시트를 만들어 정산 시간을 줄인 경험이 있어.",
+  d:"(지원하는 회사 채용공고의 인재상·직무 설명을 붙여넣으세요)",
+  r:"- 미사여구 빼고 사실 위주로\n- 회사 칭찬은 한 문장 이하",
+  f:"600자 이내, 두 문단",
+  k:"인재상 키워드 2개가 내 경험과 연결돼야 해. 지어낸 경험은 절대 넣지 마."},
+ "교수님 메일":{
+  g:"조별과제 발표일을 바꿔 달라고 교수님께 요청하는 메일을 써줘.",
+  c:"발표일이 다른 전공 시험과 겹쳐. 조원 4명 모두 같은 상황이야.",
+  d:"",
+  r:"- 변명처럼 보이지 않게\n- 대안 날짜 2개 제시",
+  f:"제목 한 줄 + 본문 5문장 이내",
+  k:"교수님이 30초 안에 결정할 수 있어야 해."}
+};
+const FIELDS=[
+ {k:"g",n:"①",t:"목표",h:"무엇을, 왜 · 어디에 쓸 결과인가",ph:"예: 조별 발표 첫 장표에 쓸 문제 정의서를 써줘"},
+ {k:"c",n:"②",t:"맥락",h:"누가 읽나 · 어떤 상황 · 나는 누구",ph:"예: 읽는 사람은 교수님과 수강생 40명이야"},
+ {k:"d",n:"③",t:"자료",h:"AI가 참고할 원문 · <자료> 태그로 감싸 맨 뒤에 붙입니다",ph:"예: 설문 응답, 과제 공지, 채용공고를 붙여넣기"},
+ {k:"r",n:"④",t:"조건",h:"지킬 것 · 하지 말 것",ph:"예: 해결책은 쓰지 말고 문제만 정의해"},
+ {k:"f",n:"⑤",t:"형식",h:"표 · 목록 · 문단 · JSON · 길이와 순서",ph:"예: 문제 한 문장 · 원인 3개 · 지표 2개, A4 반 쪽"},
+ {k:"k",n:"⑥",t:"기준",h:"무엇이면 잘된 답인가 · 모르면 어떻게",ph:"예: 근거 없는 수치는 '확인 필요'로 표시해"}
+];
+
+const ABA_KNOBS=[
+ {k:"n",h:"질문 개수",o:["최대 3개","최대 5개","최대 7개"],d:1},
+ {k:"m",h:"묻는 방식",o:["한 번에 모두","한 번에 하나씩","하나씩 + 객관식 선택지"],d:2},
+ {k:"e",h:"마무리",o:["요약 확인 후 작성","충분하면 바로 작성","묻지 말고 가정 명시"],d:0}
+];
+
+const TERMS=[
+ {t:"프롬프트",d:"AI가 답을 만들 때 참고하는 모든 입력 — 질문·지시·자료·예시·형식 요구"},
+ {t:"프롬프트 엔지니어링",d:"원하는 결과가 나오도록 입력을 설계하고, 시험하고, 고치는 일"},
+ {t:"컨텍스트 · 컨텍스트 창",d:"AI가 한 번에 읽는 입력 전체(시스템 프롬프트·지침·메모리·대화·내 메시지) · 한 번에 읽을 수 있는 최대 분량"},
+ {t:"In-Context Learning",d:"모델의 가중치를 바꾸지 않고 프롬프트 속 예시·자료를 보고 그 자리에서 패턴을 따라 하는 것"},
+ {t:"제로샷 · 퓨샷",d:"예시 없이 지시만 하는 방식 · 예시 2~5개를 함께 주는 방식. 추론 모델은 제로샷 먼저"},
+ {t:"페르소나(역할) 지정",d:"관점·말투·독자는 바꾸지만 사실 정확도는 올리지 못한다(와튼 보고서 4)"},
+ {t:"구분자",d:"#, \"\"\", <태그>로 지시와 자료를 나누는 표기. 자료 속 문장을 지시로 착각하지 않게 한다"},
+ {t:"명세 6칸",d:"목표 · 맥락 · 자료 · 조건 · 형식 · 기준 — 결과가 이상하면 빠진 칸부터"},
+ {t:"추론 모델",d:"답하기 전에 스스로 생각하는 모델. ChatGPT의 생각하기(Think) 버튼"},
+ {t:"Ask Before Answer",d:"답하기 전에 AI가 필요한 정보를 먼저 질문하게 하는 기법 = 요구사항 인터뷰(뒤집힌 상호작용 패턴)"},
+ {t:"GIGO",d:"Garbage In, Garbage Out — 입력이 나쁘면 결과도 나쁘다는 정보시스템 원칙"},
+ {t:"기능 · 비기능 요구사항",d:"시스템이 '무엇을' 하나 · '얼마나 잘' 하나(속도·보안·가용성)"}
+];
+
+/* ── render ─────────────────────────── */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CPI='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1.5 1.5 0 0 0-1.5-1.5H3.5A1.5 1.5 0 0 0 2 3.5V9a1.5 1.5 0 0 0 1.5 1.5h2"/></svg>';
+const OKI='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3.5 3.5L13 5"/></svg>';
+
+function pblock(label,val,extra){
+  return '<div class="pblock'+(extra?' '+extra:'')+'">'+
+    (label?'<span class="lbl">'+esc(label)+'</span>':'')+esc(val)+
+    '<button class="cp" data-v="'+esc(val)+'" title="복사">'+CPI+'</button></div>';
+}
+
+let total=0;
+function cardHTML(c,ci){
+  const cls='card'+(c.warn?' warn':'');
+  let body='';
+  if(c.type==='single'||c.type==='options'){
+    body=c.items.map(i=>{total++;return pblock(i.l,i.v)}).join('');
+  } else if(c.type==='data'){
+    body=c.items.map(i=>pblock(i.l,i.v,'data')).join('');
+  } else if(c.type==='steps'){
+    body='<div class="steps">'+c.items.map((i,n)=>{total++;
+      return '<div class="step"><div class="sn">'+(n+1)+'</div>'+
+      '<div class="col"><span class="stag">'+esc(i.l)+'</span>'+pblock(null,i.v)+'</div></div>';
+    }).join('')+'</div>';
+  } else if(c.type==='swap'){
+    body=c.items.map(i=>{total++;return '<div class="swap"><div class="bad">'+esc(i.bad)+'</div>'+
+      pblock(null,i.v)+'<div class="eff">'+esc(i.eff)+'</div></div>'}).join('');
+  } else if(c.type==='cmp'){
+    body='<div class="rec-wrap"><table class="rt cmp" data-ci="'+ci+'"><thead><tr><th>비교 기준</th><th class="c">A 한 줄</th><th class="c">B 명세</th></tr></thead><tbody>'+
+      c.rows.map((r,ri)=>'<tr><td>'+esc(r)+'</td><td class="c"><button class="mark" data-r="'+ri+'" data-c="0"></button></td><td class="c"><button class="mark" data-r="'+ri+'" data-c="1"></button></td></tr>').join('')+
+      '<tr><td colspan="3"><input class="one" type="text" placeholder="가장 큰 차이 한 줄 (예: 맥락을 주니 공강 시간 얘기가 나왔다)"></td></tr>'+
+      '</tbody></table></div><div class="rbar"><button class="btn pri" data-cmpcopy="'+ci+'">기록 복사</button></div>';
+  }
+  const badges=(c.b||[]).map((x,n)=>'<span class="badge'+(n===0&&c.hot?' hot':'')+'">'+esc(x)+'</span>').join('');
+  const search=[c.t,c.s,(c.b||[]).join(' '),c.note||'',(c.items||[]).map(i=>(i.v||'')+' '+(i.l||'')+' '+(i.bad||'')).join(' ')].join(' ').toLowerCase();
+  return '<article class="'+cls+(c.type==='cmp'||c.type==='data'?' wide':'')+'" data-p="'+c.p+'" data-s="'+esc(search)+'">'+
+    '<div class="chead"><div class="meta"><span class="sref mono">'+c.s+'</span>'+badges+'</div><h3>'+esc(c.t)+'</h3></div>'+
+    '<div class="cbody">'+body+'</div>'+
+    (c.note?'<div class="note">'+c.note+'</div>':'')+'</article>';
+}
+
+const pk=document.getElementById('pk');
+pk.innerHTML=PARTS.map(p=>{
+  const cs=CARDS.map((c,i)=>[c,i]).filter(x=>x[0].p===p.id);
+  return '<div class="pgroup" data-p="'+p.id+'">'+
+    '<div class="shead" style="margin:26px 0 14px"><h2 style="font-size:16px">'+
+    '<span class="mono" style="color:var(--accent-ink);font-size:13px;margin-right:8px">PART 0'+p.id.slice(1)+'</span>'+esc(p.name)+'</h2></div>'+
+    '<div class="grid">'+cs.map(x=>cardHTML(x[0],x[1])).join('')+'</div></div>';
+}).join('');
+
+document.getElementById('ck').innerHTML=CHECKS.map(c=>
+ '<button class="check" aria-pressed="false"><span class="box">'+OKI+'</span>'+
+ '<span><span class="ctitle">'+c.t+'</span><span class="cdesc">'+c.d+'</span></span></button>').join('');
+
+document.getElementById('fw').innerHTML=FLOW.map(f=>
+ '<div><div class="num mono">'+f.n+'</div><h3>'+f.t+'</h3><ul>'+
+ f.i.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="min mono">'+f.m+'</div></div>').join('');
+
+document.getElementById('pd').innerHTML=PADS.map(p=>
+ '<div class="pad"><div class="no">'+p.n+'</div><h3>'+p.t+'</h3><ul>'+
+ p.i.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="when">'+p.w+'</div></div>').join('');
+document.getElementById('pl').innerHTML=PADLET_URL?
+ '<a class="padlink" href="'+esc(PADLET_URL)+'" target="_blank" rel="noopener">패들릿 열기 → '+esc(PADLET_URL.replace(/^https?:\/\//,''))+'</a>':
+ '<p class="phint">패들릿 링크는 수업 시작 때 화면으로 공지합니다.</p>';
+
+document.getElementById('fl').innerHTML=
+ '<span class="flab mono">실습 프롬프트<span class="lx"> 걸러보기</span></span>'+
+ '<button class="chip" data-f="all" aria-pressed="true">전체<span class="n">'+CARDS.length+'</span></button>'+
+ PARTS.map(p=>'<button class="chip" data-f="'+p.id+'" aria-pressed="false">'+esc(p.name)+
+ '<span class="n">'+CARDS.filter(c=>c.p===p.id).length+'</span></button>').join('');
+
+document.getElementById('dlb').innerHTML=DATA.DELIM_DICT.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('');
+
+/* ── spec builder ───────────────────── */
+document.getElementById('pre').innerHTML='<span class="lab">예시로 채우기</span>'+
+ Object.keys(PRESETS).map(k=>'<button class="opt" data-pre="'+esc(k)+'">'+esc(k)+'</button>').join('')+
+ '<button class="opt" data-pre="__clear">비우기</button>';
+document.getElementById('sg').innerHTML=FIELDS.map(f=>
+ '<label class="fld empty" data-k="'+f.k+'"><span class="fh"><em>'+f.n+'</em><b>'+f.t+'</b><span>'+esc(f.h)+'</span></span>'+
+ '<textarea data-k="'+f.k+'" placeholder="'+esc(f.ph)+'"></textarea></label>').join('');
+function specText(){
+  const v={};FIELDS.forEach(f=>v[f.k]=document.querySelector('textarea[data-k="'+f.k+'"]').value.trim());
+  const parts=[];
+  if(v.g)parts.push('# 목표\n'+v.g);
+  if(v.c)parts.push('# 맥락\n'+v.c);
+  if(v.r)parts.push('# 조건\n'+v.r);
+  if(v.f)parts.push('# 형식\n'+v.f);
+  if(v.k)parts.push('# 기준\n'+v.k);
+  if(v.d)parts.push('# 자료\n'+(/^<[^>]+>/.test(v.d)?v.d:'<자료>\n'+v.d+'\n</자료>'));
+  return {txt:parts.join('\n\n'),v:v};
+}
+function paintSpec(){
+  const r=specText();
+  FIELDS.forEach(f=>document.querySelector('.fld[data-k="'+f.k+'"]').classList.toggle('empty',!r.v[f.k]));
+  const miss=FIELDS.filter(f=>!r.v[f.k]);
+  document.getElementById('ms').innerHTML=FIELDS.map(f=>'<span class="mk '+(r.v[f.k]?'on':'off')+'">'+f.n+' '+f.t+'</span>').join('')+
+   '<span class="mt">'+(miss.length?('빈 칸 '+miss.length+'개 — 결과가 아쉬우면 '+miss[0].n+' '+miss[0].t+'부터'):'여섯 칸이 모두 찼습니다')+'</span>';
+  const so=document.getElementById('so');
+  so.innerHTML=(r.txt?esc(r.txt):'<span style="color:#8E8885">위 칸을 채우면 여기에 프롬프트가 조립됩니다.</span>')+
+   (r.txt?'<button class="cp" data-v="'+esc(r.txt)+'" title="복사">'+CPI+'</button>':'');
+}
+paintSpec();
+document.getElementById('sg').addEventListener('input',paintSpec);
+
+/* ── ABA builder ────────────────────── */
+const abaSel={};ABA_KNOBS.forEach(k=>abaSel[k.k]=k.d);
+document.getElementById('ap').innerHTML=ABA_KNOBS.map(k=>
+ '<div class="bcol"><h4>'+esc(k.h)+'</h4><div class="opts">'+
+ k.o.map((o,i)=>'<button class="opt" data-ak="'+k.k+'" data-ai="'+i+'" aria-pressed="'+(i===k.d)+'">'+esc(o)+'</button>').join('')+
+ '</div></div>').join('');
+function abaText(){
+  const task=document.getElementById('at').value.trim()||'[하고 싶은 일]';
+  const res=document.getElementById('ar').value.trim();
+  const n=['3','5','7'][abaSel.n];
+  const L=[];
+  const raw=document.getElementById('at').value.trim();
+  L.push(raw?(/[.?!。]$/.test(raw)?raw:raw+'.'):'[하고 싶은 일]을 하려고 해.');
+  if(abaSel.e===2){
+    L.push('질문하지 말고, 좋은 결과를 위해 네가 세운 가정 3가지를 먼저 밝힌 뒤 바로 작성해줘. 가정이 틀리면 내가 고칠게.');
+  } else {
+    L.push('바로 답하지 말고, 좋은 결과를 만드는 데 꼭 필요한 정보를 먼저 질문해줘.');
+    L.push('- 질문은 최대 '+n+'개, 중요한 것부터');
+    if(abaSel.m===0)L.push('- 질문은 번호를 붙여 한 번에 모두 보여줘. 내가 한꺼번에 답할게');
+    if(abaSel.m===1)L.push('- 한 번에 하나씩 묻고, 내 답을 들은 뒤 다음 질문');
+    if(abaSel.m===2)L.push('- 한 번에 하나씩 묻고, 질문마다 고를 수 있는 선택지 3~4개와 \'기타\'를 붙여줘');
+    if(abaSel.e===0)L.push('- 질문이 끝나면 내 답을 다섯 줄로 요약해서 맞는지 확인받고, 확인되면 작성해줘');
+    if(abaSel.e===1)L.push('- 충분하다고 판단되면 \'이제 작성할게요\'라고 말하고 결과를 만들어줘');
+  }
+  if(res)L.push('결과물: '+res);
+  return L.join('\n');
+}
+function paintAba(){
+  const t=abaText();
+  document.getElementById('ao').innerHTML=esc(t)+'<button class="cp" data-v="'+esc(t)+'" title="복사">'+CPI+'</button>';
+}
+paintAba();
+['at','ar'].forEach(id=>document.getElementById(id).addEventListener('input',paintAba));
+
+/* ── terms ──────────────────────────── */
+document.getElementById('tm').innerHTML=TERMS.map((t,i)=>
+ '<button class="term" aria-expanded="false"><span class="tg">'+String(i+1).padStart(2,'0')+'</span><b>'+esc(t.t)+'</b><span class="df">'+esc(t.d)+'</span></button>').join('');
+
+document.getElementById('st1').textContent=total;
+document.getElementById('cnt').textContent=total+' PROMPTS';
+
+/* ── interactions ───────────────────── */
+let toastT;
+function toast(msg){
+  const t=document.getElementById('ts');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1500);
+}
+async function copy(txt,btn){
+  try{
+    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(txt)}
+    else{const a=document.createElement('textarea');a.value=txt;a.style.position='fixed';a.style.opacity='0';
+      document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}
+    toast('복사했습니다');
+    if(btn&&btn.classList.contains('cp')){btn.innerHTML=OKI;btn.classList.add('done');
+      setTimeout(()=>{btn.innerHTML=CPI;btn.classList.remove('done')},1400)}
+  }catch(e){toast('복사에 실패했습니다. 텍스트를 직접 선택해 주세요.')}
+}
+const MARKS=['','○','△','×'];
+document.addEventListener('click',e=>{
+  const cp=e.target.closest('.cp');
+  if(cp){const v=cp.dataset.v;if(v)copy(v,cp);return}
+  const ck=e.target.closest('.check');
+  if(ck){ck.setAttribute('aria-pressed',ck.getAttribute('aria-pressed')==='true'?'false':'true');return}
+  const mk=e.target.closest('.mark');
+  if(mk){const i=(MARKS.indexOf(mk.textContent)+1)%MARKS.length;mk.textContent=MARKS[i];return}
+  const cc=e.target.closest('[data-cmpcopy]');
+  if(cc){
+    const c=CARDS[+cc.dataset.cmpcopy];const tb=document.querySelector('table.cmp[data-ci="'+cc.dataset.cmpcopy+'"]');
+    const lines=['[실습 ① 한 줄 vs 명세 비교]'];
+    c.rows.forEach((r,ri)=>{const a=tb.querySelector('.mark[data-r="'+ri+'"][data-c="0"]').textContent||'-';
+      const b=tb.querySelector('.mark[data-r="'+ri+'"][data-c="1"]').textContent||'-';lines.push(r+' — A '+a+' / B '+b)});
+    const one=tb.querySelector('input.one').value.trim();if(one)lines.push('가장 큰 차이: '+one);
+    copy(lines.join('\n'));return
+  }
+  const pr=e.target.closest('[data-pre]');
+  if(pr){
+    const k=pr.dataset.pre;const P=PRESETS[k]||{};
+    FIELDS.forEach(f=>document.querySelector('textarea[data-k="'+f.k+'"]').value=(k==='__clear'?'':(P[f.k]||'')));
+    paintSpec();return
+  }
+  const ao=e.target.closest('[data-ak]');
+  if(ao){
+    abaSel[ao.dataset.ak]=+ao.dataset.ai;
+    document.querySelectorAll('[data-ak="'+ao.dataset.ak+'"]').forEach(b=>b.setAttribute('aria-pressed',b===ao?'true':'false'));
+    paintAba();return
+  }
+  const tm=e.target.closest('.term');
+  if(tm){tm.setAttribute('aria-expanded',tm.getAttribute('aria-expanded')==='true'?'false':'true');return}
+  if(e.target.closest('#tmode')){const tmm=document.getElementById('tm');const r=tmm.classList.toggle('rev');
+    document.querySelectorAll('.term').forEach(t=>t.setAttribute('aria-expanded','false'));
+    document.getElementById('tmode').textContent=r?'용어 보고 정의 말하기':'정의 보고 용어 맞히기';document.getElementById('tall').textContent='모두 펼치기';return}
+  if(e.target.closest('#tall')){
+    const all=[...document.querySelectorAll('.term')];const open=all.some(t=>t.getAttribute('aria-expanded')==='false');
+    all.forEach(t=>t.setAttribute('aria-expanded',open?'true':'false'));
+    document.getElementById('tall').textContent=open?'모두 접기':'모두 펼치기';return
+  }
+  const ch=e.target.closest('.chip');
+  if(ch){
+    document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===ch?'true':'false'));
+    filter();
+    document.getElementById('s-pack').scrollIntoView({behavior:'smooth',block:'start'});
+    return
+  }
+});
+
+let dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+document.getElementById('tt').addEventListener('click',()=>{
+  dark=!dark;
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+});
+
+const q=document.getElementById('q');
+q.addEventListener('input',()=>{filter();if(q.value.trim())document.getElementById('s-pack').scrollIntoView({block:'start'})});
+function filter(){
+  const term=q.value.trim().toLowerCase();
+  const act=document.querySelector('.chip[aria-pressed="true"]').dataset.f;
+  let shown=0;
+  document.querySelectorAll('.pgroup').forEach(g=>{
+    let n=0;
+    g.querySelectorAll('.card').forEach(c=>{
+      const ok=(act==='all'||c.dataset.p===act)&&(!term||c.dataset.s.includes(term));
+      c.style.display=ok?'':'none';if(ok)n++;
+    });
+    g.hidden=n===0;shown+=n;
+  });
+  document.getElementById('mt').hidden=shown>0;
+}
+</script>
+<a href="../" data-uos-portal style="position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:99px;background:#181818;color:#fff;font:600 12px/1 system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.18);opacity:.9">← 학기 포털</a>
+</body>
+</html>

@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>시립대 3주차 도구 데스크</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#FFFFFF;
+  --surface:#F7F6F5;
+  --surface-2:#F0EEEC;
+  --ink:#181818;
+  --ink-2:#3A3735;
+  --muted:#6E6A68;
+  --faint:#A5A09D;
+  --line:#E6E3E1;
+  --line-strong:#D6D2CF;
+  --accent:#FF5A4F;
+  --accent-ink:#B8352B;
+  --accent-wash:#FFF1EF;
+  --accent-line:#FFD6D1;
+  --panel:#1C1B1A;
+  --panel-ink:#F1EEEC;
+  --panel-line:#3A3735;
+  --ok:#2E7D5B;
+  --shadow:0 1px 2px rgba(24,24,24,.05), 0 8px 24px -12px rgba(24,24,24,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#151413;
+    --surface:#1E1C1B;
+    --surface-2:#252221;
+    --ink:#EDEAE8;
+    --ink-2:#D3CECB;
+    --muted:#9A9491;
+    --faint:#6E6865;
+    --line:#2E2B29;
+    --line-strong:#3D3936;
+    --accent:#FF6B60;
+    --accent-ink:#FF9086;
+    --accent-wash:#2A1B19;
+    --accent-line:#4A2C28;
+    --panel:#0E0D0D;
+    --panel-ink:#EDEAE8;
+    --panel-line:#2B2827;
+    --ok:#5FBF95;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#151413;
+  --surface:#1E1C1B;
+  --surface-2:#252221;
+  --ink:#EDEAE8;
+  --ink-2:#D3CECB;
+  --muted:#9A9491;
+  --faint:#6E6865;
+  --line:#2E2B29;
+  --line-strong:#3D3936;
+  --accent:#FF6B60;
+  --accent-ink:#FF9086;
+  --accent-wash:#2A1B19;
+  --accent-line:#4A2C28;
+  --panel:#0E0D0D;
+  --panel-ink:#EDEAE8;
+  --panel-line:#2B2827;
+  --ok:#5FBF95;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans KR","Malgun Gothic",system-ui,sans-serif;
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:"IBM Plex Mono","Consolas",monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ── top bar ─────────────────────────────── */
+.bar{position:sticky;top:0;z-index:50;background:var(--ground);border-bottom:1px solid var(--line)}
+.bar-in{display:flex;align-items:center;gap:16px;height:56px}
+.brand{display:flex;align-items:baseline;gap:10px;flex-shrink:0}
+.brand b{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.brand span{font-size:11px;color:var(--faint);letter-spacing:.08em}
+.search{flex:1;min-width:120px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:0 12px;height:34px}
+.search input{flex:1;min-width:0;background:none;border:none;outline:none;color:var(--ink);font:inherit;font-size:13.5px}
+.search input::placeholder{color:var(--faint)}
+.search svg{flex-shrink:0;color:var(--faint)}
+.tog{width:34px;height:34px;border:1px solid var(--line);border-radius:7px;display:grid;place-items:center;color:var(--muted);flex-shrink:0}
+.tog:hover{color:var(--ink);border-color:var(--line-strong)}
+.filters{display:flex;gap:6px;overflow-x:auto;padding:0 0 12px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:5px 12px;border:1px solid var(--line);border-radius:99px;font-size:12.5px;color:var(--muted);white-space:nowrap;transition:.12s}
+.chip:hover{border-color:var(--line-strong);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.chip .n{font-size:11px;opacity:.55;margin-left:5px;font-variant-numeric:tabular-nums}
+
+/* ── hero ─────────────────────────────── */
+.hero{padding:44px 0 30px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent-ink);font-weight:600;text-transform:uppercase}
+.hero h1{font-size:clamp(26px,4vw,38px);margin:12px 0 10px;line-height:1.22}
+.hero .sub{color:var(--muted);font-size:15px;max-width:62ch}
+.stats{display:flex;flex-wrap:wrap;gap:0;margin-top:24px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{flex:1 1 130px;padding:14px 18px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat b{display:block;font-size:26px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:11.5px;color:var(--muted)}
+
+/* ── sections ─────────────────────────── */
+section{padding:44px 0}
+section + section{border-top:1px solid var(--line)}
+.shead{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.shead h2{font-size:20px}
+.shead .tag{font-size:11px;letter-spacing:.12em;color:var(--faint)}
+.slead{color:var(--muted);font-size:13.5px;margin-bottom:24px;max-width:70ch}
+
+/* ── flow ─────────────────────────────── */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.flow > div{background:var(--ground);padding:18px 16px 20px}
+.flow .num{font-size:11px;letter-spacing:.1em;color:var(--accent-ink);font-weight:600}
+.flow h3{font-size:14.5px;margin:8px 0 8px}
+.flow ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.flow li{font-size:12px;color:var(--muted);padding-left:9px;position:relative}
+.flow li::before{content:"";position:absolute;left:0;top:9px;width:3px;height:3px;border-radius:50%;background:var(--faint)}
+.flow .min{margin-top:10px;font-size:11px;color:var(--faint)}
+
+/* ── checklist ────────────────────────── */
+.checks{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.check{display:flex;align-items:flex-start;gap:13px;background:var(--ground);padding:14px 18px;text-align:left;width:100%;transition:.12s}
+.check:hover{background:var(--surface)}
+.box{flex-shrink:0;width:19px;height:19px;border:1.5px solid var(--line-strong);border-radius:5px;margin-top:2px;display:grid;place-items:center;transition:.12s}
+.box svg{opacity:0;color:var(--ground);width:11px;height:11px}
+.check[aria-pressed="true"] .box{background:var(--ok);border-color:var(--ok)}
+.check[aria-pressed="true"] .box svg{opacity:1}
+.check[aria-pressed="true"] .ctitle{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--line-strong)}
+.ctitle{display:block;font-size:14px;font-weight:500;transition:.12s}
+.cdesc{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.cdesc a{color:var(--accent-ink);text-underline-offset:2px}
+
+/* ── prompt cards ─────────────────────── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;align-items:start}
+.card{border:1px solid var(--line);border-radius:11px;background:var(--ground);overflow:hidden;display:flex;flex-direction:column}
+.card.warn{border-color:var(--accent-line);background:var(--accent-wash)}
+.chead{padding:15px 17px 12px;display:flex;flex-direction:column;gap:7px}
+.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sref{font-size:10.5px;letter-spacing:.06em;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.badge{font-size:10.5px;padding:1px 7px;border-radius:99px;background:var(--surface-2);color:var(--muted)}
+.badge.hot{background:var(--accent-wash);color:var(--accent-ink);border:1px solid var(--accent-line)}
+.card h3{font-size:15px;line-height:1.35}
+.cbody{padding:0 17px 15px;display:flex;flex-direction:column;gap:9px;flex:1}
+.note{padding:11px 17px 14px;border-top:1px dashed var(--line);font-size:12px;color:var(--muted);line-height:1.5}
+.note b{color:var(--ink-2);font-weight:600}
+
+.pblock{position:relative;background:var(--panel);border:1px solid var(--panel-line);border-radius:8px;padding:13px 44px 13px 15px;color:var(--panel-ink);font-size:13.5px;line-height:1.62;white-space:pre-wrap;word-break:break-word}
+.pblock.op{font-family:"IBM Plex Mono","Consolas",monospace;font-size:13px}
+.pblock .lbl{display:block;font-size:10.5px;letter-spacing:.06em;color:var(--faint);margin-bottom:5px;font-family:"IBM Plex Mono",monospace}
+.cp{position:absolute;top:9px;right:9px;width:26px;height:26px;border-radius:6px;border:1px solid var(--panel-line);display:grid;place-items:center;color:#8E8885;transition:.12s}
+.cp:hover{color:var(--panel-ink);border-color:#5A5451;background:rgba(255,255,255,.05)}
+.cp.done{color:var(--ok);border-color:var(--ok)}
+.cp svg{width:13px;height:13px}
+
+.steps{display:flex;flex-direction:column;gap:9px}
+.step{display:flex;gap:11px;align-items:flex-start}
+.sn{flex-shrink:0;width:21px;height:21px;border-radius:50%;background:var(--surface-2);color:var(--muted);font-size:11px;font-weight:600;display:grid;place-items:center;margin-top:9px;font-family:"IBM Plex Mono",monospace}
+.step.reset .sn{background:var(--accent);color:#fff}
+.step > .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.stag{font-size:11px;color:var(--faint)}
+.step.reset .stag{color:var(--accent-ink);font-weight:500}
+
+.swap{display:flex;flex-direction:column;gap:5px;padding:11px 0;border-bottom:1px solid var(--line)}
+.swap:last-child{border-bottom:none;padding-bottom:0}
+.bad{font-size:12.5px;color:var(--faint);text-decoration:line-through;text-decoration-color:var(--line-strong);padding-left:15px;position:relative}
+.bad::before{content:"×";position:absolute;left:0;top:-1px;color:var(--faint);text-decoration:none;font-size:13px}
+.swap .pblock{font-size:13px;padding:11px 42px 11px 13px}
+.eff{font-size:11.5px;color:var(--muted);padding-left:2px}
+
+/* ── builder ──────────────────────────── */
+.bwrap{border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.bpick{padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px;background:var(--surface)}
+.bcol h4{margin:0 0 9px;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.bcol h4 em{font-style:normal;font-family:"IBM Plex Mono",monospace;color:var(--accent-ink);margin-right:5px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{padding:4px 11px;border:1px solid var(--line-strong);border-radius:99px;font-size:12.5px;background:var(--ground);color:var(--ink-2);transition:.12s}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.bout{padding:18px;border-top:1px solid var(--line);background:var(--ground)}
+.bout .pblock{min-height:76px}
+.bhint{font-size:12px;color:var(--muted);margin-top:10px}
+
+/* ── padlet ───────────────────────────── */
+.pads{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.pad{border:1px solid var(--line);border-radius:11px;padding:18px}
+.pad .no{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent-ink);font-weight:600}
+.pad h3{font-size:15px;margin:7px 0 9px}
+.pad ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.pad li{font-size:12.5px;color:var(--muted);padding-left:14px;position:relative}
+.pad li::before{content:"—";position:absolute;left:0;color:var(--faint)}
+.pad .when{margin-top:12px;font-size:11.5px;color:var(--faint);font-family:"IBM Plex Mono",monospace}
+
+/* ── misc ─────────────────────────────── */
+.empty{padding:56px 0;text-align:center;color:var(--muted);font-size:14px}
+footer{border-top:1px solid var(--line);padding:30px 0 46px;color:var(--faint);font-size:12px;display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);background:var(--ink);color:var(--ground);padding:9px 18px;border-radius:99px;font-size:13px;opacity:0;pointer-events:none;transition:.18s;z-index:99;box-shadow:var(--shadow)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:860px){
+  .flow{grid-template-columns:repeat(2,1fr)}
+  .stat{flex-basis:50%}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .flow{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .brand span{display:none}
+}
+
+
+/* ── 3주차 추가 ───────────────────────── */
+.flow .min b{color:var(--ink-2);font-weight:600}
+.gone{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:18px}
+.gone > div{background:var(--ground);padding:12px 14px}
+.gone .d{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--faint)}
+.gone .n{font-size:13.5px;font-weight:600;margin:3px 0 2px}
+.gone .w{font-size:12px;color:var(--muted)}
+.gone .k{display:inline-block;font-size:10.5px;padding:0 6px;border-radius:99px;margin-left:4px;vertical-align:1px}
+.k.end{background:var(--accent-wash);color:var(--accent-ink);border:1px solid var(--accent-line)}
+.k.ren{background:var(--surface-2);color:var(--muted)}
+
+/* picker */
+.pick{border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.pick-in{padding:18px;background:var(--surface);display:grid;grid-template-columns:1.3fr 1fr;gap:22px}
+@media (max-width:760px){.pick-in{grid-template-columns:1fr}}
+.pick h4{margin:0 0 9px;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.pick h4 em{font-style:normal;font-family:"IBM Plex Mono",monospace;color:var(--accent-ink);margin-right:5px}
+.pick-out{padding:18px;border-top:1px solid var(--line);background:var(--ground)}
+.recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.rec{border:1px solid var(--line);border-radius:10px;padding:13px 15px;display:flex;flex-direction:column;gap:6px}
+.rec.top{border-color:var(--accent-line);background:var(--accent-wash)}
+.rec .rk{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent-ink);font-weight:600}
+.rec h5{margin:0;font-size:15px}
+.rec p{font-size:12.5px;color:var(--muted);line-height:1.5}
+.rec .why{color:var(--ink-2)}
+.rec a{font-size:12px;color:var(--accent-ink);text-underline-offset:2px}
+.rec .warn{color:var(--accent-ink)}
+.phint{font-size:12px;color:var(--muted);margin-top:12px}
+
+/* tool cards */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;align-items:start}
+.tool{border:1px solid var(--line);border-radius:11px;padding:15px 17px;display:flex;flex-direction:column;gap:8px;background:var(--ground)}
+.tool .top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.tool h3{font-size:16px}
+.tool .by{font-size:11.5px;color:var(--faint)}
+.tool dl{margin:0;display:grid;grid-template-columns:62px 1fr;gap:4px 10px;font-size:12.5px;line-height:1.5}
+.tool dt{color:var(--faint)}
+.tool dd{margin:0;color:var(--ink-2)}
+.tool dd.paid{color:var(--muted)}
+.tool dd.caution{color:var(--accent-ink)}
+.tool .go{font-size:12.5px;color:var(--accent-ink);text-underline-offset:2px;font-family:"IBM Plex Mono",monospace;word-break:break-all}
+.lvl{font-size:10.5px;padding:1px 7px;border-radius:99px;white-space:nowrap}
+.lvl.free{background:#E6F4EC;color:#2E7D5B}
+.lvl.credit{background:#FFF4DC;color:#8A5A00}
+.lvl.paid{background:var(--surface-2);color:var(--muted)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lvl.free{background:#16301F;color:#5FBF95}:root:not([data-theme="light"]) .lvl.credit{background:#33280F;color:#E0B04F}}
+:root[data-theme="dark"] .lvl.free{background:#16301F;color:#5FBF95}
+:root[data-theme="dark"] .lvl.credit{background:#33280F;color:#E0B04F}
+.tfil{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+
+/* record tables */
+.rec-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table.rt{width:100%;border-collapse:collapse;font-size:12.5px;min-width:520px}
+.rt th{background:var(--surface);color:var(--muted);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);font-size:11.5px}
+.rt td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.rt tr:last-child td{border-bottom:none}
+.rt td.c{text-align:center;width:74px}
+.mark{width:44px;height:28px;border:1px solid var(--line-strong);border-radius:6px;font-size:15px;font-weight:600;background:var(--ground)}
+.mark:hover{border-color:var(--accent)}
+.rt input{width:100%;min-width:60px;border:1px solid var(--line);border-radius:5px;padding:5px 7px;background:var(--ground);color:var(--ink);font:inherit;font-size:12.5px}
+.rt input:focus{outline:none;border-color:var(--accent)}
+.rbar{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:8px;flex-wrap:wrap}
+.btn{padding:6px 12px;border:1px solid var(--line-strong);border-radius:7px;font-size:12.5px;background:var(--ground)}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.btn.pri:hover{color:var(--ground);opacity:.88}
+details.ans{font-size:12.5px;color:var(--muted);border:1px dashed var(--line-strong);border-radius:8px;padding:8px 12px}
+details.ans summary{cursor:pointer;color:var(--ink-2);font-weight:500}
+details.ans p{margin-top:6px;line-height:1.6}
+
+/* stack builder */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.slot{border:1px solid var(--line);border-radius:10px;padding:13px 14px}
+.slot h4{margin:0 0 8px;font-size:12.5px;color:var(--muted);font-weight:600}
+.slot select,.slot input{width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:7px 8px;background:var(--ground);color:var(--ink);font:inherit;font-size:13px}
+.slot input{margin-top:7px}
+.padlink{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;padding:8px 14px;border-radius:8px;background:var(--accent-wash);border:1px solid var(--accent-line);color:var(--accent-ink);text-decoration:none}
+
+.card.wide{grid-column:1/-1}
+.card.wide .rt td:first-child{min-width:220px}
+
+/* ── 필터 구분 (프롬프트 = 검정 / 도구 = 코랄) ── */
+.flab{font-size:10.5px;letter-spacing:.1em;color:var(--faint);align-self:center;white-space:nowrap;padding-right:2px;text-transform:uppercase}
+.filters .flab{padding-bottom:0;align-self:center}
+.tfil{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.fchips{display:flex;gap:6px;flex-wrap:wrap}
+.chip[data-tf][aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.tfil .chip[data-tf]{border-color:var(--accent-line)}
+.tfil .chip[data-tf]:hover{border-color:var(--accent);color:var(--accent-ink)}
+.tfil .chip[data-tf][aria-pressed="true"]:hover{color:#fff}
+
+@media (max-width:620px){.lx{display:none}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="wrap">
+    <div class="bar-in">
+      <div class="brand"><b>도구 데스크</b><span class="mono">2026.09.18 · 3주차</span></div>
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
+        <input id="q" type="search" placeholder="실습 프롬프트 검색 (예: 노트북, 포스터, 출처)" autocomplete="off">
+      </label>
+      <button class="tog" id="tt" title="밝기 전환" aria-label="밝기 전환">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8 5.6 5.6 0 1 0 13.2 9.6z"/></svg>
+      </button>
+    </div>
+    <div class="filters" id="fl"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">AI실무활용과 스마트비즈니스 · 3주차</div>
+    <h1>범용 AI 도구의 이해 (2)<br>도구 지도와 실습 프롬프트</h1>
+    <p class="sub">오늘은 도구를 넓게 보고, 내 과제에 맞는 것을 골라 씁니다. 여기 있는 실습은 전부 무료 계정으로 됩니다. 프롬프트는 복사 버튼을 누르고 붙여넣기만 하세요.</p>
+    <div class="stats">
+      <div class="stat"><b id="st1">0</b><span>복사할 프롬프트</span></div>
+      <div class="stat"><b id="st2">0</b><span>도구 카드</span></div>
+      <div class="stat"><b>3</b><span>패들릿 업로드</span></div>
+      <div class="stat"><b>150<span style="font-size:14px">분</span></b><span>2·3·4교시 · 33-B202</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section id="s-check">
+    <div class="shead"><h2>시작 전에 확인할 것</h2><span class="tag mono">BEFORE WE START</span></div>
+    <p class="slead">오늘은 구글 계정 하나로 거의 다 됩니다. 다섯 개를 먼저 걷어내고 시작합니다. 눌러서 체크할 수 있습니다.</p>
+    <div class="checks" id="ck"></div>
+  </section>
+
+  <section id="s-flow">
+    <div class="shead"><h2>오늘의 흐름</h2><span class="tag mono">150 MIN</span></div>
+    <p class="slead">지난주는 ChatGPT와 제미나이 두 개를 깊게 봤습니다. 오늘은 여러 도구를 넓게 보고, 할 일에 맞게 고르는 눈을 만듭니다.</p>
+    <div class="flow" id="fw"></div>
+    <div class="gone" id="gn"></div>
+  </section>
+
+  <section id="s-pick">
+    <div class="shead"><h2>도구 고르기 도우미</h2><span class="tag mono">SLIDE 08 · 11 · 12</span></div>
+    <p class="slead">하려는 일을 하나 고르고, 조건을 눌러 보세요. 오늘 기준으로 쓸 만한 도구를 순서대로 보여줍니다. 추천은 출발점일 뿐이니, 처음 쓰는 도구는 아래 '3분 체크'로 한 번 더 보세요.</p>
+    <div class="pick">
+      <div class="pick-in">
+        <div><h4><em>①</em>지금 하려는 일</h4><div class="opts" id="pj"></div></div>
+        <div><h4><em>②</em>조건 (여러 개 선택 가능)</h4><div class="opts" id="pc"></div></div>
+      </div>
+      <div class="pick-out">
+        <div class="recs" id="pr"></div>
+        <p class="phint" id="ph">3분 체크: ① 무엇을 잘하나 ② 무료로 어디까지 ③ 출처를 보여주나 ④ 내 자료는 어디로 가나 ⑤ 결과물을 가져갈 수 있나</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-tools">
+    <div class="shead"><h2>도구 카드</h2><span class="tag mono" id="tcnt"></span></div>
+    <p class="slead"><b>아래 빨간색 칩</b>(도구 카드)은 이 섹션의 카드만 걸러냅니다. 2026년 9월 17일에 각 서비스 요금제 화면과 공식 발표로 확인한 내용이고, 무료 한도는 자주 바뀌니 실제 화면을 기준으로 보세요.</p>
+    <div class="tfil"><span class="flab mono">도구 카드<span class="lx"> 걸러보기</span></span><span id="tf" class="fchips"></span></div>
+    <div class="tgrid" id="tg"></div>
+  </section>
+
+  <section id="s-pack">
+    <div class="shead"><h2>실습 프롬프트</h2><span class="tag mono" id="cnt"></span></div>
+    <p class="slead"><b>맨 위 검은색 칩</b>(실습 프롬프트)을 누르면 이 섹션의 프롬프트만 걸러집니다. 카드 오른쪽 위 버튼을 누르면 그 문장만 복사됩니다. 기록표는 칸을 눌러 표시하고, 다 채우면 복사해서 패들릿에 붙이세요.</p>
+    <div id="pk"></div>
+    <div class="empty" id="mt" hidden>검색 결과가 없습니다. 다른 낱말로 찾아보세요.</div>
+  </section>
+
+  <section id="s-stack">
+    <div class="shead"><h2>나의 도구 조합</h2><span class="tag mono">SLIDE 40</span></div>
+    <p class="slead">할 일 네 칸에 하나씩 고르고 이유를 한 줄 적으세요. 아래 버튼으로 복사해 패들릿에 같이 올려도 됩니다.</p>
+    <div class="stack" id="sk"></div>
+    <div class="rbar"><button class="btn pri" id="skc">내 조합 복사</button></div>
+  </section>
+
+  <section id="s-padlet">
+    <div class="shead"><h2>패들릿에 올릴 것</h2><span class="tag mono">수시과제 10%</span></div>
+    <p class="slead">품질이 아니라 올렸는지를 봅니다. 먼저 학번·이름으로 글을 올리고, 이후 활동은 그 글에 댓글로 남기세요. <b>올릴 때 쓴 도구 이름을 꼭 같이 적습니다.</b></p>
+    <div class="pads" id="pd"></div>
+    <div id="pl"></div>
+  </section>
+
+  <footer>
+    <span>서울시립대학교 경영학부 · AI실무활용과 스마트비즈니스 · 전공선택 29044(01)</span>
+    <span>김덕진 · IT커뮤니케이션연구소 소장</span>
+  </footer>
+</div>
+
+<div class="toast" id="ts">복사했습니다</div>
+
+<script>
+/* ── 수업 전에 바꿀 것 ─────────────────── */
+const PADLET_URL = "";   /* 예: "https://padlet.com/itcl/uos0918" — 비워두면 '수업 시작 때 공지'로 표시 */
+
+const CHECKS=[
+ {t:"개인 구글 계정으로 로그인",d:"학교 계정이 아니라 <b>개인 구글 계정</b>이어야 합니다. 제미나이, Gemini Notebook, Google Vids가 모두 이 계정으로 됩니다."},
+ {t:"Claude · Perplexity 로그인",d:"<a href=\"https://claude.ai\" target=\"_blank\" rel=\"noopener\">claude.ai</a>와 <a href=\"https://www.perplexity.ai\" target=\"_blank\" rel=\"noopener\">perplexity.ai</a>에서 'Google로 계속하기'. 따로 가입할 것이 없습니다."},
+ {t:"제미나이 학생 요금제 확인",d:"one.google.com/ai-student · 12개월 무료, 신청 마감 2026년 12월 31일. <b>안 해도 오늘 실습은 됩니다.</b> 신청했다면 1년 뒤 자동 결제 알림을 걸어두세요."},
+ {t:"공부할 자료 하나 준비",d:"Gemini Notebook 실습에 넣을 자료입니다. 2주차 강의자료 PDF가 가장 좋고, 없으면 뉴스 기사 주소 두세 개면 됩니다."},
+ {t:"노트북 배터리 확인",d:"강의실에 충전 케이블이 없습니다."}
+];
+const FLOW=[
+ {n:"01",t:"도구 지도",m:"오프닝 포함 35분",i:["사라지고 바뀐 도구","할 일로 나눈 지도","무료로 어디까지","새 도구 3분 체크"]},
+ {n:"02",t:"세 개의 답",m:"25분 · 패들릿 ①",i:["Claude 첫걸음","같은 질문 세 도구 비교","아티팩트 계산기"]},
+ {n:"03",t:"찾기와 공부",m:"30분 · 패들릿 ②",i:["검색형 AI 출처 비교","공부 모드 세 가지","중간고사 노트북"]},
+ {n:"04",t:"만들기",m:"35분 · 패들릿 ③",i:["포스터 · CM송","도식 · 영상","홍보 키트 미션"]},
+ {n:"05",t:"정리",m:"11분",i:["에이전트는 9주차","나의 도구 조합","AI 활용 규칙"]}
+];
+const GONE=[
+ {d:"2026.04.09",n:"네이버 클로바X · 큐:",w:"종료, AI탭으로",k:"end"},
+ {d:"2026.04.26",n:"OpenAI Sora 앱",w:"앱·웹 종료",k:"end"},
+ {d:"2026.04.30",n:"구글 Whisk",w:"종료, Flow로",k:"end"},
+ {d:"2026.06.17",n:"ChatGPT Pulse",w:"종료, 예약 작업으로",k:"end"},
+ {d:"2026.07.16",n:"NotebookLM",w:"Gemini Notebook으로",k:"ren"},
+ {d:"2026.08.09",n:"ChatGPT Atlas",w:"AI 브라우저 종료",k:"end"},
+ {d:"2026.09.16",n:"Claude Cowork",w:"브랜드 종료, 클로드 대화창 안으로",k:"ren"},
+ {d:"2026.09.28",n:"구글 Mixboard",w:"종료 예정",k:"end"},
+ {d:"2026.10.15",n:"카카오 카나나 앱",w:"종료 예정, 카카오톡 안으로",k:"end"}
+];
+
+/* ── 도구 ─────────────────────────────── */
+const TCATS=[{id:"talk",name:"생각·대화"},{id:"search",name:"찾기·조사"},{id:"study",name:"내 자료로 공부"},{id:"make",name:"만들기"},{id:"agent",name:"일 맡기기"}];
+const LVL={free:"무료로 됨",credit:"무료는 빠듯",paid:"유료부터"};
+const TOOLS=[
+ {n:"ChatGPT",by:"OpenAI",c:"talk",u:"https://chatgpt.com",l:"free",j:{talk:3,study:2,image:2,search:1},cite:1,exp:1,
+  g:"글쓰기·정리·코딩까지 두루. 한국에서 가장 많이 씁니다(7월 앱 MAU 2,367만).",
+  f:"텍스트 대화 무제한, 생각하기 버튼, 공부하기(@study), 이미지 생성(한도 있음)",
+  p:"Plus: GPT-6 Astra, ChatGPT Work(에이전트)",x:"무료 계정에는 답변 아래 광고가 뜹니다."},
+ {n:"제미나이",by:"구글",c:"talk",u:"https://gemini.google.com",l:"free",j:{talk:3,search:2,study:2,deck:2},cite:1,exp:1,
+  g:"구글 검색·유튜브·드라이브와 연결됩니다. 딥리서치와 Canvas가 무료.",
+  f:"딥리서치, Canvas, Gems, 나노 바나나 2, 음악 만들기, 오디오 개요",
+  p:"AI Plus(학생 12개월 무료): 영상 생성, 사용량 2배, 예약 작업",x:"개인 구글 계정으로 쓰세요. 사용량은 5시간마다 다시 채워집니다."},
+ {n:"Claude",by:"Anthropic",c:"talk",u:"https://claude.ai",l:"free",j:{talk:3,deck:2},cite:1,exp:1,
+  g:"긴 글 읽기·글 다듬기, 말로 작은 앱을 만드는 아티팩트.",
+  f:"대화, 웹 검색, 파일 만들기, 아티팩트, 메모리, 프로젝트 5개 (Sonnet·Haiku 모델)",
+  p:"Pro(월 20달러): Opus, Research, 작업 맡기기·예약, Docs·Slides·Design",x:"9월 16일 업무용 Cowork가 대화창 안으로 합쳐졌습니다(유료부터 순차 적용, 무료는 곧). 무료 사용량은 5시간 단위로 채워집니다."},
+ {n:"Microsoft Copilot",by:"마이크로소프트",c:"talk",u:"https://copilot.microsoft.com",l:"free",j:{talk:2},cite:1,
+  g:"Edge·Windows에 기본으로 들어 있어 따로 설치할 것이 없습니다.",
+  f:"대화, Edge 사이드바에서 보고 있는 웹페이지·PDF 요약",
+  p:"Microsoft 365 구독과 연동되는 기능",x:"8월부터 개인용·업무용 앱을 합치는 중이라 화면이 바뀌고 있습니다."},
+ {n:"카카오톡 속 ChatGPT",by:"카카오 · OpenAI",c:"talk",u:"",l:"free",j:{talk:2},kr:1,
+  g:"카카오톡을 벗어나지 않고 ChatGPT를 씁니다. 누적 가입 1,300만(8월).",
+  f:"카카오톡 안에서 시작",p:"—",x:"카나나 앱은 10월 15일 종료하고 카카오톡 안으로 들어갑니다."},
+ {n:"에이닷",by:"SKT",c:"talk",u:"",l:"free",j:{talk:1},kr:1,
+  g:"통화·문자 요약, 에이전트콜(고객센터 연결 대기를 대신, 6월).",
+  f:"무료 앱",p:"—",x:"통화 관련 기능은 통신사·기종에 따라 다릅니다."},
+ {n:"Meta AI",by:"메타",c:"talk",u:"https://www.meta.ai",l:"free",j:{talk:1},
+  g:"인스타그램·왓츠앱을 만든 회사의 AI. 5월 한국 출시.",
+  f:"앱·웹 대화 (빠른 답 · 깊게 생각하기 모드)",p:"—",x:"개인 에이전트 기능 확대를 두고 사생활 우려 보도가 있었습니다(9월)."},
+ {n:"Grok",by:"xAI",c:"talk",u:"https://grok.com",l:"free",j:{talk:1,search:1},
+  g:"X(트위터) 실시간 게시물과 연결됩니다.",
+  f:"사용량 제한이 있는 무료 대화",p:"SuperGrok 월 30달러부터",x:"X 게시물은 출처 신뢰도가 제각각입니다. 원문을 꼭 확인하세요."},
+ {n:"DeepSeek",by:"딥시크 (중국)",c:"talk",u:"https://chat.deepseek.com",l:"free",j:{talk:1},
+  g:"추론형 모델을 무료로. V4 정식판(8월).",
+  f:"웹·앱 대화, 추론 강도 선택",p:"—",x:"2025년 한국 이용자 정보 국외 이전 문제로 다운로드가 중단됐다 재개됐습니다. 개인정보 처리방침을 먼저 보세요."},
+ {n:"Perplexity",by:"퍼플렉시티",c:"search",u:"https://www.perplexity.ai",l:"free",j:{search:3,talk:1},cite:1,
+  g:"문장마다 출처 번호가 붙습니다. 과제 근거 찾기에 맞습니다.",
+  f:"출처가 달린 검색, Comet 브라우저",p:"Pro 월 20달러 · Max 월 200달러",x:"출처가 많아도 공식 출처인지는 따로 확인하세요."},
+ {n:"네이버 AI탭",by:"네이버 · 하이퍼클로바X",c:"search",u:"https://www.naver.com",l:"free",j:{search:3},cite:1,kr:1,
+  g:"국내 가게·가격·후기 같은 생활 정보에 강한 편이고 예약으로 이어집니다.",
+  f:"모바일·PC 무료 (6월 정식 출시)",p:"—",x:"클로바X·큐:는 4월에 종료됐습니다. 네이버 검색 화면에서 AI탭을 찾으세요."},
+ {n:"구글 AI 모드",by:"구글 검색",c:"search",u:"https://www.google.com",l:"free",j:{search:2},cite:1,
+  g:"검색창에서 바로 대화형 답. 해외 자료와 최신 뉴스를 넓게 훑을 때.",
+  f:"한국어 지원, 무료",p:"—",x:"답 아래 링크를 눌러 원문 날짜를 확인하세요."},
+ {n:"Gemini Notebook",by:"구글 · 옛 NotebookLM",c:"study",u:"https://notebook.google.com",l:"free",j:{study:3,search:1,deck:1},cite:1,exp:1,
+  g:"내가 올린 자료 안에서만 답하고 인용 번호를 붙입니다. 시험 공부에 가장 맞습니다.",
+  f:"노트북 100개, 소스 50개, 채팅 하루 50회, 오디오·동영상 개요 하루 3개, 퀴즈·플래시카드 하루 10개",
+  p:"AI Plus: 대부분 한도 2배",x:"7월에 이름이 바뀌었습니다. 요약하면서 틀릴 수 있으니 인용 번호로 확인하세요."},
+ {n:"ChatGPT 공부하기",by:"OpenAI",c:"study",u:"https://chatgpt.com",l:"free",j:{study:2},
+  g:"답을 바로 주지 않고 질문하며 이끕니다. 8월부터 화면에서 퀴즈를 풉니다.",
+  f:"모든 요금제 · 웹 입력창에 @study",p:"—",x:"공부용이어도 틀릴 수 있습니다. 중요한 내용은 교재와 대조하세요."},
+ {n:"제미나이 가이드 학습",by:"구글",c:"study",u:"https://gemini.google.com",l:"free",j:{study:2},
+  g:"단계별로 가르치며 확인 질문을 합니다. 학습 노트북(6월)은 진단 퀴즈로 맞춤 레슨을 만듭니다.",
+  f:"도구 메뉴에서 선택",p:"—",x:"학습 노트북의 무료 범위는 공식 안내가 없어 화면으로 확인하세요."},
+ {n:"제미나이 Canvas",by:"구글",c:"make",u:"https://gemini.google.com",l:"free",j:{deck:3},exp:1,
+  g:"인포그래픽·웹페이지·프레젠테이션을 말로 만들고 고칩니다.",
+  f:"무료 계정 가능",p:"—",x:"ChatGPT의 캔버스는 폐지됐지만 제미나이 Canvas는 그대로입니다."},
+ {n:"냅킨",by:"Napkin",c:"make",u:"https://www.napkin.ai",l:"credit",j:{deck:3},exp:1,
+  g:"글을 붙여넣으면 흐름도·비교표 같은 도식을 골라 줍니다.",
+  f:"주 500크레딧, PPTX 내보내기",p:"유료 요금제",x:"무료 결과물에는 워터마크가 붙습니다."},
+ {n:"Gamma",by:"감마",c:"make",u:"https://gamma.app",l:"credit",j:{deck:2},exp:1,
+  g:"주제만 주면 발표 덱 전체를 만듭니다.",
+  f:"가입 때 400크레딧 한 번 (다시 채워지지 않음)",p:"크레딧을 다 쓰면 유료",x:"무료 결과물에 워터마크. 한 번에 제대로 쓰세요."},
+ {n:"Genspark",by:"젠스파크",c:"make",u:"https://www.genspark.ai",l:"credit",j:{deck:1,agent:2},exp:1,
+  g:"슈퍼 에이전트·AI 슬라이드·시트. 7월 한국 진출.",
+  f:"하루 100크레딧",p:"유료 요금제",x:"슬라이드 한 번에 무료 하루치를 넘길 수 있어 오늘 실습에서는 뺐습니다."},
+ {n:"나노 바나나 2",by:"구글 · 제미나이 이미지",c:"make",u:"https://gemini.google.com",l:"free",j:{image:3},exp:1,
+  g:"한글 문구 포스터, 부분 수정, 여러 장 합성.",
+  f:"제미나이 무료 계정의 기본 이미지 모델",p:"AI Plus: 나노 바나나 Pro로 다시 생성",x:"SynthID와 보이는 워터마크가 들어갑니다. 실존 인물 합성은 주의."},
+ {n:"Lyria 3.5",by:"구글 · 제미나이 음악",c:"make",u:"https://gemini.google.com",l:"free",j:{music:3},adult:1,exp:1,
+  g:"텍스트·사진·영상으로 보컬곡이나 연주곡. 한국어 가사, K-pop 장르.",
+  f:"제미나이 무료 계정 (짧은 곡 위주)",p:"유료 요금제에서 더 긴 곡",x:"만 18세 이상. 결과물에 SynthID가 들어갑니다."},
+ {n:"Suno",by:"수노",c:"make",u:"https://suno.com",l:"credit",j:{music:2},exp:1,
+  g:"노래 생성 전문 서비스. 9월 v6 출시.",
+  f:"v6-mini, 하루 50크레딧",p:"유료 요금제",x:"무료로 만든 곡은 상업적으로 쓸 수 없습니다."},
+ {n:"Google Vids",by:"구글",c:"make",u:"https://vids.google.com",l:"free",j:{video:3},exp:1,
+  g:"영상 편집기 안에서 Veo 3.1로 장면을 만들고 이어 붙입니다.",
+  f:"개인 구글 계정 월 10편 (4월 발표)",p:"유료 요금제: 더 많은 생성, 아바타 등",x:"한 편마다 한도가 줄어듭니다. 프롬프트를 먼저 다듬고 만드세요."},
+ {n:"제미나이 영상",by:"구글 · Gemini Omni",c:"make",u:"https://gemini.google.com",l:"paid",j:{video:2},exp:1,
+  g:"대화하며 영상을 고칩니다. 10초씩 이어 최대 40초.",
+  f:"무료 계정은 안 됨",p:"AI Plus부터 (학생 요금제로 가능)",x:"학생 요금제를 신청했다면 써볼 수 있습니다."},
+ {n:"CapCut",by:"캡컷",c:"make",u:"https://www.capcut.com",l:"free",j:{video:1},exp:1,
+  g:"자막·컷 편집 위주. 만든 영상을 다듬을 때.",
+  f:"1080p 내보내기, 기본 AI 보이스오버",p:"Pro: 고급 AI 기능",x:"고급 AI 기능은 대부분 유료입니다."},
+ {n:"에이전트 4종",by:"9주차에 자세히",c:"agent",u:"",l:"paid",j:{agent:3},
+  g:"ChatGPT Work · Gemini Spark · Genspark Claw · Perplexity Computer. 여러 단계를 알아서 처리합니다. Claude는 9월 16일 Cowork를 대화창 안으로 합쳤습니다.",
+  f:"대부분 무료로는 안 됨",p:"ChatGPT Plus · Google AI Pro · Perplexity Pro 등",x:"Gemini Spark는 AI Pro 이상이라 학생 요금제(AI Plus)로는 안 됩니다."}
+];
+const JOBS=[
+ {id:"talk",t:"묻고 정리하기 · 글 다듬기"},{id:"search",t:"최신 정보 · 근거 찾기"},{id:"study",t:"강의자료로 시험 공부"},
+ {id:"deck",t:"발표자료 · 도식"},{id:"image",t:"포스터 · 이미지"},{id:"music",t:"CM송 · 음악"},
+ {id:"video",t:"짧은 영상"},{id:"agent",t:"여러 단계 일 맡기기"}
+];
+const CONDS=[
+ {id:"free",t:"무료만"},{id:"cite",t:"출처가 꼭 필요"},{id:"kr",t:"국내 생활 정보"},
+ {id:"exp",t:"파일로 가져가기"},{id:"u18",t:"만 18세 미만"}
+];
+
+const PADS=[
+ {n:"①",t:"세 개의 답",w:"Part 02 · 5분",i:["던진 질문 그대로","가장 나은 답을 준 도구와 이유 한 줄 (비교 기록표를 복사해 붙여도 됩니다)","(선택) 아티팩트 계산기 캡처"]},
+ {n:"②",t:"내 자료로 만든 퀴즈",w:"Part 03 · 5분",i:["넣은 소스 (파일 이름이나 링크)","퀴즈나 플래시카드 캡처","틀리거나 애매했던 곳 한 군데, 없으면 '없음'과 확인한 방법"]},
+ {n:"③",t:"홍보 키트",w:"Part 04 · 5분",i:["포스터 한 장 + CM송·도식·영상 중 하나","쓴 도구와 마지막 프롬프트","몇 번 고쳤고, 가장 크게 바꾼 이유 한 줄"]}
+];
+
+const PARTS=[
+ {id:"p1",name:"도구 지도"},
+ {id:"p2",name:"세 개의 답"},
+ {id:"p3",name:"찾기와 공부"},
+ {id:"p4",name:"만들기"}
+];
+
+const CARDS=[
+/* ── PART 1 ── */
+{p:"p1",s:"S12",b:["3분 체크"],t:"새 도구, AI에게 먼저 정리시키기",type:"single",
+ items:[{l:"OO에 도구 이름을 넣으세요",v:"OO라는 AI 서비스를 처음 써보려고 해. 이 서비스가 ① 무엇을 잘하는지 ② 무료로 어디까지 되는지 ③ 답에 출처를 보여주는지 ④ 내가 올린 자료가 학습에 쓰이는지 ⑤ 만든 결과물을 상업적으로 써도 되는지를, 공식 페이지 링크와 함께 표로 정리해줘. 확인되지 않는 부분은 모른다고 적어줘."}],
+ note:"AI가 만든 표는 출발점입니다. <b>링크를 눌러 공식 페이지에서 한 번 더</b> 확인하세요. 무료 한도는 자주 바뀝니다."},
+{p:"p1",s:"S11",b:["무료로 어디까지"],t:"내 상황에 맞는 무료 도구 찾기",type:"single",
+ items:[{l:"아무 대화형 AI에",v:"나는 경영학부 학생이고 유료 구독은 하지 않을 거야. 레포트 조사, 시험 공부, 발표자료 만들기에 쓸 무료 AI 도구를 각각 하나씩 추천하고, 무료로 어디까지 되는지 알려줘. 확인이 안 되는 부분은 추측하지 말고 모르겠다고 말해줘."}],
+ note:"마지막 문장은 2주차에 배운 할루시네이션 줄이기입니다. 위의 <b>도구 고르기 도우미</b>와 결과를 비교해 보세요."},
+
+/* ── PART 2 ── */
+{p:"p2",s:"S16",b:["ChatGPT · 제미나이 · Claude"],t:"같은 질문, 세 개의 답",type:"single",hot:true,
+ items:[{l:"세 곳 모두 새 채팅에 똑같이",v:"우리 학교 앞에 작은 개인 카페를 열었는데, 바로 옆에 대형 프랜차이즈 카페가 있어. 가격을 내리지 않고 대학생 손님을 끌 방법 3가지를 제안해줘. 각 방법마다 예상 비용과, 실패할 수 있는 이유도 같이 말해줘."}],
+ note:"세 창을 나란히 열고 동시에 던지세요. ChatGPT에 2주차 맞춤형 지침이 들어 있다면 그 사실도 메모해 두세요."},
+{p:"p2",s:"S17",b:["비교 기록표"],t:"비교할 때 보는 다섯 가지",type:"rubric",
+ note:"칸을 누를 때마다 ○ → △ → × → 빈칸으로 바뀝니다. <b>답의 길이는 기준이 아닙니다.</b> 이름을 가리고 옆 사람에게 고르게 해도 좋습니다."},
+{p:"p2",s:"S18",b:["Claude","아티팩트"],t:"말로 만드는 손익분기점 계산기",type:"steps",hot:true,
+ items:[{l:"만들기",v:"손익분기점 계산기를 만들어줘. 고정비, 개당 판매가격, 개당 변동비를 입력하면 손익분기 판매량과 매출액을 바로 보여주고, 판매량에 따른 이익 그래프도 그려줘. 화면은 한국어로."},
+        {l:"이어서 · 말로 고치기",v:"커피 원두 가격이 20% 오르면 손익분기 판매량이 어떻게 바뀌는지 비교하는 버튼을 추가해줘."},
+        {l:"검산하기",v:"고정비 300만 원, 판매가 5,000원, 변동비 2,000원일 때 손익분기 판매량과 매출액을 계산 과정과 함께 보여줘."}],
+ note:"정답은 <b>1,000잔, 매출 500만 원</b>입니다. 계산기에 같은 숫자를 넣어 맞는지 보세요. 10주차 바이브 코딩의 맛보기입니다."},
+{p:"p2",s:"S18",b:["제미나이","대안"],t:"Claude 사용량이 찼다면 Canvas로",type:"single",
+ items:[{l:"제미나이 → 도구 → Canvas 선택 후",v:"손익분기점 계산기를 만들어줘. 고정비, 개당 판매가격, 개당 변동비를 입력하면 손익분기 판매량과 매출액을 바로 보여주고, 판매량에 따른 이익 그래프도 그려줘. 화면은 한국어로."}],
+ note:"같은 문장으로 두 도구의 결과를 비교해 봐도 좋습니다."},
+
+/* ── PART 3 ── */
+{p:"p3",s:"S22",b:["검색형 AI","출처 비교"],t:"답이 정해진 질문으로 출처 비교",type:"single",hot:true,
+ items:[{l:"Perplexity · 네이버 AI탭 · 구글 AI 모드 중 두 곳 이상",v:"2026년 최저시급으로 주 15시간 아르바이트를 하면, 주휴수당을 포함해 한 달에 얼마를 받는지 계산해줘. 계산 근거와 출처를 함께 보여줘."}],
+ ans:"2026년 최저시급은 10,320원입니다. 주 15시간이면 주휴수당 대상이고, 주휴시간은 15 ÷ 40 × 8 = 3시간. 주 18시간 × 월 평균 4.345주 ≈ 78.2시간 → 약 80만 7천 원. 2027년 최저임금(10,700원 의결)을 섞어 답하는 도구가 있는지도 보세요.",
+ note:"아래 <b>출처 기록표</b>에 바로 적으세요."},
+{p:"p3",s:"S22",b:["기록표"],t:"출처 기록표",type:"srctable",
+ note:"공식 출처는 고용노동부, 최저임금위원회처럼 정부 기관 사이트입니다. 출처가 많다고 맞는 답은 아닙니다."},
+{p:"p3",s:"S21",b:["조건 걸기"],t:"검색형 AI에 조건 붙이기",type:"options",
+ items:[{l:"어디를 볼지",v:"고용노동부나 최저임금위원회 같은 공식 사이트 자료를 우선으로 봐줘. 블로그와 홍보성 글은 빼줘."},
+        {l:"언제 자료인지",v:"2026년에 발표된 자료만 참고하고, 각 출처의 날짜를 같이 적어줘."},
+        {l:"숫자와 출처 잇기",v:"답에 나온 숫자마다 어느 출처에서 왔는지 번호를 붙여줘."}],
+ note:"2주차의 '조건은 문장으로'입니다. 하나씩 붙여 가며 답이 어떻게 바뀌는지 보세요."},
+{p:"p3",s:"S23",b:["공부 모드"],t:"답 대신 이해를 받는 질문",type:"options",
+ items:[{l:"ChatGPT 웹 · 입력창에",v:"@study 재무회계에서 감가상각이 뭔지, 내가 이해할 때까지 질문하면서 알려줘."},
+        {l:"제미나이 · 도구 → 가이드 학습",v:"마케팅 4P를 처음 배우는 사람에게 가르치듯 단계별로 알려줘. 한 단계가 끝날 때마다 나에게 확인 질문을 하나씩 해줘."}],
+ note:"바로 답이 안 나와도 정상입니다. 질문에 직접 답하면서 따라가세요."},
+{p:"p3",s:"S26",b:["Gemini Notebook","10분"],t:"중간고사 대비 노트북",type:"steps",hot:true,
+ items:[{l:"채팅 · 핵심 뽑기",v:"이 자료에서 중간고사에 나올 만한 핵심 개념 10개를 골라, 각각 한 줄 정의와 헷갈리기 쉬운 점을 표로 정리해줘."},
+        {l:"스튜디오 · 오디오 개요 맞춤설정 칸에",v:"대학교 경영학부 학생이 시험 전날 듣는다고 생각하고, 헷갈리는 개념 위주로 설명해줘. 예시는 대학생 생활에서 들어줘."},
+        {l:"스튜디오 · 퀴즈 맞춤설정 칸에",v:"중간고사 대비용으로, 개념 정의와 사례 구분 문제 위주로 만들어줘. 헷갈리기 쉬운 보기를 꼭 넣어줘."}],
+ note:"notebook.google.com → 새로 만들기 → 소스 추가(2주차 강의자료 PDF, 기사 주소, 유튜브 링크). 오디오 개요는 몇 분 걸리니 <b>먼저 눌러두고 퀴즈를 푸세요.</b> 무료는 오디오 개요 하루 3개입니다."},
+{p:"p3",s:"S27",b:["확인"],t:"퀴즈 정답, 원문과 대조하기",type:"single",warn:true,
+ items:[{l:"퀴즈를 만든 노트북의 채팅에서",v:"방금 만든 퀴즈의 정답마다, 근거가 된 원문 문장을 그대로 인용하고 인용 번호를 붙여줘."}],
+ note:"자료 안에서만 답해도 요약하면서 숫자나 주어가 바뀔 수 있습니다. 틀린 곳을 찾았다면 그게 <b>패들릿 ②</b>의 가장 좋은 재료입니다."},
+
+/* ── PART 4 ── */
+{p:"p4",s:"S31",b:["나노 바나나 2"],t:"한글 포스터 만들기",type:"single",hot:true,
+ items:[{l:"제미나이 → 도구 → 이미지 만들기",v:"우리 학과 'AI 실무 스터디' 신입 모집 포스터를 만들어줘. 세로형, 밝고 깔끔한 대학 동아리 느낌. 큰 제목은 \"AI로 일하는 법, 같이 배워요\" 한 줄, 아래 작은 글씨로 \"매주 목요일 저녁 7시\"."}],
+ note:"넣을 글자는 따옴표로 감싸고 짧게. 글자가 계속 깨지면 글자 없이 만든 뒤 캔바나 PPT에서 얹으세요."},
+{p:"p4",s:"S31",b:["나노 바나나 2"],t:"한 번에 하나씩 고치기",type:"options",
+ items:[{l:"배경만",v:"글자는 그대로 두고 배경만 파란 계열로 바꿔줘."},
+        {l:"장면만",v:"사람은 빼고, 노트북과 책이 놓인 책상 위 장면으로 바꿔줘. 글자는 그대로 둬."},
+        {l:"크기만",v:"같은 디자인으로 인스타그램용 정사각형 버전도 만들어줘."}],
+ note:"바꿀 곳과 <b>그대로 둘 곳</b>을 같이 말하는 게 요령입니다."},
+{p:"p4",s:"S32",b:["SynthID"],t:"AI가 만든 이미지인지 확인",type:"single",
+ items:[{l:"만든 이미지를 제미나이에 올리고",v:"이 이미지가 구글 AI로 만들어졌는지 SynthID로 확인해줘."}],
+ note:"표시가 없다고 사람이 만든 것은 아닙니다. 다른 회사 도구로 만든 이미지에는 SynthID가 없습니다."},
+{p:"p4",s:"S33",b:["Lyria 3.5","만 18세 이상"],t:"30초 CM송 만들기",type:"options",
+ items:[{l:"제미나이 → 도구 → 음악 만들기",v:"경쾌한 K-pop 스타일로 동아리 신입 모집 CM송을 만들어줘. 가사는 한국어로, \"AI로 일하는 법, 같이 배워요\"가 후렴에 들어가게."},
+        {l:"포스터를 첨부하고",v:"이 포스터 분위기에 맞는 30초 배경음악을 만들어줘. 가사는 없이."}],
+ note:"만 18세 미만이거나 음악이 막히면 도식이나 영상으로 바꾸세요. 대안인 Suno 무료 곡은 <b>상업적으로 쓸 수 없습니다.</b>"},
+{p:"p4",s:"S34",b:["제미나이 Canvas"],t:"인포그래픽 한 장, 그다음 슬라이드",type:"steps",
+ items:[{l:"도구 → Canvas 선택 후",v:"우리 동아리 활동을 소개하는 한 페이지 인포그래픽을 만들어줘. 활동 3가지, 모임 일정, 지원 방법이 한눈에 보이게."},
+        {l:"이어서",v:"이 인포그래픽 내용을 5장짜리 프레젠테이션으로 바꿔줘."}],
+ note:"내보내기 메뉴는 화면에서 확인하세요. 구조는 내가 잡고, 한 장씩 맡기는 쪽이 결과도 한도도 낫습니다."},
+{p:"p4",s:"S34",b:["냅킨"],t:"냅킨에 붙여넣을 문단",type:"single",
+ items:[{l:"napkin.ai에 붙여넣기",v:"우리 동아리 활동은 세 단계로 진행된다. 먼저 매주 목요일 스터디에서 AI 도구를 하나씩 익힌다. 다음으로 한 달에 한 번 팀별로 작은 프로젝트를 만든다. 마지막으로 학기 말에 성과 발표회를 열어 결과를 공유한다."}],
+ note:"도식 후보가 여러 개 나옵니다. 하나 골라 PPTX로 내보낼 수 있습니다. 무료 결과물에는 워터마크가 붙습니다."},
+{p:"p4",s:"S35",b:["Google Vids"],t:"15초 세로 홍보 영상",type:"single",
+ items:[{l:"vids.google.com 또는 제미나이(AI Plus)",v:"우리 동아리 신입 모집 15초 세로 영상. 강의실에서 노트북으로 AI를 쓰며 웃는 대학생들, 마지막 장면에 \"같이 배워요\" 자막."}],
+ note:"개인 구글 계정은 Vids에서 월 10편까지 무료입니다. 한 편마다 한도가 줄어드니 <b>프롬프트를 먼저 다듬고</b> 만드세요."},
+{p:"p4",s:"S36",b:["미션","15분"],t:"홍보 키트: 문구 → 프롬프트 → 생성",type:"steps",hot:true,
+ items:[{l:"문구부터",v:"우리 행사를 홍보할 문구를 10자 이내로 5개 만들어줘. 대학생이 에브리타임에서 보고 클릭하고 싶게. 행사: (여기에 한 줄로)"},
+        {l:"이미지 프롬프트 다듬기",v:"이 문구로 세로 포스터를 만들 거야. 나노 바나나에 넣을 프롬프트를 배경, 분위기, 글자 위치까지 넣어 한 문단으로 써줘."},
+        {l:"(택1) CM송 가사 먼저",v:"이 행사 CM송 가사를 8줄로 써줘. 후렴 한 줄이 반복되게."}],
+ note:"포스터는 필수, CM송·도식·영상 중 하나를 더 고릅니다. 완성도보다 <b>어떤 도구를 왜 골랐는지</b>를 봅니다."}
+];
+
+/* ── render ─────────────────────────── */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CPI='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1.5 1.5 0 0 0-1.5-1.5H3.5A1.5 1.5 0 0 0 2 3.5V9a1.5 1.5 0 0 0 1.5 1.5h2"/></svg>';
+const OKI='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3.5 3.5L13 5"/></svg>';
+
+function pblock(label,val){
+  return '<div class="pblock">'+(label?'<span class="lbl">'+esc(label)+'</span>':'')+esc(val)+
+    '<button class="cp" data-v="'+esc(val)+'" title="복사" aria-label="복사">'+CPI+'</button></div>';
+}
+
+const RUB=["결론이 먼저 나오나","대학가 · 개인 카페 · 가격 유지 조건을 썼나","비용이 구체적인가","실패 이유를 진짜 짚었나","숫자를 지어내지 않았나"];
+const RTOOLS=["ChatGPT","제미나이","Claude"];
+function rubricHTML(){
+  let h='<div class="rec-wrap"><table class="rt" id="rub"><thead><tr><th>기준</th>'+RTOOLS.map(t=>'<th class="c">'+t+'</th>').join('')+'</tr></thead><tbody>';
+  RUB.forEach((r,i)=>{h+='<tr><td>'+esc(r)+'</td>'+RTOOLS.map((t,j)=>'<td class="c"><button class="mark" data-r="'+i+'" data-t="'+j+'" aria-label="'+esc(t+' '+r)+'"></button></td>').join('')+'</tr>'});
+  h+='<tr><td>가장 나은 답과 이유</td><td colspan="3"><input id="rbest" placeholder="예: Claude — 실패 이유가 방법마다 달랐음"></td></tr>';
+  h+='</tbody></table></div><div class="rbar"><button class="btn" data-clear="rub">지우기</button><button class="btn pri" data-copy="rub">기록 복사</button></div>';
+  return h;
+}
+const STOOLS=["Perplexity","네이버 AI탭","구글 AI 모드"];
+function srcHTML(){
+  let h='<div class="rec-wrap"><table class="rt" id="src"><thead><tr><th>도구</th><th>출처 개수</th><th class="c">공식 출처</th><th class="c">최신 날짜</th><th>계산 결과</th></tr></thead><tbody>';
+  STOOLS.forEach((t,i)=>{h+='<tr><td><input value="'+esc(t)+'" data-k="n'+i+'"></td><td><input inputmode="numeric" placeholder="개수" data-k="c'+i+'"></td><td class="c"><button class="mark" data-r="'+i+'" data-t="0" aria-label="공식 출처"></button></td><td class="c"><button class="mark" data-r="'+i+'" data-t="1" aria-label="최신 날짜"></button></td><td><input placeholder="금액" data-k="v'+i+'"></td></tr>'});
+  h+='</tbody></table></div><div class="rbar"><button class="btn" data-clear="src">지우기</button><button class="btn pri" data-copy="src">기록 복사</button></div>';
+  return h;
+}
+
+let total=0;
+function cardHTML(c){
+  const cls='card'+(c.warn?' warn':'');
+  let body='';
+  if(c.type==='single'||c.type==='options'){
+    body=c.items.map(i=>{total++;return pblock(i.l,i.v)}).join('');
+  } else if(c.type==='steps'){
+    body='<div class="steps">'+c.items.map((i,n)=>{total++;
+      return '<div class="step"><div class="sn">'+(n+1)+'</div><div class="col"><span class="stag">'+esc(i.l)+'</span>'+pblock(null,i.v)+'</div></div>';
+    }).join('')+'</div>';
+  } else if(c.type==='rubric'){ body=rubricHTML(); }
+  else if(c.type==='srctable'){ body=srcHTML(); }
+  if(c.ans) body+='<details class="ans"><summary>정답 참고 (먼저 해보고 여세요)</summary><p>'+esc(c.ans)+'</p></details>';
+  const badges=(c.b||[]).map((x,n)=>'<span class="badge'+(n===0&&c.hot?' hot':'')+'">'+esc(x)+'</span>').join('');
+  const search=[c.t,c.s,(c.b||[]).join(' '),c.note||'',(c.items||[]).map(i=>(i.v||'')+' '+(i.l||'')).join(' ')].join(' ').toLowerCase();
+  return '<article class="card'+(c.warn?' warn':'')+((c.type==='rubric'||c.type==='srctable')?' wide':'')+'" data-p="'+c.p+'" data-s="'+esc(search)+'">'+
+    '<div class="chead"><div class="meta"><span class="sref mono">'+c.s+'</span>'+badges+'</div><h3>'+esc(c.t)+'</h3></div>'+
+    '<div class="cbody">'+body+'</div>'+(c.note?'<div class="note">'+c.note+'</div>':'')+'</article>';
+}
+
+const pk=document.getElementById('pk');
+pk.innerHTML=PARTS.map(p=>{
+  const cs=CARDS.filter(c=>c.p===p.id);
+  return '<div class="pgroup" data-p="'+p.id+'">'+
+    '<div class="shead" style="margin:26px 0 14px"><h2 style="font-size:16px">'+
+    '<span class="mono" style="color:var(--accent-ink);font-size:13px;margin-right:8px">PART 0'+p.id.slice(1)+'</span>'+p.name+'</h2></div>'+
+    '<div class="grid">'+cs.map(cardHTML).join('')+'</div></div>';
+}).join('');
+document.getElementById('st1').textContent=total;
+document.getElementById('cnt').textContent=total+' PROMPTS';
+
+document.getElementById('ck').innerHTML=CHECKS.map(c=>
+ '<button class="check" aria-pressed="false"><span class="box">'+OKI+'</span>'+
+ '<span><span class="ctitle">'+c.t+'</span><span class="cdesc">'+c.d+'</span></span></button>').join('');
+
+document.getElementById('fw').innerHTML=FLOW.map(f=>
+ '<div><div class="num mono">'+f.n+'</div><h3>'+f.t+'</h3><ul>'+
+ f.i.map(x=>'<li>'+x+'</li>').join('')+'</ul><div class="min mono">'+f.m+'</div></div>').join('');
+
+document.getElementById('gn').innerHTML=GONE.map(g=>
+ '<div><div class="d">'+g.d+'<span class="k '+g.k+'">'+(g.k==='ren'?'이름 변경':'종료')+'</span></div><div class="n">'+esc(g.n)+'</div><div class="w">'+esc(g.w)+'</div></div>').join('');
+
+document.getElementById('pd').innerHTML=PADS.map(p=>
+ '<div class="pad"><div class="no">'+p.n+'</div><h3>'+p.t+'</h3><ul>'+
+ p.i.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="when">'+p.w+'</div></div>').join('');
+document.getElementById('pl').innerHTML=PADLET_URL?
+ '<a class="padlink" href="'+esc(PADLET_URL)+'" target="_blank" rel="noopener">패들릿 열기 → '+esc(PADLET_URL.replace(/^https?:\/\//,''))+'</a>':
+ '<p class="phint">패들릿 링크는 수업 시작 때 화면으로 공지합니다.</p>';
+
+document.getElementById('fl').innerHTML=
+ '<span class="flab mono">실습 프롬프트<span class="lx"> 걸러보기</span></span>'+
+ '<button class="chip" data-f="all" aria-pressed="true">전체<span class="n">'+CARDS.length+'</span></button>'+
+ PARTS.map(p=>'<button class="chip" data-f="'+p.id+'" aria-pressed="false">'+p.name+
+ '<span class="n">'+CARDS.filter(c=>c.p===p.id).length+'</span></button>').join('');
+
+/* ── tool cards ─────────────────────── */
+function toolHTML(t){
+  return '<div class="tool" data-c="'+t.c+'"><div class="top"><h3>'+esc(t.n)+'</h3><span class="lvl '+t.l+'">'+LVL[t.l]+'</span></div>'+
+   '<div class="by">'+esc(t.by)+'</div>'+
+   '<dl><dt>잘하는 것</dt><dd>'+esc(t.g)+'</dd><dt>무료로</dt><dd>'+esc(t.f)+'</dd>'+
+   '<dt>유료부터</dt><dd class="paid">'+esc(t.p)+'</dd><dt>주의</dt><dd class="caution">'+esc(t.x)+'</dd></dl>'+
+   (t.u?'<a class="go" href="'+t.u+'" target="_blank" rel="noopener">'+t.u.replace(/^https?:\/\/(www\.)?/,'')+' ↗</a>':'')+'</div>';
+}
+document.getElementById('tg').innerHTML=TOOLS.map(toolHTML).join('');
+document.getElementById('st2').textContent=TOOLS.length;
+document.getElementById('tcnt').textContent=TOOLS.length+' TOOLS';
+document.getElementById('tf').innerHTML='<button class="chip" data-tf="all" aria-pressed="true">전체<span class="n">'+TOOLS.length+'</span></button>'+
+ TCATS.map(c=>'<button class="chip" data-tf="'+c.id+'" aria-pressed="false">'+c.name+'<span class="n">'+TOOLS.filter(t=>t.c===c.id).length+'</span></button>').join('');
+
+/* ── picker ─────────────────────────── */
+document.getElementById('pj').innerHTML=JOBS.map((j,i)=>'<button class="opt" data-job="'+j.id+'" aria-pressed="'+(i===0)+'">'+j.t+'</button>').join('');
+document.getElementById('pc').innerHTML=CONDS.map(c=>'<button class="opt" data-cond="'+c.id+'" aria-pressed="'+(c.id==='free')+'">'+c.t+'</button>').join('');
+let job='talk'; const conds=new Set(['free']);
+function recommend(){
+  const out=[];
+  TOOLS.forEach(t=>{
+    const base=t.j[job]; if(!base) return;
+    if(conds.has('free')&&t.l==='paid') return;
+    if(conds.has('u18')&&t.adult) return;
+    let sc=base*10; const why=[]; const warn=[];
+    if(t.l==='credit'){ sc-=conds.has('free')?5:2; warn.push('무료 크레딧이 빠듯') }
+    if(t.l==='free' && conds.has('free')) why.push('무료로 됨');
+    if(conds.has('cite')){ if(t.cite){sc+=3;why.push('출처 표시')} else {sc-=8;warn.push('출처 표시가 약함')} }
+    if(conds.has('kr')){ if(t.kr){sc+=6;why.push('국내 정보')} }
+    if(conds.has('exp')){ if(t.exp){sc+=3;why.push('파일로 가져가기')} else {sc-=3;warn.push('내보내기 제한')} }
+    if(t.adult) warn.push('만 18세 이상');
+    out.push({t,sc,why,warn});
+  });
+  out.sort((a,b)=>b.sc-a.sc);
+  const el=document.getElementById('pr');
+  if(!out.length){
+    el.innerHTML='<div class="rec top"><h5>조건에 맞는 무료 도구가 없습니다</h5><p>'+(job==='agent'?'일을 맡기는 에이전트는 대부분 유료입니다. 9주차에 자세히 다룹니다.':'조건을 하나 풀어 보세요. 만 18세 미만이면 음악 대신 도식이나 영상으로 홍보 키트를 채우세요.')+'</p></div>';
+    return;
+  }
+  const agentNote=(job==='agent'&&conds.has('free'))?'<div class="rec"><span class="rk">참고</span><h5>에이전트는 대부분 유료입니다</h5><p>무료 조건을 풀면 에이전트 4종이 보입니다. 9주차(11월 6일)에 자세히 다룹니다.</p></div>':'';
+  el.innerHTML=out.slice(0,4).map((r,i)=>'<div class="rec'+(i===0?' top':'')+'"><span class="rk">'+(i===0?'먼저 써볼 도구':'대안 '+i)+'</span><h5>'+esc(r.t.n)+' <span class="lvl '+r.t.l+'">'+LVL[r.t.l]+'</span></h5>'+
+    '<p class="why">'+esc(r.t.g)+'</p><p>무료로: '+esc(r.t.f)+'</p>'+
+    (r.why.length?'<p>맞는 조건: '+esc(r.why.join(' · '))+'</p>':'')+
+    (r.warn.length?'<p class="warn">주의: '+esc(r.warn.join(' · '))+'</p>':'')+
+    (r.t.u?'<a href="'+r.t.u+'" target="_blank" rel="noopener">열기 ↗</a>':'')+'</div>').join('')+agentNote;
+}
+recommend();
+
+/* ── stack builder ──────────────────── */
+const SLOTS=[{h:"생각·대화",c:["talk"]},{h:"찾기·조사",c:["search"]},{h:"내 자료로 공부",c:["study"]},{h:"만들기",c:["make"]}];
+document.getElementById('sk').innerHTML=SLOTS.map((s,i)=>'<div class="slot"><h4>'+s.h+'</h4><select data-slot="'+i+'"><option value="">고르세요</option>'+
+  TOOLS.filter(t=>s.c.includes(t.c)).map(t=>'<option>'+esc(t.n)+'</option>').join('')+'</select><input data-why="'+i+'" placeholder="이유 한 줄"></div>').join('');
+
+/* ── interactions ───────────────────── */
+let toastT;
+function toast(msg){
+  const t=document.getElementById('ts');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1500);
+}
+async function copy(txt,btn){
+  try{
+    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(txt)}
+    else{const a=document.createElement('textarea');a.value=txt;a.style.position='fixed';a.style.opacity='0';
+      document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}
+    toast('복사했습니다');
+    if(btn&&btn.classList.contains('cp')){btn.innerHTML=OKI;btn.classList.add('done');
+      setTimeout(()=>{btn.innerHTML=CPI;btn.classList.remove('done')},1400)}
+  }catch(e){toast('복사에 실패했습니다. 텍스트를 직접 선택해 주세요.')}
+}
+const CYC=['','○','△','×'];
+function recordText(id){
+  const tb=document.getElementById(id);
+  if(id==='rub'){
+    const rows=RUB.map((r,i)=>'- '+r+': '+RTOOLS.map((t,j)=>t+' '+(tb.querySelector('.mark[data-r="'+i+'"][data-t="'+j+'"]').textContent||'-')).join(' / '));
+    const best=document.getElementById('rbest').value.trim();
+    return '[패들릿 ① 비교 기록]\n'+rows.join('\n')+(best?'\n가장 나은 답: '+best:'');
+  }
+  const rows=STOOLS.map((_,i)=>{
+    const v=k=>tb.querySelector('[data-k="'+k+i+'"]').value.trim();
+    const m=t=>tb.querySelector('.mark[data-r="'+i+'"][data-t="'+t+'"]').textContent||'-';
+    return '- '+(v('n')||'도구')+': 출처 '+(v('c')||'-')+'개 / 공식 출처 '+m(0)+' / 최신 날짜 '+m(1)+' / 결과 '+(v('v')||'-');
+  });
+  return '[출처 비교 기록]\n'+rows.join('\n');
+}
+
+document.addEventListener('click',e=>{
+  const cp=e.target.closest('.cp');
+  if(cp){const v=cp.dataset.v;if(v)copy(v,cp);return}
+  const ck=e.target.closest('.check');
+  if(ck&&!e.target.closest('a')){ck.setAttribute('aria-pressed',ck.getAttribute('aria-pressed')==='true'?'false':'true');return}
+  const mk=e.target.closest('.mark');
+  if(mk){mk.textContent=CYC[(CYC.indexOf(mk.textContent)+1)%CYC.length];return}
+  const cpy=e.target.closest('[data-copy]');
+  if(cpy){copy(recordText(cpy.dataset.copy));return}
+  const clr=e.target.closest('[data-clear]');
+  if(clr){const tb=document.getElementById(clr.dataset.clear);
+    tb.querySelectorAll('.mark').forEach(m=>m.textContent='');
+    tb.querySelectorAll('input').forEach((x,i)=>{x.value=x.dataset.k&&x.dataset.k[0]==='n'?STOOLS[+x.dataset.k.slice(1)]:''});
+    if(clr.dataset.clear==='rub')document.getElementById('rbest').value='';
+    toast('지웠습니다');return}
+  const jb=e.target.closest('[data-job]');
+  if(jb){job=jb.dataset.job;document.querySelectorAll('[data-job]').forEach(b=>b.setAttribute('aria-pressed',b===jb?'true':'false'));recommend();return}
+  const cd=e.target.closest('[data-cond]');
+  if(cd){const k=cd.dataset.cond;if(conds.has(k)){conds.delete(k);cd.setAttribute('aria-pressed','false')}else{conds.add(k);cd.setAttribute('aria-pressed','true')}recommend();return}
+  const tf=e.target.closest('[data-tf]');
+  if(tf){document.querySelectorAll('[data-tf]').forEach(c=>c.setAttribute('aria-pressed',c===tf?'true':'false'));
+    const f=tf.dataset.tf;document.querySelectorAll('.tool').forEach(t=>t.style.display=(f==='all'||t.dataset.c===f)?'':'none');return}
+  if(e.target.id==='skc'){
+    const lines=SLOTS.map((s,i)=>{const v=document.querySelector('[data-slot="'+i+'"]').value;const w=document.querySelector('[data-why="'+i+'"]').value.trim();
+      return '- '+s.h+': '+(v||'(미정)')+(w?' — '+w:'')});
+    copy('[나의 도구 조합]\n'+lines.join('\n'));return}
+  const ch=e.target.closest('.chip[data-f]');
+  if(ch){
+    document.querySelectorAll('.chip[data-f]').forEach(c=>c.setAttribute('aria-pressed',c===ch?'true':'false'));
+    filter();
+    const pack=document.getElementById('s-pack');
+    const top=pack.getBoundingClientRect().top;
+    if(top<0||top>window.innerHeight*0.6){
+      const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({top:pack.offsetTop-110,behavior:reduce?'auto':'smooth'});
+    }
+    return
+  }
+});
+
+let dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+document.getElementById('tt').addEventListener('click',()=>{
+  dark=!dark;
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+});
+
+const q=document.getElementById('q');
+q.addEventListener('input',filter);
+function filter(){
+  const term=q.value.trim().toLowerCase();
+  const act=document.querySelector('.chip[data-f][aria-pressed="true"]').dataset.f;
+  let shown=0;
+  document.querySelectorAll('.pgroup').forEach(g=>{
+    let n=0;
+    g.querySelectorAll('.card').forEach(c=>{
+      const ok=(act==='all'||c.dataset.p===act)&&(!term||c.dataset.s.includes(term));
+      c.style.display=ok?'':'none';if(ok)n++;
+    });
+    g.hidden=n===0;shown+=n;
+  });
+  document.getElementById('mt').hidden=shown>0;
+  document.getElementById('cnt').textContent=(term||act!=='all')?shown+' / '+CARDS.length+' CARDS':total+' PROMPTS';
+}
+</script>
+<a href="../" data-uos-portal style="position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:99px;background:#181818;color:#fff;font:600 12px/1 system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.18);opacity:.9">← 학기 포털</a>
+</body>
+</html>

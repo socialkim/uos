@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI실무활용과 스마트비즈니스 · 서울시립대</title>
+<meta name="description" content="서울시립대 경영학부 'AI실무활용과 스마트비즈니스' 수업 포털 — 주차별 실습 페이지와 한 학기 흐름">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#FFFFFF;--surface:#F7F6F5;--surface-2:#F0EEEC;
+  --ink:#181818;--ink-2:#3A3735;--muted:#6E6A68;--faint:#A5A09D;
+  --line:#E6E3E1;--line-strong:#D6D2CF;
+  --accent:#FF5A4F;--accent-ink:#B8352B;--accent-wash:#FFF1EF;--accent-line:#FFD6D1;
+  --panel:#1C1B1A;--panel-ink:#F1EEEC;--panel-muted:#A9A3A0;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#151413;--surface:#1E1C1B;--surface-2:#252221;
+  --ink:#EDEAE8;--ink-2:#D3CECB;--muted:#9A9491;--faint:#6E6865;
+  --line:#2E2B29;--line-strong:#3D3936;
+  --accent:#FF6B60;--accent-ink:#FF9086;--accent-wash:#2A1B19;--accent-line:#4A2C28;
+  --panel:#0E0D0D;--panel-ink:#EDEAE8;--panel-muted:#8E8885;
+}}
+:root[data-theme="dark"]{
+  --ground:#151413;--surface:#1E1C1B;--surface-2:#252221;
+  --ink:#EDEAE8;--ink-2:#D3CECB;--muted:#9A9491;--faint:#6E6865;
+  --line:#2E2B29;--line-strong:#3D3936;
+  --accent:#FF6B60;--accent-ink:#FF9086;--accent-wash:#2A1B19;--accent-line:#4A2C28;
+  --panel:#0E0D0D;--panel-ink:#EDEAE8;--panel-muted:#8E8885;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans KR","Malgun Gothic",system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.mono{font-family:"IBM Plex Mono",Consolas,monospace}
+a{color:inherit}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+@media (max-width:520px){.wrap{padding:0 16px}}
+
+/* bar */
+.bar{border-bottom:1px solid var(--line)}
+.bar-in{display:flex;align-items:center;gap:12px;height:56px}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0;flex:1}
+.brand b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand span{font-size:11px;color:var(--faint);letter-spacing:.08em;white-space:nowrap}
+@media (max-width:520px){.brand span{display:none}}
+.tog{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;display:grid;place-items:center;color:var(--muted);flex-shrink:0}
+.tog:hover{color:var(--ink);border-color:var(--line-strong)}
+
+/* 1층 — 이번 수업 */
+.hero{padding:40px 0 8px}
+.when{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--accent);color:#fff}
+.pill.soft{background:var(--surface-2);color:var(--ink-2)}
+.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.2;margin:14px 0 10px}
+.hero .pts{color:var(--ink-2);font-size:16px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 22px;border-radius:10px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid var(--line-strong);color:var(--ink)}
+.btn:hover{border-color:var(--ink)}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.btn.pri:hover{opacity:.88}
+.btn[aria-disabled="true"]{pointer-events:none;color:var(--faint);border-style:dashed}
+.hnote{margin-top:14px;font-size:13px;color:var(--muted)}
+.hnote a{color:var(--accent-ink);font-weight:600;text-underline-offset:3px}
+
+/* 2층 — 학기 흐름 */
+.sec{padding:56px 0 0}
+.shead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:18px}
+.shead h2{font-size:20px}
+.shead .mono{font-size:12px;color:var(--faint);letter-spacing:.06em}
+.track{display:grid;grid-template-columns:repeat(16,1fr);gap:4px;margin-bottom:8px}
+.track i{height:8px;border-radius:2px;background:var(--surface-2)}
+.track i.done{background:var(--line-strong)}
+.track i.now{background:var(--accent)}
+.track i.exam{background:repeating-linear-gradient(135deg,var(--surface-2) 0 3px,var(--line-strong) 3px 6px)}
+.tlab{display:flex;justify-content:space-between;font-size:12px;color:var(--faint);margin-bottom:28px}
+
+.phase{margin-top:30px}
+.phase:first-of-type{margin-top:0}
+.ph{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.ph b{font-size:13px;letter-spacing:.02em}
+.ph span{font-size:12px;color:var(--faint)}
+.row{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.row:last-child{border-bottom:1px solid var(--line)}
+.row .d{font-size:13px;color:var(--muted)}
+.row .d small{display:block;font-size:11px;color:var(--faint)}
+.row h3{font-size:15.5px;font-weight:600}
+.row .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.row.past h3{color:var(--ink-2);font-weight:500}
+.row.now{background:linear-gradient(90deg,var(--accent-wash),transparent 70%);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:8px;border-top-color:transparent}
+.row.now + .row{border-top-color:transparent}
+.row.now h3{color:var(--ink)}
+.go{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;text-decoration:none;padding:7px 12px;border-radius:8px;border:1px solid var(--line-strong);white-space:nowrap}
+.go:hover{border-color:var(--ink)}
+.row.now .go{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.st{font-size:12px;color:var(--faint);white-space:nowrap}
+.more{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.more a{font-size:12.5px;color:var(--accent-ink);text-underline-offset:3px}
+@media (max-width:640px){
+  .row{grid-template-columns:64px minmax(0,1fr);gap:4px 12px}
+  .row .end{grid-column:2}
+  .row .sub{display:none}
+}
+
+/* 3층 — 수업 정보 */
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;padding:48px 0 0}
+.info h4{margin:0 0 8px;font-size:12px;color:var(--faint);font-weight:600;letter-spacing:.06em}
+.info p{font-size:14px;color:var(--ink-2)}
+.grade{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:6px 0 8px;gap:2px}
+.grade i{background:var(--line-strong)}
+.grade i:last-child{background:var(--ink-2)}
+.gl{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.gl b{color:var(--ink);font-weight:600}
+footer{margin-top:64px;padding:22px 0 40px;border-top:1px solid var(--line);font-size:12px;color:var(--faint);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+footer a{color:var(--muted)}
+.err{padding:60px 0;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap bar-in">
+  <div class="brand"><b id="bt">AI실무활용과 스마트비즈니스</b><span class="mono" id="bs">UOS</span></div>
+  <button class="tog" id="tt" aria-label="밝게/어둡게"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7z"/></svg></button>
+</div></header>
+
+<main class="wrap" id="app">
+  <div class="err" id="ld">불러오는 중…</div>
+</main>
+
+<script>
+/* ────────────────────────────────────────────────────────────
+   이 파일은 고칠 일이 거의 없습니다.
+   · 수업 계획·패들릿 링크  → course.json
+   · 주차별 실습 페이지     → 날짜 폴더(예: 261030/index.html)를 올리면 자동으로 켜집니다
+   ──────────────────────────────────────────────────────────── */
+const DAYS=['일','월','화','수','목','금','토'];
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const todayKST=()=>{const q=new URLSearchParams(location.search).get('today');if(q&&/^\d{4}-\d\d-\d\d$/.test(q))return q;return new Date(Date.now()+9*3600e3).toISOString().slice(0,10)};
+const slugOf=w=>w.slug||(w.date?w.date.slice(2).replace(/-/g,''):null);
+const md=d=>{const [y,m,dd]=d.split('-').map(Number);return m+'.'+dd};
+const dow=d=>DAYS[new Date(d+'T12:00:00Z').getUTCDay()];
+const ARROW='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
+
+async function exists(path){
+  try{const r=await fetch(path,{method:'HEAD',cache:'no-store'});return r.ok}catch(e){return false}
+}
+
+async function main(){
+  let C;
+  try{C=await (await fetch('course.json',{cache:'no-store'})).json()}
+  catch(e){document.getElementById('ld').textContent='course.json을 읽지 못했습니다. GitHub Pages 주소로 열어 주세요.';return}
+  const key=(location.hash.slice(1)&&C.semesters[location.hash.slice(1)])?location.hash.slice(1):C.current;
+  const S=C.semesters[key];
+  document.getElementById('bt').textContent=S.course;
+  document.getElementById('bs').textContent='UOS · '+key;
+  document.title=S.course+' · '+S.label;
+
+  const today=todayKST();
+  const W=S.weeks;
+  // 페이지 존재 여부 (같은 사이트 안 HEAD 요청 — 학생이 몇 명이든 제한 없음)
+  await Promise.all(W.map(async w=>{const s=slugOf(w);w._slug=s;w._has=s?await exists(s+'/'):false}));
+
+  // 이번 수업: 오늘 이후 가장 가까운 날짜 수업 (없으면 마지막 수업)
+  const dated=W.filter(w=>w.date);
+  let cur=dated.find(w=>w.date>=today)||dated[dated.length-1];
+  const isToday=cur.date===today;
+  const lastWithPage=[...W].filter(w=>w._has&&w.date&&w.date<today).pop();
+  const dday=Math.round((new Date(cur.date)-new Date(today))/864e5);
+
+  // ── 1층 ──
+  let h='<section class="hero">';
+  h+='<div class="when">'+(isToday?'<span class="pill">오늘 수업</span>':dday>0?'<span class="pill soft">다음 수업 · D-'+dday+'</span>':'<span class="pill soft">마지막 수업</span>')+
+     '<span class="mono">'+cur.w+'주차 · '+md(cur.date)+' ('+dow(cur.date)+') · '+esc(S.when)+' · '+esc(S.room)+'</span></div>';
+  h+='<h1>'+esc(cur.title)+'</h1>';
+  if(cur.points&&cur.points.length)h+='<p class="pts">'+cur.points.map(esc).join(' · ')+'</p>';
+  h+='<div class="acts">';
+  if(cur._has)h+='<a class="btn pri" href="'+cur._slug+'/">실습 페이지 열기 '+ARROW+'</a>';
+  else if(!cur.exam)h+='<span class="btn" aria-disabled="true">실습 페이지는 수업 날 열립니다</span>';
+  if(cur.padlet)h+='<a class="btn" href="'+esc(cur.padlet)+'" target="_blank" rel="noopener">패들릿 열기</a>';
+  h+='</div>';
+  if(!cur._has&&lastWithPage&&lastWithPage!==cur)h+='<p class="hnote">지난 수업 다시 보기 → <a href="'+lastWithPage._slug+'/">'+lastWithPage.w+'주차 '+esc(lastWithPage.title)+'</a></p>';
+  h+='</section>';
+
+  // ── 2층 ──
+  const done=W.filter(w=>w.date?w.date<today:W.indexOf(w)<W.indexOf(cur)).length;
+  h+='<section class="sec"><div class="shead"><h2>한 학기 흐름</h2><span class="mono">'+esc(S.label)+' · 16주</span></div>';
+  h+='<div class="track" aria-hidden="true">'+W.map(w=>{
+      const c=w===cur?'now':(w.exam?'exam':(w.date&&w.date<today)?'done':(!w.date&&W.indexOf(w)<W.indexOf(cur))?'done':'');
+      return '<i class="'+c+'" title="'+w.w+'주차 '+esc(w.title)+'"></i>'}).join('')+'</div>';
+  h+='<div class="tlab"><span>'+md(dated[0].date)+' 개강</span><span>'+done+' / '+W.length+'주 지남</span><span>'+md(dated[dated.length-1].date)+' 종강</span></div>';
+
+  for(const ph of S.phases){
+    const ws=W.filter(w=>ph.weeks.includes(w.w));
+    h+='<div class="phase"><div class="ph"><b>'+esc(ph.name)+'</b><span class="mono">'+ws[0].w+'–'+ws[ws.length-1].w+'주</span></div>';
+    for(const w of ws){
+      const past=w.date?w.date<today:W.indexOf(w)<W.indexOf(cur);
+      const now=w===cur;
+      const dateTxt=w.date?md(w.date):esc(w.when_note||'—');
+      let end;
+      if(w._has)end='<a class="go" href="'+w._slug+'/">실습 페이지'+ARROW+'</a>';
+      else if(w.exam)end='<span class="st">시험</span>';
+      else end='<span class="st">'+(past?'':'예정')+'</span>';
+      const more=[];
+      if(w.padlet)more.push('<a href="'+esc(w.padlet)+'" target="_blank" rel="noopener">패들릿</a>');
+      (w.links||[]).forEach(l=>more.push('<a href="'+esc(l.u)+'"'+(/^https?:/.test(l.u)?' target="_blank" rel="noopener"':'')+'>'+esc(l.t)+'</a>'));
+      h+='<div class="row'+(past?' past':'')+(now?' now':'')+'">'+
+         '<div class="d mono">'+dateTxt+'<small>'+w.w+'주차</small></div>'+
+         '<div><h3>'+esc(w.title)+'</h3>'+(w.points&&w.points.length?'<p class="sub">'+w.points.map(esc).join(' · ')+'</p>':'')+
+         (more.length?'<div class="more">'+more.join('')+'</div>':'')+'</div>'+
+         '<div class="end">'+end+'</div></div>';
+    }
+    h+='</div>';
+  }
+  h+='</section>';
+
+  // ── 3층 ──
+  const g=S.grading||[];
+  h+='<section class="info">'+
+     '<div><h4>수업</h4><p>'+esc(S.when)+' · '+esc(S.room)+'<br>'+esc(S.code)+'<br>'+esc(S.people)+'</p></div>'+
+     '<div><h4>평가</h4><div class="grade">'+g.map(x=>'<i style="flex:'+x[1]+'"></i>').join('')+'</div>'+
+     '<div class="gl">'+g.map(x=>'<span>'+esc(x[0])+' <b>'+x[1]+'%</b></span>').join('')+'</div></div>'+
+     '</section>';
+  const others=Object.keys(C.semesters).filter(k=>k!==key);
+  h+='<footer><span>서울시립대학교 경영학부 · '+esc(S.course)+'</span>'+
+     (others.length?'<span>지난 학기 · '+others.map(k=>'<a href="#'+k+'">'+esc(C.semesters[k].label)+'</a>').join(' · ')+'</span>':'')+
+     '<span><a href="../">← 서울시립대 수업 전체</a> · 김덕진 · <a href="https://socialkim.github.io/">IT커뮤니케이션연구소</a></span></footer>';
+
+  document.getElementById('app').innerHTML=h;
+}
+main();
+addEventListener('hashchange',main);
+
+let dark=matchMedia('(prefers-color-scheme: dark)').matches;
+document.getElementById('tt').onclick=()=>{dark=!dark;document.documentElement.setAttribute('data-theme',dark?'dark':'light')};
+</script>
+</body>
+</html>
