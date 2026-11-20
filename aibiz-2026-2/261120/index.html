@@ -350,6 +350,7 @@ section{padding:36px 0}
 <a href="#s-terms">용어 카드 24</a>
 <a href="#s-tools">도구</a>
 <a href="#s-labA" class="lab">실습 A</a>
+<a href="#s-web" class="lab">웹에 올리기</a>
 <a href="#s-labB" class="lab">실습 B</a>
 <a href="#s-labC" class="lab">실습 C</a>
 <a href="#s-stuck">막혔을 때</a>
@@ -544,9 +545,93 @@ HTML 파일 하나로(CSS · JS 포함), 미리보기로 바로 볼 수 있게.<
 <div class="steps" style="--n:3">
 <div class="st"><span class="k">1</span><b>내려받기</b><span>캔버스의 내려받기(또는 코드 복사 → 메모장에 붙여 저장). 파일 이름은 영문으로, 예: career.html</span></div>
 <div class="st"><span class="k">2</span><b>더블클릭</b><span>브라우저에서 열립니다. 주소창이 file://로 시작하면 내 컴퓨터에서만 보인다는 뜻이에요.</span></div>
-<div class="st hot"><span class="k">3</span><b>공유</b><span>캔버스의 공유 링크를 만들거나, 파일을 메신저로 보내거나, 깃허브 Pages에 올립니다.</span></div>
+<div class="st hot"><span class="k">3</span><b>공유</b><span>캔버스의 공유 링크를 만들거나, 파일을 메신저로 보내거나, 깃허브 Pages에 올립니다 — 바로 아래 <a href="#s-web">실습 W</a>.</span></div>
 </div>
 <div class="callout"><b>패들릿에</b> — 결과 화면 캡처 + 프롬프트에 쓴 용어 세 개 + AI가 제멋대로 채운 곳 한 줄.</div>
+</section>
+
+<section id="s-web">
+<div class="shead"><h2>실습 W 웹에 올리기 — 깃허브 → Vercel</h2><span class="tag mono">LAB W · DEPLOY</span></div>
+<p class="slead">실습 A에서 받은 HTML 한 파일을 <b>내 주소</b>로 올립니다. 깃허브는 원본을 쌓아 두는 <b>창고</b>, Vercel은 그 원본을 사이트로 만들어 내보내는 <b>매장</b>이에요. 한 번 연결해 두면 그다음부터는 깃허브에 올리기만 하면 됩니다.</p>
+<div class="steps" style="--n:4">
+<div class="st"><span class="k">1</span><b>만든다</b><span>캔버스 · 빌더에서 파일이 나옵니다.</span></div>
+<div class="st"><span class="k">2</span><b>깃허브에 올린다</b><span>원본 창고. 올릴 때마다 기록(커밋)이 남아요.</span></div>
+<div class="st hot"><span class="k">3</span><b>Vercel이 가져간다</b><span>새 커밋을 알아채고 빌드(조립)한 뒤 내보냅니다.</span></div>
+<div class="st"><span class="k">4</span><b>주소로 열린다</b><span>친구 폰에서 열리면 배포 끝.</span></div>
+</div>
+<h3 class="sub">W-1 깃허브 가입 <small>2분 · 무료</small></h3>
+<ol class="ol">
+<li><span class="sn">1</span><div><a href="https://github.com" target="_blank" rel="noopener">github.com</a> → 오른쪽 위 <span class="ui">Sign up</span></div></li>
+<li><span class="sn">2</span><div>이메일 · 비밀번호 · <span class="ui">Username</span>(사용자 이름)을 넣습니다. <b>사용자 이름이 주소의 앞부분</b>이 돼요 — 영문 · 숫자 · 하이픈만, 학번 · 전화번호는 넣지 않습니다</div></li>
+<li><span class="sn">3</span><div>사람 확인 퍼즐을 풀고, 이메일로 온 숫자 코드를 입력합니다. 요금제를 물으면 <span class="ui">Free</span> 그대로</div></li>
+</ol>
+<h3 class="sub">W-2 저장소 만들기 <small>1분 · 이름 하나만 정한다</small></h3>
+<div class="two">
+<figure class="rshot"><img src="gh_repo.jpg" alt="깃허브 새 저장소 만들기 화면. Repository name 입력 칸, Choose visibility는 Public, Add README 스위치가 보인다." loading="lazy"><figcaption><b>2026.11.20 실제 화면</b> — github.com/new</figcaption></figure>
+<ol class="ol">
+<li><span class="sn">1</span><div>오른쪽 위 <span class="ui">+</span> → <span class="ui">New repository</span></div></li>
+<li><span class="sn">2</span><div><span class="ui">Repository name</span>에 영문 · 숫자로. 예: <span class="ui mono">career-test</span></div></li>
+<li><span class="sn">3</span><div><span class="ui">Choose visibility</span>는 <span class="ui">Public</span> 그대로, <span class="ui">Add README</span>를 켭니다</div></li>
+<li><span class="sn">4</span><div>맨 아래 <span class="ui">Create repository</span></div></li>
+</ol>
+</div>
+<h3 class="sub">W-3 파일 올리기 <small>2분 · 이름은 index.html</small></h3>
+<div class="two">
+<figure class="rshot"><img src="gh_upload.jpg" alt="깃허브 저장소 폴더 화면. 오른쪽 위 Add file 버튼을 누르면 Create new file과 Upload files 메뉴가 나온다. 목록에 index.html 파일이 보인다." loading="lazy"><figcaption><b>2026.11.20 실제 화면</b> — 지금 보고 있는 이 데스크가 들어 있는 폴더입니다</figcaption></figure>
+<ol class="ol">
+<li><span class="sn">1</span><div>실습 A에서 받은 파일 이름을 <span class="ui mono">index.html</span>로 바꿉니다. 이 이름이어야 주소만 쳐도 열려요</div></li>
+<li><span class="sn">2</span><div>저장소 화면에서 <span class="ui">Add file</span> → <span class="ui">Upload files</span></div></li>
+<li><span class="sn">3</span><div>파일을 끌어다 놓고, 아래 초록 버튼 <span class="ui">Commit changes</span></div></li>
+</ol>
+</div>
+<h3 class="sub">W-4 Pages 켜기 → 주소 하나 <small>2분</small></h3>
+<div class="two">
+<figure class="rshot"><img src="gh_pages.jpg" alt="깃허브 저장소 Settings의 Pages 화면. Source는 Deploy from a branch, Branch는 main과 root, 위쪽에 Your site is live at 주소가 보인다." loading="lazy"><figcaption><b>2026.11.20 실제 화면</b> — 맨 위 'Your site is live at'이 내 주소</figcaption></figure>
+<ol class="ol">
+<li><span class="sn">1</span><div>저장소 위쪽 탭 <span class="ui">Settings</span> → 왼쪽 메뉴 <span class="ui">Pages</span></div></li>
+<li><span class="sn">2</span><div><span class="ui">Branch</span>를 <span class="ui">main</span>, 폴더는 <span class="ui">/ (root)</span>로 고르고 <span class="ui">Save</span></div></li>
+<li><span class="sn">3</span><div>1~2분 뒤 새로 고치면 주소가 뜹니다 — <span class="ui mono">사용자이름.github.io/저장소이름/</span></div></li>
+</ol>
+</div>
+<p class="exp"><b>여기까지가 깃허브 Pages</b> — HTML 한 파일은 이것으로 충분합니다. 빌더가 내보낸 프로젝트(React · Next.js)나 AI를 부르는 기능이 들어가면, 빌드와 비밀 값(API 키) 보관이 필요해서 Vercel 같은 배포 서비스로 갑니다.</p>
+<h3 class="sub">W-5 Vercel 연결 → 주소 둘 <small>4분 · 깃허브 계정으로 들어간다</small></h3>
+<div class="two">
+<figure class="rshot"><img src="vc_import.jpg" alt="Vercel 새 프로젝트 화면. Import Git Repository 아래에 깃허브 계정과 저장소 줄, 오른쪽에 Import 버튼이 보인다." loading="lazy"><figcaption><b>2026.11.20 실제 화면</b> — vercel.com/new (다른 저장소 줄은 지웠습니다)</figcaption></figure>
+<ol class="ol">
+<li><span class="sn">1</span><div><a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a> → <span class="ui">Sign Up</span> → <span class="ui">Hobby</span>(개인용) → <span class="ui">Continue with GitHub</span></div></li>
+<li><span class="sn">2</span><div>깃허브 창에서 <span class="ui">Authorize Vercel</span>. 저장소 접근을 물으면 <span class="ui">Only select repositories</span>로 오늘 만든 저장소만 골라도 됩니다</div></li>
+<li><span class="sn">3</span><div><span class="ui">Add New</span> → <span class="ui">Project</span> → 내 저장소 옆 <span class="ui">Import</span></div></li>
+<li><span class="sn">4</span><div><span class="ui">Framework Preset</span>은 <span class="ui">Other</span> 그대로 두고 <span class="ui">Deploy</span></div></li>
+<li><span class="sn">5</span><div>1분쯤 뒤 주소가 나옵니다 — <span class="ui mono">프로젝트이름.vercel.app</span></div></li>
+</ol>
+</div>
+<p class="when" style="margin-top:8px">Hobby 요금제는 무료이고 개인 · 비상업용만 쓸 수 있어요(수업 실습은 해당). 전화번호 확인이나 2단계 인증 안내가 나오면 직접 하세요. 화면 문구는 조금 다를 수 있습니다.</p>
+<h3 class="sub">W-6 고쳐 본다 <small>2분 · Vercel에서는 아무것도 누르지 않는다</small></h3>
+<ol class="ol">
+<li><span class="sn">1</span><div>깃허브 저장소에서 <span class="ui mono">index.html</span>을 열고 연필 아이콘 → 제목 한 줄을 바꾸고 <span class="ui">Commit changes</span></div></li>
+<li><span class="sn">2</span><div>1분쯤 뒤 Vercel 주소를 새로 고칩니다. 바뀌어 있으면 <b>자동 배포</b>가 된 거예요</div></li>
+</ol>
+<h3 class="sub">막힐 때 <small>대부분 이름과 기다림의 문제</small></h3>
+<div class="rec-wrap"><table class="rt stk">
+<thead><tr><th style="width:230px">상황</th><th>확인할 것</th><th>이유</th></tr></thead>
+<tbody>
+<tr><th scope="row">Pages 주소가 404</th><td data-l="확인할 것">1~2분 기다렸다 새로 고침 · 파일 이름이 index.html인지</td><td data-l="이유">반영까지 시간이 걸리고, 첫 화면 이름이 정해져 있어요</td></tr>
+<tr><th scope="row">Vercel 목록에 내 저장소가 없다</th><td data-l="확인할 것">Adjust GitHub App Permissions에서 저장소 추가</td><td data-l="이유">가입할 때 허락한 저장소만 보여요</td></tr>
+<tr><th scope="row">고쳤는데 그대로다</th><td data-l="확인할 것">깃허브에 커밋이 올라갔는지</td><td data-l="이유">Vercel은 내 컴퓨터가 아니라 깃허브만 봅니다</td></tr>
+<tr><th scope="row">배포가 빨갛게 실패</th><td data-l="확인할 것">실패 기록(로그)을 복사해 AI에게 원인과 고칠 곳을 묻는다</td><td data-l="이유">문법 오류 · 빠진 파일 · 환경 변수가 대부분</td></tr>
+<tr><th scope="row">올리면 안 되는 것</th><td data-l="확인할 것">실제 개인정보 · 비밀번호 · API 키</td><td data-l="이유">Public 저장소는 누구나 보고, 지워도 기록에 남아요</td></tr>
+</tbody></table></div>
+<h3 class="sub">이런 서비스를 뭐라고 부르나 <small>회의에서 나오는 말</small></h3>
+<div class="rec-wrap"><table class="rt stk">
+<thead><tr><th style="width:230px">말</th><th>뜻</th></tr></thead>
+<tbody>
+<tr><th scope="row">호스팅</th><td data-l="뜻">내 파일을 인터넷에 올려 두고 주소로 열리게 해 주는 일. 깃허브 Pages는 '정적 호스팅'</td></tr>
+<tr><th scope="row">PaaS · 배포 플랫폼</th><td data-l="뜻">서버 · 네트워크는 업체가 맡고 나는 코드만 올린다. Vercel · Netlify · Cloudflare Pages · Render · Firebase Hosting</td></tr>
+<tr><th scope="row">CI/CD · 자동 배포</th><td data-l="뜻">커밋하면 자동으로 빌드하고 내보내는 것</td></tr>
+<tr><th scope="row">v0</th><td data-l="뜻">Vercel이 만든 AI 빌더. 만들고 Publish 한 번이면 Vercel 주소가 나오고, 깃허브 연결도 설정에서 됩니다. 무료는 하루 메시지 수가 적어요(선택 실습)</td></tr>
+</tbody></table></div>
+<div class="callout"><b>패들릿에</b> — 내 주소 두 개(…github.io/… 와 ….vercel.app) + 올리다가 막힌 곳 한 줄.</div>
+<p class="when" style="margin-top:8px">2026.11.20 확인 · 출처: <a href="https://docs.github.com/pages/getting-started-with-github-pages/github-pages-limits" target="_blank" rel="noopener">GitHub Docs — GitHub Pages</a> · <a href="https://vercel.com/docs/git" target="_blank" rel="noopener">Vercel Docs — Git</a> · <a href="https://vercel.com/docs/plans/hobby" target="_blank" rel="noopener">Vercel Hobby Plan</a> · <a href="https://v0.app/docs/deployments" target="_blank" rel="noopener">v0 Docs — Deployments</a>. 요금 · 한도는 자주 바뀝니다.</p>
 </section>
 
 <section id="s-labB">
