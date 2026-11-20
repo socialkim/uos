@@ -325,6 +325,9 @@ section{padding:36px 0}
 #tgrid .cbody p{font-size:13.5px;color:var(--ink-2)}
 .rt td .pblock{font-size:13px;padding:10px 42px 10px 12px}
 .obs-line input[type=search]{-webkit-appearance:none;appearance:none}
+.rshot{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.rshot img{display:block;width:100%;height:auto}
+.rshot figcaption{padding:10px 14px;font-size:12.8px;color:var(--ink-2);line-height:1.55;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -572,6 +575,18 @@ HTML 파일 하나로(CSS · JS 포함), 미리보기로 바로 볼 수 있게.<
 - 마케팅 직무에는 자주 쓰는 상황 예시 3개 미리 보여 주기
 - 결과 프롬프트는 코드 블록처럼 상자 안에 표시</span><button class="cp" data-cpid="cp-b1" title="복사" aria-label="복사"></button></div>
 <p class="exp"><b>볼 것</b> — 만드는 동안 화면에 지나가는 말(컴포넌트 · 반응형 …)과, 실습 A의 러프한 한 줄에 견줘 첫 결과가 얼마나 다른지.</p>
+<h3 class="sub">수업 전에 직접 돌려 봤습니다 <small>2026.11.20 오전 9시 20분 · 구글 AI 스튜디오 Build · 교수 계정(PRO 표시)</small></h3>
+<div class="two">
+<figure class="rshot"><img src="b1_aistudio.jpg" alt="구글 AI 스튜디오 Build에서 PRD형 프롬프트로 만든 프롬프트 빌더 화면. 왼쪽에 2분 58초 동안 파일 8개를 만든 기록, 가운데에 입력 화면, 오른쪽에 생성된 프롬프트." loading="lazy"><figcaption><b>B-1 결과</b> — 2분 58초, 파일 8개. 직무 드롭다운 · 마케팅 예시 3개 · 톤 4종 · 복사 버튼 · 좌우 2단이 한 번에 나왔어요.</figcaption></figure>
+<figure class="rshot"><img src="b2_aistudio.jpg" alt="같은 앱에 수정 세 가지를 묶어 보낸 뒤의 화면. 왼쪽에 1분 20초 동안 파일 4개를 고친 기록, 아래쪽에 응답 길이 버튼, 결과 상자는 진한 회색." loading="lazy"><figcaption><b>B-2 수정 결과</b> — 1분 20초, 파일 4개. 직무 2개 추가 · 응답 길이 버튼 · 결과 상자 진한 회색, 세 가지가 한 번에 반영됐어요.</figcaption></figure>
+</div>
+<ol class="ol" style="margin-top:14px">
+<li><span class="sn">1</span><div><a href="https://ai.studio/build" target="_blank" rel="noopener">ai.studio/build</a> → 가운데 입력창 <span class="ui">Describe an app and let Gemini do the rest</span>에 프롬프트를 붙여 넣고 오른쪽 아래 화살표</div></li>
+<li><span class="sn">2</span><div>왼쪽에 <span class="ui mono">Running for …</span> 시간이 올라가고 파일 이름이 하나씩 체크됩니다. 여기 지나가는 이름(<span class="ui mono">components</span> · <span class="ui mono">index.html</span> · <span class="ui mono">index.css</span>)이 오늘 배운 용어예요</div></li>
+<li><span class="sn">3</span><div>가운데 <span class="ui">Preview</span>에 앱이 뜨면 직접 눌러 봅니다</div></li>
+<li><span class="sn">4</span><div>고칠 때는 왼쪽 아래 <span class="ui">Make changes, add new features, ask for anything</span> 칸에 · 게시는 오른쪽 위 <span class="ui">Publish</span></div></li>
+</ol>
+<p class="when" style="margin-top:8px">유료(PRO) 계정에서 확인한 시간입니다. 무료 계정은 하루 한도가 내 화면에 표시되고, 더 느리거나 중간에 멈출 수 있어요. 멈추면 거기서 캡처하고 실습 A로 돌아갑니다.</p>
 <h3 class="sub">B-2 고치고, 내 것으로, 내보낸다 <small>6분 · 한도가 끝나면 거기서 캡처</small></h3>
 <div class="two">
 <div><div class="pblock"><span class="lbl">수정 — 묶어서 한 번</span><span id="cp-b2">다음을 수정해 줘:
