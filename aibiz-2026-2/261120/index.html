@@ -1,1 +1,757 @@
-<!doctype html><meta charset="utf-8"><title>시립대 9회차</title><p>올리는 중입니다. 잠시 뒤 새로고침해 주세요.</p>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>시립대 9회차 바이브 코딩 데스크</title>
+<meta name="description" content="서울시립대 AI실무활용과 스마트비즈니스 9회차(2026.11.20) 실습 데스크 — 바이브 코딩 도구와 개발 용어, 지난주 에이전트 실습 잇기">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+
+<style>
+:root{
+--ground:#FFFFFF;--surface:#F7F6F5;--surface-2:#F0EEEC;
+--ink:#181818;--ink-2:#3A3735;--muted:#6E6A68;--faint:#A5A09D;
+--line:#E6E3E1;--line-strong:#D6D2CF;
+--accent:#FF5A4F;--accent-ink:#B8352B;--accent-wash:#FFF1EF;--accent-line:#FFD6D1;
+--panel:#1C1B1A;--panel-ink:#F1EEEC;--panel-line:#3A3735;
+--ok:#2E7D5B;--ok-wash:#E6F4EC;--ok-line:#CBE8D6;
+--shadow:0 1px 2px rgba(24,24,24,.05), 0 8px 24px -12px rgba(24,24,24,.12);
+}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme="light"]){
+--ground:#151413;--surface:#1E1C1B;--surface-2:#252221;
+--ink:#EDEAE8;--ink-2:#D3CECB;--muted:#9A9491;--faint:#6E6865;
+--line:#2E2B29;--line-strong:#3D3936;
+--accent:#FF6B60;--accent-ink:#FF9086;--accent-wash:#2A1B19;--accent-line:#4A2C28;
+--panel:#0E0D0D;--panel-ink:#EDEAE8;--panel-line:#2B2827;
+--ok:#5FBF95;--ok-wash:#16301F;--ok-line:#24503A;
+--shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+}
+:root[data-theme="dark"]{
+--ground:#151413;--surface:#1E1C1B;--surface-2:#252221;
+--ink:#EDEAE8;--ink-2:#D3CECB;--muted:#9A9491;--faint:#6E6865;
+--line:#2E2B29;--line-strong:#3D3936;
+--accent:#FF6B60;--accent-ink:#FF9086;--accent-wash:#2A1B19;--accent-line:#4A2C28;
+--panel:#0E0D0D;--panel-ink:#EDEAE8;--panel-line:#2B2827;
+--ok:#5FBF95;--ok-wash:#16301F;--ok-line:#24503A;
+--shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+margin:0;background:var(--ground);color:var(--ink);
+font-family:"IBM Plex Sans KR","Malgun Gothic",system-ui,sans-serif;
+font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+word-break:keep-all;overflow-wrap:break-word;
+}
+.mono{font-family:"IBM Plex Mono","IBM Plex Sans KR","Consolas",monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--accent-ink);text-underline-offset:2px}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+.bar{position:sticky;top:0;z-index:50;background:var(--ground);border-bottom:1px solid var(--line)}
+.bar-in{display:flex;align-items:center;gap:10px;height:54px}
+.brand{display:flex;align-items:baseline;gap:10px;flex-shrink:0;margin-right:auto;min-width:0}
+.brand b{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.brand span{font-size:11px;color:var(--faint);letter-spacing:.06em}
+.toplink{font-size:12.5px;padding:6px 11px;border:1px solid var(--accent-line);background:var(--accent-wash);color:var(--accent-ink);border-radius:7px;text-decoration:none;white-space:nowrap}
+.tog{width:34px;height:34px;border:1px solid var(--line);border-radius:7px;display:grid;place-items:center;color:var(--muted);flex-shrink:0}
+.tog:hover{color:var(--ink);border-color:var(--line-strong)}
+.nav{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{flex-shrink:0;padding:4px 11px;border:1px solid var(--line);border-radius:99px;font-size:12.5px;color:var(--muted);white-space:nowrap;text-decoration:none;transition:.12s}
+.nav a:hover{border-color:var(--line-strong);color:var(--ink)}
+.nav a.lab{border-color:var(--accent-line);color:var(--accent-ink)}
+.nav a.on{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.nav a.lab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.hero{padding:44px 0 30px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent-ink);font-weight:600}
+.hero h1{font-size:clamp(28px,4.6vw,44px);margin:12px 0 10px;line-height:1.2}
+.hero .lede{font-size:16px;color:var(--ink-2);font-weight:500;max-width:44em}
+.hero .sub{color:var(--muted);font-size:14.5px;max-width:66ch;margin-top:10px}
+.hero .sub b{color:var(--ink-2)}
+.cta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.stats{display:flex;flex-wrap:wrap;margin-top:24px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{flex:1 1 130px;padding:14px 18px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat b{display:block;font-size:26px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat b small{font-size:14px;font-weight:600}
+.stat span{font-size:11.5px;color:var(--muted)}
+section{padding:44px 0;scroll-margin-top:104px}
+section + section{border-top:1px solid var(--line)}
+.shead{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+.shead h2{font-size:21px}
+.shead .tag{font-size:11px;letter-spacing:.12em;color:var(--faint)}
+.slead{color:var(--muted);font-size:13.5px;margin-bottom:22px;max-width:74ch}
+.slead b{color:var(--ink-2)}
+h3.sub{font-size:15.5px;margin:30px 0 12px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h3.sub small{font-size:12px;color:var(--faint);font-weight:400}
+.key{margin-top:16px;border-left:3px solid var(--accent);padding:10px 14px;background:var(--surface);border-radius:0 8px 8px 0;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.key b{color:var(--ink)}
+.callout{border:1px dashed var(--line-strong);border-radius:10px;padding:12px 15px;font-size:13px;color:var(--ink-2);line-height:1.6;margin-top:14px}
+.callout b:first-child{color:var(--ink)}
+.callout.warn{border:1px solid var(--accent-line);background:var(--accent-wash)}
+.callout ul{margin:6px 0 0;padding-left:18px}
+.callout li{margin:3px 0}
+.ui{display:inline-block;padding:0 6px;border:1px solid var(--line-strong);border-radius:5px;font-size:.92em;background:var(--surface);color:var(--ink);line-height:1.5}
+.ui.mono{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:.86em}
+code{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:.88em;background:var(--surface-2);padding:1px 5px;border-radius:4px;color:var(--accent-ink);word-break:break-all}
+.muted{color:var(--muted)}
+.when{font-size:11px;color:var(--faint);font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;letter-spacing:.02em}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--line-strong);border-radius:7px;font-size:12.5px;background:var(--ground);color:var(--ink);text-decoration:none;line-height:1.4;max-width:100%}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.btn.pri:hover{color:var(--ground);opacity:.88}
+.btn svg{width:13px;height:13px;flex-shrink:0}
+.btn .fn{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:12px;white-space:nowrap}
+.padlink{display:inline-flex;align-items:center;gap:8px;font-size:13px;padding:8px 14px;border-radius:8px;background:var(--accent-wash);border:1px solid var(--accent-line);color:var(--accent-ink);text-decoration:none;max-width:100%}
+.chip{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:99px;border:1px solid var(--accent-line);background:var(--accent-wash);color:var(--accent-ink);text-decoration:none;margin:2px 4px 2px 0;white-space:nowrap}
+.chip.pd{border-color:var(--ok-line);background:var(--ok-wash);color:var(--ok)}
+.checks{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.check{display:flex;align-items:flex-start;gap:13px;background:var(--ground);padding:14px 18px;text-align:left;width:100%;transition:.12s}
+.check:hover{background:var(--surface)}
+.box{flex-shrink:0;width:19px;height:19px;border:1.5px solid var(--line-strong);border-radius:5px;margin-top:2px;display:grid;place-items:center;transition:.12s}
+.box svg{opacity:0;color:var(--ground);width:11px;height:11px}
+.check[aria-pressed="true"] .box{background:var(--ok);border-color:var(--ok)}
+.check[aria-pressed="true"] .box svg{opacity:1}
+.check[aria-pressed="true"] .ctitle{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--line-strong)}
+.ctitle{display:block;font-size:14px;font-weight:500;transition:.12s}
+.cgrp{display:inline-block;font-size:10.5px;padding:0 6px;border-radius:99px;background:var(--surface-2);color:var(--muted);margin-right:6px;vertical-align:1px;font-weight:400}
+.cdesc{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.cprog{font-size:12px;color:var(--muted);margin:10px 0 0;font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+@media (max-width:900px){.grid3{grid-template-columns:minmax(0,1fr)}}
+.card{border:1px solid var(--line);border-radius:11px;background:var(--ground);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.card.warn{border-color:var(--accent-line);background:var(--accent-wash)}
+.card.on{border-color:var(--accent-line)}
+.chead{padding:15px 17px 12px;display:flex;flex-direction:column;gap:7px}
+.meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.badge{font-size:10.5px;padding:1px 7px;border-radius:99px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.badge.hot{background:var(--accent-wash);color:var(--accent-ink);border:1px solid var(--accent-line)}
+.badge.ok{background:var(--ok-wash);color:var(--ok);border:1px solid var(--ok-line)}
+.card h3{font-size:15px;line-height:1.4}
+.cbody > .btn{align-self:flex-start}
+.cbody{padding:0 17px 15px;display:flex;flex-direction:column;gap:10px;flex:1;min-width:0;font-size:13.5px;color:var(--ink-2)}
+.note{padding:11px 17px 14px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted);line-height:1.55}
+.note b{color:var(--ink-2);font-weight:600}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+@media (max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
+.two > *,.grid3 > *,.trio > *,.fixes > *{min-width:0}
+.pblock{position:relative;background:var(--panel);border:1px solid var(--panel-line);border-radius:8px;padding:13px 46px 13px 15px;color:var(--panel-ink);font-size:13.5px;line-height:1.62;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;min-width:0}
+.pblock.op{font-family:"IBM Plex Mono","IBM Plex Sans KR","Consolas",monospace;font-size:12.8px}
+.pblock.data{max-height:340px;overflow:auto}
+.pblock.long{max-height:640px;overflow:auto;font-family:"IBM Plex Mono","IBM Plex Sans KR","Consolas",monospace;font-size:12.6px}
+.pblock.big{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:clamp(15px,2.2vw,19px);font-weight:500;padding:16px 50px 16px 16px;letter-spacing:-.01em}
+.pblock .lbl{display:block;font-size:10.5px;letter-spacing:.04em;color:#8E8885;margin-bottom:5px;font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;white-space:normal;font-weight:400}
+.cp{position:absolute;top:9px;right:9px;width:28px;height:28px;border-radius:6px;border:1px solid var(--panel-line);display:grid;place-items:center;color:#8E8885;transition:.12s;background:var(--panel)}
+.cp:hover{color:var(--panel-ink);border-color:#5A5451;background:#262423}
+.cp.done{color:#5FBF95;border-color:#5FBF95}
+.cp svg{width:13px;height:13px}
+.exp{font-size:12.8px;color:var(--ink-2);line-height:1.55;margin-top:6px}
+.exp b{color:var(--ok)}
+.ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.ol > li{display:flex;gap:11px;align-items:flex-start;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.ol > li > div{flex:1;min-width:0}
+.sn{flex-shrink:0;width:21px;height:21px;border-radius:50%;background:var(--surface-2);color:var(--muted);font-size:11px;font-weight:600;display:grid;place-items:center;margin-top:1px;font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace}
+.ol > li.hot .sn{background:var(--accent);color:#fff}
+ul.dots{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+ul.dots li{font-size:13px;color:var(--ink-2);padding-left:14px;position:relative;line-height:1.55}
+ul.dots li::before{content:"";position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--faint)}
+.rec-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:9px}
+table.rt{width:100%;border-collapse:collapse;font-size:13px}
+.rt th{background:var(--surface);color:var(--muted);font-weight:600;text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);font-size:12px;vertical-align:bottom}
+.rt td,.rt tbody th{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55}
+.rt tbody th{font-weight:600;color:var(--ink);background:var(--ground);font-size:13px;text-align:left}
+.rt tr:last-child td,.rt tr:last-child th{border-bottom:none}
+.rt td small,.rt tbody th small{display:block;color:var(--faint);font-size:11.5px;font-weight:400}
+.rt td.num{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;white-space:nowrap}
+.rt tr.labrow th,.rt tr.labrow td{background:var(--accent-wash)}
+@media (max-width:680px){
+.rt.stk thead{display:none}
+.rt.stk tr{display:block;border-bottom:1px solid var(--line);padding:6px 0}
+.rt.stk tr:last-child{border-bottom:none}
+.rt.stk td,.rt.stk tbody th{display:block;border:none;padding:4px 13px}
+.rt.stk tbody th{font-size:14px;padding-top:8px}
+.rt.stk td[data-l]::before{content:attr(data-l);display:block;font-size:11px;color:var(--faint);font-weight:500;margin-bottom:1px}
+.rt.stk td.num{white-space:normal}
+}
+.mbar{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-bottom:14px;gap:1px;background:var(--line)}
+.mbar a{flex:var(--m) 1 0;min-width:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);background:var(--surface);text-decoration:none;white-space:nowrap;overflow:hidden;font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace}
+.mbar a.lab{background:var(--accent-wash);color:var(--accent-ink);font-weight:600}
+.mbar a:hover{background:var(--surface-2)}
+.mbar .s{display:none}
+@media (max-width:560px){.mbar .l{display:none}.mbar .s{display:inline}}
+@media (max-width:680px){
+.rt.stk.flowt tr{display:grid;grid-template-columns:minmax(0,1fr) auto;padding:8px 0 10px}
+.rt.stk.flowt tr.labrow{background:var(--accent-wash)}
+.rt.stk.flowt tbody th{grid-column:1;grid-row:1}
+.rt.stk.flowt td.num{grid-column:2;grid-row:1;padding-top:8px;color:var(--muted)}
+.rt.stk.flowt td.num::after{content:"분"}
+.rt.stk.flowt td{grid-column:1/-1}
+.rt.stk.flowt td[data-l]::before{display:none}
+.rt.stk.flowt td.none{display:none}
+}
+.fixes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:980px){.fixes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.fixes{grid-template-columns:minmax(0,1fr)}}
+.fix{border:1px solid var(--line);border-radius:10px;padding:14px 16px 15px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.fix .no{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:11px;color:var(--accent-ink);font-weight:600;letter-spacing:.06em}
+.fix h3{font-size:14.5px;line-height:1.4}
+.fix dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;font-size:12.8px;line-height:1.5}
+.fix dt{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;color:var(--ink);font-weight:600;white-space:nowrap}
+.fix dd{margin:0;color:var(--ink-2)}
+.fix p{font-size:12.5px;color:var(--muted);line-height:1.55}
+.steps{display:grid;grid-template-columns:repeat(var(--n,6),minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.st{background:var(--ground);padding:13px 16px 14px 14px;position:relative;display:flex;flex-direction:column;gap:3px;min-width:0}
+.st:not(:last-child)::after{content:"";position:absolute;right:-6px;top:50%;width:9px;height:9px;border-top:1.5px solid var(--faint);border-right:1.5px solid var(--faint);background:var(--ground);transform:translateY(-50%) rotate(45deg);z-index:1}
+.st .k{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:10.5px;color:var(--accent-ink);font-weight:600;letter-spacing:.05em}
+.st b{font-size:14px;line-height:1.35}
+.st span{font-size:12px;color:var(--muted);line-height:1.5}
+.st span.sig{color:var(--ink-2)}
+.st.hot{background:var(--accent-wash)}
+.st.hot::after{background:var(--accent-wash)}
+.loopback{margin:8px calc(100% / 6) 0;border:1.5px dashed var(--line-strong);border-top:none;border-radius:0 0 10px 10px;height:16px;position:relative}
+.loopback span{position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);background:var(--ground);padding:0 8px;font-size:11.5px;color:var(--muted);white-space:nowrap}
+.loopnote{margin-top:18px;font-size:12.5px;color:var(--muted)}
+@media (max-width:820px){
+.steps{grid-template-columns:minmax(0,1fr)}
+.st{padding:10px 14px 11px;display:block}
+.st .k{display:inline-block;margin-right:8px;min-width:14px}
+.st b{display:inline}
+.st span:not(.k){display:block}
+.st:not(:last-child)::after{right:auto;left:22px;top:auto;bottom:-6px;transform:rotate(135deg)}
+.loopback{display:none}
+.loopnote{margin-top:10px}
+}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.eq .t{padding:8px 12px;border:1px solid var(--line-strong);border-radius:8px;background:var(--ground);font-size:14px;font-weight:600;line-height:1.3}
+.eq .t small{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:1px}
+.eq .op{color:var(--faint);font-weight:600;font-size:15px}
+.eq .t.res{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.eq .t.res small{color:var(--line-strong)}
+.eq .t.hum{border-color:var(--accent-line);background:var(--accent-wash);color:var(--accent-ink)}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:860px){.trio{grid-template-columns:minmax(0,1fr)}}
+.trio > div{border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--ink-2);line-height:1.6;min-width:0}
+.trio > div.on{border-color:var(--accent-line);background:var(--accent-wash)}
+.trio b.h{display:block;font-size:15px;color:var(--ink);margin-bottom:2px}
+.trio .w{display:block;font-size:12px;color:var(--accent-ink);margin-bottom:8px}
+.trio dl{margin:0;display:flex;flex-direction:column;gap:6px}
+.trio dt{font-size:11px;color:var(--faint);font-weight:500}
+.trio dd{margin:0}
+.trio ul{margin:0;padding:0 0 0 16px}
+.trio li{margin:2px 0}
+.dls{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.dls li{display:flex;gap:4px 10px;align-items:baseline;flex-wrap:wrap}
+.dls li > span{font-size:12.5px;color:var(--muted)}
+.tree{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:12.3px;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;white-space:pre;overflow-x:auto;line-height:1.6;margin:0}
+.notice{display:grid;grid-template-columns:auto minmax(0,1fr);border:1px solid var(--accent);border-radius:12px;overflow:hidden;margin-bottom:22px}
+.notice .nd{background:var(--accent);color:#fff;padding:18px 22px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.notice .nd b{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:28px;line-height:1.05;letter-spacing:-.02em}
+.notice .nd span{font-size:14px;font-weight:700}
+.notice .nb{background:var(--accent-wash);padding:16px 20px;font-size:13.5px;color:var(--ink-2);line-height:1.65}
+.notice .nb strong{color:var(--accent-ink)}
+.notice .nb ul{margin:6px 0 0;padding-left:18px}
+@media (max-width:620px){.notice{grid-template-columns:minmax(0,1fr)}.notice .nd{padding:14px 18px}}
+.obs-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;font-size:13px;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:7px;overflow:hidden;flex-shrink:0;background:var(--ground)}
+.seg button{padding:5px 11px;font-size:12.5px;color:var(--muted);white-space:nowrap;transition:.12s}
+.seg button + button{border-left:1px solid var(--line-strong)}
+.seg button:hover{color:var(--ink);background:var(--surface)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+.seg button[data-v="y"][aria-pressed="true"]{background:var(--ok);color:#fff}
+.obs td.v{width:150px;white-space:nowrap}
+.obs textarea,.obs-line input{width:100%;border:1px solid var(--line);border-radius:6px;padding:6px 9px;background:var(--ground);color:var(--ink);font:inherit;font-size:12.8px;line-height:1.5;resize:vertical;min-height:36px;display:block}
+.obs textarea:focus,.obs-line input:focus{outline:none;border-color:var(--accent)}
+.obs tr.me th,.obs tr.me td{background:var(--surface)}
+.obs-line{margin-top:10px}
+.obs-line label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.rbar{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px;flex-wrap:wrap}
+.rbar .bhint{margin:0 auto 0 0;font-size:12px;color:var(--muted)}
+@media (max-width:680px){
+.rt.stk.obs tr{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;padding:8px 0 10px}
+.rt.stk.obs tr.me{background:var(--surface)}
+.rt.stk.obs tbody th{grid-column:1;grid-row:1;padding:4px 13px}
+.rt.stk.obs td.v{grid-column:2;grid-row:1;width:auto;padding:4px 13px 4px 0}
+.rt.stk.obs td.sig{grid-column:1/-1;grid-row:2;font-size:12.5px;padding:0 13px 6px}
+.rt.stk.obs td.memo{grid-column:1/-1;grid-row:3}
+.rt.stk.obs td[data-l]::before{display:none}
+.rt.stk.obs td.sig::before{display:inline!important;content:"신호 · "!important;font-size:12.5px!important;color:var(--faint)}
+}
+.reads{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.rgrp{border:1px solid var(--line);border-radius:11px;padding:16px 18px;min-width:0}
+.rgrp h3{font-size:14px;margin:0 0 10px}
+.rgrp ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.rgrp li{font-size:13px;line-height:1.5}
+.rgrp li a{color:var(--accent-ink);font-weight:500;overflow-wrap:anywhere}
+.rgrp li .who{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:11px;color:var(--faint);display:block}
+.rgrp li .why{color:var(--muted);font-size:12px;display:block}
+.pads{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.pad{border:1px solid var(--line);border-radius:11px;padding:18px}
+.pad .no{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:12px;color:var(--accent-ink);font-weight:600}
+.pad h3{font-size:15px;margin:7px 0 9px}
+.pad ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.pad li{font-size:12.8px;color:var(--ink-2);padding-left:14px;position:relative}
+.pad li::before{content:"—";position:absolute;left:0;color:var(--faint)}
+.pad .when{margin-top:12px}
+details.more{border:1px dashed var(--line-strong);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--muted)}
+details.more summary{cursor:pointer;color:var(--ink-2);font-weight:500}
+details.more[open] summary{margin-bottom:9px}
+details.more + details.more{margin-top:8px}
+footer{border-top:1px solid var(--line);padding:30px 0 46px;color:var(--faint);font-size:12px;display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);background:var(--ink);color:var(--ground);padding:9px 18px;border-radius:99px;font-size:13px;opacity:0;pointer-events:none;transition:.18s;z-index:99;box-shadow:var(--shadow);max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:560px){
+.wrap{padding:0 16px}
+.brand span{display:none}
+.stat{flex-basis:50%;border-bottom:1px solid var(--line)}
+.stat:nth-child(2n){border-right:none}
+.stat:nth-last-child(-n+2){border-bottom:none}
+.hero{padding-top:30px}
+.toplink .lx{display:none}
+section{padding:36px 0}
+.chead{padding:14px 15px 10px}
+.cbody{padding:0 15px 14px}
+.note{padding:10px 15px 13px}
+.check{padding:13px 15px}
+}
+#tgrid .card h3{font-size:16px}
+#tgrid .cbody p{font-size:13.5px;color:var(--ink-2)}
+.rt td .pblock{font-size:13px;padding:10px 42px 10px 12px}
+.obs-line input[type=search]{-webkit-appearance:none;appearance:none}
+</style>
+</head>
+<body>
+
+<div class="bar">
+<div class="wrap">
+<div class="bar-in">
+<div class="brand"><b>바이브 코딩 데스크</b><span class="mono">2026.11.20 · 9회차</span></div>
+<a class="toplink" href="https://padlet.com/itcl/uos1120" target="_blank" rel="noopener">패들릿<span class="lx"> 열기</span></a>
+<button class="tog" id="tt" title="밝기 전환" aria-label="밝기 전환">
+<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8 5.6 5.6 0 1 0 13.2 9.6z"/></svg>
+</button>
+</div>
+<nav class="nav" id="nav" aria-label="섹션 바로 가기">
+<a href="#s-check">시작 전에</a>
+<a href="#s-flow">흐름</a>
+<a href="#s-qa">지난주 질문 답</a>
+<a href="#s-labR" class="lab">실습 R</a>
+<a href="#s-map">네 층 지도</a>
+<a href="#s-terms">용어 카드 24</a>
+<a href="#s-tools">도구</a>
+<a href="#s-labA" class="lab">실습 A</a>
+<a href="#s-labB" class="lab">실습 B</a>
+<a href="#s-labC" class="lab">실습 C</a>
+<a href="#s-stuck">막혔을 때</a>
+<a href="#s-padlet">패들릿</a>
+</nav>
+</div>
+</div>
+
+<div class="wrap">
+<header class="hero" id="top">
+<div class="eyebrow">AI실무활용과 스마트비즈니스 · 9회차 · 2026.11.20</div>
+<h1>말로 만든다, 눈으로 고친다</h1>
+<p class="lede">바이브 코딩 도구와 개발 용어 — 용어를 알면 더 정확히 시킨다</p>
+<p class="sub">앞 35분은 <b>지난주 마무리</b>(질문 3개 답 · 스킬 + MCP로 에이전트 한 바퀴), 그다음부터 <b>바이브 코딩</b>입니다. 한 파일 웹앱 → 앱 빌더 → 팀 주제 첫 화면 순서로 만들어요. 모든 실습은 무료 계정, 2026년 11월 화면 기준이에요. 요금과 한도는 수시로 바뀌니 내 화면에 보이는 숫자가 우선입니다.</p>
+<div class="cta">
+<a class="padlink" href="https://padlet.com/itcl/uos1120" target="_blank" rel="noopener">패들릿 열기 → padlet.com/itcl/uos1120</a>
+<a class="btn" href="#s-labR">실습 R 에이전트 한 바퀴</a>
+<a class="btn pri" href="#s-labA">실습 A 한 파일 웹앱</a>
+<a class="btn" href="#s-terms">용어 카드 24</a>
+</div>
+<div class="stats">
+<div class="stat"><b>4</b><span>실습 · R A B C</span></div>
+<div class="stat"><b>24</b><span>개발 용어 · 네 묶음</span></div>
+<div class="stat"><b>150<small>분</small></b><span>2·3·4교시</span></div>
+<div class="stat"><b>0<small>원</small></b><span>모두 무료 계정으로</span></div>
+</div>
+</header>
+</div>
+
+<main class="wrap">
+
+<section id="s-check">
+<div class="shead"><h2>시작 전에</h2><span class="tag mono">BEFORE WE START</span></div>
+<p class="slead">눌러서 하나씩 체크하세요. 체크는 이 브라우저에만 저장됩니다. <b>챗GPT 하나와 구글 계정 하나</b>면 오늘 실습을 끝까지 할 수 있어요.</p>
+<div class="checks" data-key="w11-ck" data-prog="ckp">
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle"><span class="cgrp">실습 R</span>챗GPT 로그인 · 왼쪽 '플러그인' 메뉴가 보이는지</span><span class="cdesc">무료 계정이면 됩니다. 지난주에 붙인 법령 · 통계 MCP가 '설치됨'에 남아 있는지 확인하세요.</span></span></button>
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle"><span class="cgrp">실습 R</span>지난주 파일 3개 내려받기</span><span class="cdesc">problem-brief-plugin.zip · jachwi_survey_가상.csv · jachwi_interview_가상.txt — 아래 실습 R 칸에 링크가 있어요.</span></span></button>
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle"><span class="cgrp">실습 A</span>챗GPT 캔버스 또는 제미나이 Canvas 켜 보기</span><span class="cdesc">챗GPT: 입력창의 '+' 또는 도구 → 캔버스 / 제미나이: 입력창 아래 '+' → Canvas. 둘 중 편한 것 하나.</span></span></button>
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle"><span class="cgrp">실습 B</span>앱 빌더 하나 열어 두기</span><span class="cdesc">구글 AI 스튜디오 Build(ai.studio/build)를 권해요. 개인 구글 계정으로 들어갑니다. Lovable · Bolt 계정이 있으면 그걸 써도 됩니다.</span></span></button>
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle"><span class="cgrp">준비</span>패들릿 열어 두기</span><span class="cdesc">padlet.com/itcl/uos1120 — 개인(실습 A · B) · 팀(실습 C) · 막힌 곳을 올립니다.</span></span></button>
+</div>
+<p class="cprog" id="ckp"></p>
+</section>
+
+<section id="s-flow">
+<div class="shead"><h2>오늘의 흐름</h2><span class="tag mono">150 MIN</span></div>
+<p class="slead">지난주 마무리 35분, 그다음부터 바이브 코딩. 실습은 색이 들어간 줄입니다.</p>
+<div class="rec-wrap"><table class="rt stk flowt">
+<thead><tr><th style="width:210px">구간</th><th style="width:60px">분</th><th>무엇을</th></tr></thead>
+<tbody>
+<tr><th scope="row">OPENING</th><td class="num">6</td><td data-l="무엇을">오늘의 지도 · 지난주 바로잡기 4</td></tr>
+<tr class="labrow"><th scope="row">RECAP 지난주 잇기</th><td class="num">35</td><td data-l="무엇을">질문 3개에 답하기 · 에이전트 두 장 압축 · <b>실습 R</b> 스킬 + MCP로 한 바퀴(15분)</td></tr>
+<tr><th scope="row">PART 01 바이브 코딩이란</th><td class="num">17</td><td data-l="무엇을">정의와 1년 반의 흐름 · 왜 경영학부 학생에게 · 한계 셋</td></tr>
+<tr><th scope="row">PART 02 개발 용어 지도</th><td class="num">25</td><td data-l="무엇을">웹 서비스 네 층 · 용어 24개 · 프롬프트에 쓰는 법</td></tr>
+<tr><th scope="row">PART 03 도구 고르기</th><td class="num">13</td><td data-l="무엇을">도구 세 갈래 · 무료 한도 · 크레딧 아끼는 법</td></tr>
+<tr class="labrow"><th scope="row">PART 04 실습</th><td class="num">48</td><td data-l="무엇을"><b>실습 A</b> 한 파일 웹앱(20분) → <b>실습 B</b> 앱 빌더(16분) → <b>실습 C</b> 팀 주제 첫 화면(10분) + 패들릿</td></tr>
+<tr><th scope="row">CLOSING</th><td class="num">6</td><td data-l="무엇을">정리 · 기말 프로젝트로 잇기 · 이번 주 할 일</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s-qa">
+<div class="shead"><h2>지난주 질문에 다시 답합니다</h2><span class="tag mono">Q&amp;A · 2026.11.13</span></div>
+<p class="slead">쉬는 시간에 나온 질문 세 개에 답이 흐렸어요. 녹음을 다시 듣고 정리했습니다.</p>
+<div class="trio">
+<div class="on"><b class="h">질문 1 · 스킬 · 커넥터 · 플러그인</b><span class="w">크기 순서가 아니라 하는 일이 다르다</span>
+<dl><dt>스킬 = 노하우</dt><dd>어떻게 할지 적어 둔 지침 폴더(SKILL.md). 바깥 서비스에 닿지 않는다.</dd>
+<dt>커넥터 = 손발</dt><dd>계정에 붙인 MCP 서버. 바깥 서비스 · 데이터에 닿게 해 준다.</dd>
+<dt>플러그인 = 묶음 상자</dt><dd>스킬 + 커넥터(+ 명령)를 한 번에 설치하는 꾸러미.</dd>
+<dt>컴퓨터가 꺼지면?</dt><dd>플러그인이냐 커넥터냐가 아니라 <b>어디에 붙였나</b>로 갈린다. 계정에 붙인 것은 웹 · 모바일 어디서나, 내 컴퓨터에 설정한 로컬 MCP · 로컬 스킬은 그 컴퓨터가 켜져 있어야 한다.</dd></dl></div>
+<div><b class="h">질문 2 · AI 브라우저 vs 피클</b><span class="w">어디서 도는지가 다르다</span>
+<dl><dt>내 컴퓨터에서 도는 것</dt><dd>AI 브라우저 · 데스크톱 에이전트. 내 로그인 그대로 움직이고, 실수도 내 컴퓨터에서 난다.</dd>
+<dt>가상 컴퓨터에서 도는 것</dt><dd>피클 같은 클라우드 개인 에이전트. 내가 자는 동안에도 돌고, 연결한 메일 · 일정 정보가 그쪽에 놓인다.</dd>
+<dt>맡기기 전에 둘</dt><dd>보내기 · 결제 · 전화는 사람 승인 뒤에. 탈퇴 전에 연결부터 해제.</dd>
+<dt>바로잡기</dt><dd>"피클 안에 클로드 소넷이 들어 있다"는 공식 문서에서 확인하지 못했다. 어떤 모델인지는 바뀔 수 있다.</dd></dl></div>
+<div><b class="h">질문 3 · 거래소 주가 데이터와 MCP</b><span class="w">계산값을 스킬에 넣는 방식은 틀린 게 아니라 1단계</span>
+<dl><dt>1단계 · 파일을 스킬에</dt><dd>엑셀 · 파이썬으로 계산한 표를 스킬의 참고 파일로. 화면에 '기준일'만 적으면 발표용으로 충분하다.</dd>
+<dt>2단계 · 스킬 안 스크립트</dt><dd>짧은 코드가 필요할 때 API를 부른다. API 키를 코드에 적지 않는다.</dd>
+<dt>3단계 · MCP 서버</dt><dd>API를 '도구'로 감싸 어느 AI에서나 @로 부른다. 데이터가 매일 바뀌어야 할 때만.</dd>
+<dt>이미 있는 길부터</dt><dd><a href="https://openapi.krx.co.kr/" target="_blank" rel="noopener">KRX OPEN API</a>(인증키 신청형) · <a href="https://www.data.go.kr/data/15094775/openapi.do" target="_blank" rel="noopener">공공데이터포털 금융위원회 KRX 상장종목정보</a> · <a href="https://apiportal.koreainvestment.com/" target="_blank" rel="noopener">한국투자증권 Open API의 공식 MCP</a></dd></dl></div>
+</div>
+<div class="key"><b>행동을 바꾸면 스킬, 접근을 주면 커넥터, 둘을 싸면 플러그인.</b> 그리고 "Think를 끄면 MCP를 더 잘 부른다"는 추정이었고 근거는 찾지 못했어요. 확실히 부르려면 <span class="ui mono">@</span>로 지명하거나 지침 · 메모리에 "법률 질문은 법률 MCP 먼저"를 적어 두세요.</div>
+</section>
+
+<section id="s-labR">
+<div class="shead"><h2>실습 R 스킬 + MCP로 에이전트 한 바퀴</h2><span class="tag mono">LAB R · 15 MIN</span></div>
+<p class="slead">지난주에 못 한 실습입니다. <b>목표 한 문장을 주고 손을 뗍니다.</b> 결과보다 과정을 보세요 — 계획을 먼저 보이는지, 도구를 몇 번 부르는지, 스스로 점검하는지. 챗GPT 무료 계정 기준이에요.</p>
+<div class="two">
+<div>
+<h3 class="sub" style="margin-top:0">파일 — 지난주 데스크에서 <small>가상 자료 · 실제 인물 · 조사 아님</small></h3>
+<ul class="dls">
+<li><a class="btn" href="../261113/files/problem-brief-plugin.zip" download><span class="fn">problem-brief-plugin.zip</span></a><span>챗GPT 플러그인 zip</span></li>
+<li><a class="btn" href="../261113/files/jachwi_survey_%EA%B0%80%EC%83%81.csv" download><span class="fn">jachwi_survey_가상.csv</span></a><span>가상 설문 30명</span></li>
+<li><a class="btn" href="../261113/files/jachwi_interview_%EA%B0%80%EC%83%81.txt" download><span class="fn">jachwi_interview_가상.txt</span></a><span>가상 인터뷰 3명</span></li>
+</ul>
+<p class="when" style="margin-top:10px">클로드 · 제미나이로 하려면 <a href="../261113/#s-labB">지난주 데스크 실습 B</a>의 세팅 표를 보세요.</p>
+<h3 class="sub">MCP를 아직 못 붙였다면 <small>플러그인 → 추가 → 사용자 지정 MCP 서버 추가 · 인증 없음</small></h3>
+<div class="pblock op"><span class="lbl">법령 MCP</span><span id="cp-law">https://mcp.gomdori.app/law</span><button class="cp" data-cpid="cp-law" title="복사" aria-label="복사"></button></div>
+<div class="pblock op" style="margin-top:8px"><span class="lbl">통계 MCP</span><span id="cp-stats">https://mcp.gomdori.app/stats</span><button class="cp" data-cpid="cp-stats" title="복사" aria-label="복사"></button></div>
+</div>
+<div>
+<h3 class="sub" style="margin-top:0">순서 5단계</h3>
+<ol class="ol">
+<li><span class="sn">1</span><div>플러그인 → 추가 → <b>플러그인 압축 파일 업로드</b> → problem-brief-plugin.zip → 설치</div></li>
+<li><span class="sn">2</span><div>새 채팅에서 <span class="ui mono">@problem-brief</span> · <span class="ui mono">@법령 MCP</span> · <span class="ui mono">@통계 MCP</span>를 붙인다</div></li>
+<li><span class="sn">3</span><div>파일 2개(설문 CSV · 인터뷰 TXT)를 첨부한다</div></li>
+<li class="hot"><span class="sn">4</span><div>아래 목표 문장을 붙여 넣고 <b>손을 뗀다</b>. 되묻는 질문에만 답한다</div></li>
+<li><span class="sn">5</span><div>세 가지를 센다 — 계획을 먼저 보였나 · 도구를 몇 번 불렀나 · 스스로 점검했나</div></li>
+</ol>
+</div>
+</div>
+<h3 class="sub">목표 문장 <small>그대로 붙여 넣기</small></h3>
+<div class="pblock"><span class="lbl">실습 R · 목표 문장</span><span id="cp-goal">problem-brief 스킬로 문제 정의 브리핑을 만들어 줘.
+주제: 서울시립대 앞(서울 동대문구)에서 처음 자취방을 계약하는 대학생이 겪는 어려움(특히 보증금과 계약 확인).
+첨부한 가상 설문과 가상 인터뷰를 먼저 읽고, 연결된 통계·법령 도구와 웹 검색으로 근거를 붙여 한 장으로 정리해 줘.
+시작 전에 계획부터 보여 줘.</span><button class="cp" data-cpid="cp-goal" title="복사" aria-label="복사"></button></div>
+<h3 class="sub">돌려 본 뒤 — 사람이 직접 할 것 3가지</h3>
+<div class="checks" data-key="w11-human" data-prog="hup">
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle">출처 링크를 직접 클릭해 열어 본다</span><span class="cdesc">출처를 달았다고 출처가 맞는 건 아니에요.</span></span></button>
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle">법령 조문은 국가법령정보센터 원문과 대조한다</span><span class="cdesc">law.go.kr에서 조문 번호로 찾습니다.</span></span></button>
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle">통계 숫자의 기준 시점 · 지역을 확인한다</span><span class="cdesc">'동대문구'라고 쓰고 서울 전체 값을 가져오는 일이 있었어요(지난주 확인).</span></span></button>
+</div>
+<p class="cprog" id="hup"></p>
+<div class="key"><b>에이전트 = 모델 + 스킬 + 도구 + 루프 + 사람 확인.</b> 에이전트는 일을 끝내 주지만 책임까지 끝내 주지는 않습니다.</div>
+</section>
+
+<section id="s-map">
+<div class="shead"><h2>웹 서비스는 네 층으로 본다</h2><span class="tag mono">THE MAP</span></div>
+<p class="slead">오늘 나오는 용어는 모두 이 네 층 가운데 하나에 붙어요. <b>실습 A는 맨 위 한 층만</b> 만들고, <b>실습 B는 네 층을 도구가 대신</b> 깔아 줍니다.</p>
+<div class="rec-wrap"><table class="rt stk">
+<thead><tr><th style="width:170px">층</th><th>하는 일</th><th>식당으로 치면</th><th>여기 붙는 말</th></tr></thead>
+<tbody>
+<tr><th scope="row">화면 · 프론트엔드</th><td data-l="하는 일">사용자가 보고 누르는 곳</td><td data-l="식당으로 치면">홀 — 메뉴판과 테이블</td><td data-l="여기 붙는 말">HTML · CSS · JavaScript · 반응형 · 히어로 섹션</td></tr>
+<tr><th scope="row">처리 · 백엔드</th><td data-l="하는 일">화면 뒤에서 계산하고 규칙을 지키는 곳</td><td data-l="식당으로 치면">주방 — 주문을 받아 요리</td><td data-l="여기 붙는 말">서버 · API · 인증(로그인)</td></tr>
+<tr><th scope="row">저장 · 데이터베이스</th><td data-l="하는 일">데이터를 표로 쌓아 두는 곳</td><td data-l="식당으로 치면">창고와 장부</td><td data-l="여기 붙는 말">DB · 테이블 · CRUD</td></tr>
+<tr><th scope="row">공개 · 배포</th><td data-l="하는 일">남이 접속할 수 있게 올려 두는 곳</td><td data-l="식당으로 치면">가게 문 열기 · 간판</td><td data-l="여기 붙는 말">Publish · 호스팅 · 도메인 · 깃허브</td></tr>
+</tbody></table></div>
+<div class="key"><b>API는 주문서</b>예요. 홀과 주방이 아무렇게나 소리치지 않고 정해진 양식으로 주고받습니다. 지난주에 말한 대로 <b>서버는 '내어주는 쪽'</b>이고요.</div>
+</section>
+
+<section id="s-terms">
+<div class="shead"><h2>용어 카드 24</h2><span class="tag mono">GLOSSARY · 4 × 6</span></div>
+<p class="slead">외우는 게 아니라 <b>프롬프트에 씁니다</b>. 묶음을 고르거나 검색하세요. 카드의 프롬프트 예시는 눌러서 복사할 수 있어요.</p>
+<div class="obs-top">
+<span class="seg" id="tfilter" role="group" aria-label="묶음 고르기">
+<button data-g="all" aria-pressed="true">전체</button><button data-g="화면" aria-pressed="false">화면</button><button data-g="처리 · 저장" aria-pressed="false">처리 · 저장</button><button data-g="공개" aria-pressed="false">공개</button><button data-g="과정" aria-pressed="false">과정</button>
+</span>
+<span class="obs-line" style="margin:0;flex:1;min-width:180px"><input id="tsearch" type="search" placeholder="용어 검색 — 예: 반응형, API, PRD" aria-label="용어 검색"></span>
+<span id="tcount" class="when"></span>
+</div>
+<div class="grid3" id="tgrid"></div>
+</section>
+
+<section id="s-tools">
+<div class="shead"><h2>도구 — 무료로 어디까지</h2><span class="tag mono">TOOLS · 2026.11</span></div>
+<p class="slead">코드를 얼마나 보게 되느냐로 세 갈래예요. 오늘은 <b>채팅 안에서 한 파일</b>(실습 A)과 <b>브라우저 앱 빌더</b>(실습 B)만 씁니다. 숫자는 2026년 11월 확인 기준이고, 내 화면의 숫자가 우선입니다.</p>
+<div class="rec-wrap"><table class="rt stk">
+<thead><tr><th style="width:210px">도구</th><th>무료 한도</th><th>잘하는 것</th><th>주의</th></tr></thead>
+<tbody>
+<tr class="labrow"><th scope="row"><a href="https://ai.studio/build" target="_blank" rel="noopener">구글 AI 스튜디오 Build</a><small>앱 빌더 · 오늘 권장</small></th><td data-l="무료 한도">만들기는 무료 · 하루 한도는 내 계정 화면에 표시</td><td data-l="잘하는 것">구글 계정만으로 시작 · 저장 · 로그인까지 말로</td><td data-l="주의">게시 수와 많이 쓰는 기능에는 제한이 있다</td></tr>
+<tr><th scope="row"><a href="https://lovable.dev" target="_blank" rel="noopener">Lovable</a><small>앱 빌더</small></th><td data-l="무료 한도">하루 5크레딧 · 한 달 최대 30</td><td data-l="잘하는 것">디자인이 깔끔 · 계획 모드 · 만들면 바로 주소</td><td data-l="주의">요청 두세 번이면 하루치가 끝난다</td></tr>
+<tr><th scope="row"><a href="https://bolt.new" target="_blank" rel="noopener">Bolt.new</a><small>앱 빌더</small></th><td data-l="무료 한도">하루 30만 토큰 · 한 달 100만</td><td data-l="잘하는 것">만드는 과정이 다 보인다 · 호스팅 포함</td><td data-l="주의">프로젝트가 커질수록 빨리 닳는다</td></tr>
+<tr><th scope="row"><a href="https://gemini.google.com" target="_blank" rel="noopener">제미나이 Canvas</a><small>채팅 안 한 파일</small></th><td data-l="무료 한도">제미나이 사용자 누구나</td><td data-l="잘하는 것">채팅 옆에서 바로 미리보기 · 한 화면 도구</td><td data-l="주의">여러 화면 · 저장이 필요하면 빌더로</td></tr>
+<tr><th scope="row"><a href="https://chatgpt.com" target="_blank" rel="noopener">챗GPT 캔버스</a> · <a href="https://claude.ai" target="_blank" rel="noopener">클로드 아티팩트</a><small>채팅 안 한 파일</small></th><td data-l="무료 한도">무료 계정 화면 기준으로 확인</td><td data-l="잘하는 것">평소 쓰던 채팅에서 그대로</td><td data-l="주의">한도에 걸리면 다른 채팅 도구로 옮긴다</td></tr>
+</tbody></table></div>
+<p class="when" style="margin-top:8px">개발자용 에디터 · 터미널(Cursor · 클로드 코드 · 코덱스)은 오늘 소개만 합니다.</p>
+<h3 class="sub">크레딧 아끼는 법 4</h3>
+<div class="fixes">
+<div class="fix"><span class="no">1</span><h3>계획은 밖에서</h3><p>PRD는 챗GPT · 제미나이에서 먼저 쓰고, 빌더에는 완성된 한 장만 넣는다.</p></div>
+<div class="fix"><span class="no">2</span><h3>묶어서 한 번에</h3><p>수정 사항 세 개를 모아 "1. … 2. … 3. …"으로 한 번에 보낸다.</p></div>
+<div class="fix"><span class="no">3</span><h3>참고 화면을 준다</h3><p>말로 설명하기 어려운 디자인은 캡처 한 장. "이 화면처럼 여백과 글자 크기를".</p></div>
+<div class="fix"><span class="no">4</span><h3>코드를 들고 나온다</h3><p>빌더의 Code 보기에서 코드를 복사해 다른 AI에 붙여 고친 뒤 다시 넣는다.</p></div>
+</div>
+</section>
+
+<section id="s-labA">
+<div class="shead"><h2>실습 A 한 파일 웹앱 — 커리어 성향 진단</h2><span class="tag mono">LAB A · 20 MIN</span></div>
+<p class="slead">챗GPT 캔버스 또는 제미나이 Canvas에서 만듭니다. <b>첫 시도는 러프하게</b> — AI가 빈칸을 어떻게 채우는지 본 다음, 용어로 다듬어요.</p>
+<h3 class="sub" style="margin-top:0">A-1 첫 시도 <small>8분 · 너무 자세히 말하지 않는다</small></h3>
+<div class="pblock"><span class="lbl">프롬프트 1</span><span id="cp-a1">MBTI 같은 컨셉의 커리어 성향 진단 도구를 만들어 줘.
+10문항 정도 테스트해서 결과가 4종류로 나오게 구성해 줘.
+HTML 파일 하나로(CSS · JS 포함), 미리보기로 바로 볼 수 있게.</span><button class="cp" data-cpid="cp-a1" title="복사" aria-label="복사"></button></div>
+<p class="exp"><b>할 일</b> — 미리보기에서 끝까지 눌러 보고, 마음에 안 드는 곳 세 군데를 메모합니다. 아직 고치지 않아요.</p>
+<h3 class="sub">A-2 용어로 다듬는다 <small>8분 · 묶어서 한 번에</small></h3>
+<div class="pblock"><span class="lbl">프롬프트 2 — 5번에 내 메모를 덧붙여서</span><span id="cp-a2">다음을 한 번에 반영해 줘.
+1. 디자인 톤을 차분한 비즈니스 느낌으로. 네이비와 베이지 위주.
+2. 결과 4가지 페르소나에 캐릭터 있는 이름과 설명을 붙이고, 각각 추천 직무 3개.
+3. 히어로 섹션에 한 줄 소개와 시작 버튼. 문항 화면 위쪽에 진행률 바. 모바일 한 줄 · PC 2단 반응형.
+4. 마지막 결과를 로컬 스토리지에 저장해서 다시 열면 보이게. 결과 화면에 '결과 복사' 버튼.
+5. (내 메모: 여기에 고칠 곳 세 군데를 적는다)</span><button class="cp" data-cpid="cp-a2" title="복사" aria-label="복사"></button></div>
+<p class="exp"><b>볼 것</b> — 용어 하나가 화면의 어디를 바꿨는지. 창 너비를 줄이면 '반응형'이 보입니다.</p>
+<h3 class="sub">A-3 파일로 받아 열어 본다 <small>4분</small></h3>
+<div class="steps" style="--n:3">
+<div class="st"><span class="k">1</span><b>내려받기</b><span>캔버스의 내려받기(또는 코드 복사 → 메모장에 붙여 저장). 파일 이름은 영문으로, 예: career.html</span></div>
+<div class="st"><span class="k">2</span><b>더블클릭</b><span>브라우저에서 열립니다. 주소창이 file://로 시작하면 내 컴퓨터에서만 보인다는 뜻이에요.</span></div>
+<div class="st hot"><span class="k">3</span><b>공유</b><span>캔버스의 공유 링크를 만들거나, 파일을 메신저로 보내거나, 깃허브 Pages에 올립니다.</span></div>
+</div>
+<div class="callout"><b>패들릿에</b> — 결과 화면 캡처 + 프롬프트에 쓴 용어 세 개 + AI가 제멋대로 채운 곳 한 줄.</div>
+</section>
+
+<section id="s-labB">
+<div class="shead"><h2>실습 B 앱 빌더 — 맞춤 프롬프트 생성기</h2><span class="tag mono">LAB B · 16 MIN</span></div>
+<p class="slead">이번에는 반대로 <b>처음 한 번을 정확하게</b> 줍니다. 무엇 · 핵심 기능 · 디자인 · 추가, 네 덩어리로 쓴 것이 PRD예요. <a href="https://ai.studio/build" target="_blank" rel="noopener">구글 AI 스튜디오 Build</a>를 권하고, Lovable · Bolt도 같은 프롬프트로 됩니다.</p>
+<h3 class="sub" style="margin-top:0">B-1 PRD형 프롬프트 <small>10분 · 통째로 붙여 넣기</small></h3>
+<div class="pblock"><span class="lbl">PRD형 프롬프트</span><span id="cp-b1">[ 무엇을 만들고 싶은가 ]
+- 한 줄 설명: ChatGPT 프롬프트를 자동으로 만들어 주는 도구
+- 주요 사용자: 직장인, 학생
+- 사용 상황: AI에게 일을 시킬 때 어떻게 부탁할지 모를 때
+
+[ 핵심 기능 ]
+1. 직무 선택 (드롭다운): 마케팅 / HR / 기획 / 영업 / 연구 / 기타
+2. 상황 입력 (자유 텍스트)
+3. 톤 선택 (라디오): 격식 / 친근 / 창의 / 논리
+4. "프롬프트 생성" 버튼 → 결과 영역에 자동 조립된 프롬프트 표시
+5. 결과 영역에 "복사" 버튼
+
+[ 디자인 ]
+- 깔끔하고 비즈니스 느낌
+- 화이트 바탕 + 네이비 포인트
+- PC에서는 좌우 2단(입력 / 결과), 모바일에서는 위아래(반응형)
+
+[ 추가 요청 ]
+- 로그인 없이, DB 없이 만들어 줘
+- 마케팅 직무에는 자주 쓰는 상황 예시 3개 미리 보여 주기
+- 결과 프롬프트는 코드 블록처럼 상자 안에 표시</span><button class="cp" data-cpid="cp-b1" title="복사" aria-label="복사"></button></div>
+<p class="exp"><b>볼 것</b> — 만드는 동안 화면에 지나가는 말(컴포넌트 · 반응형 …)과, 실습 A의 러프한 한 줄에 견줘 첫 결과가 얼마나 다른지.</p>
+<h3 class="sub">B-2 고치고, 내 것으로, 내보낸다 <small>6분 · 한도가 끝나면 거기서 캡처</small></h3>
+<div class="two">
+<div><div class="pblock"><span class="lbl">수정 — 묶어서 한 번</span><span id="cp-b2">다음을 수정해 줘:
+1. 직무 드롭다운에 '회계/재무'와 '디자인' 추가
+2. 응답 길이 선택 버튼 추가: 짧게 / 보통 / 자세히
+3. 결과 상자 배경을 좀 더 진한 회색으로</span><button class="cp" data-cpid="cp-b2" title="복사" aria-label="복사"></button></div></div>
+<div><div class="pblock"><span class="lbl">개인화 — 경영학부답게</span><span id="cp-b3">직무 목록을 다음으로 바꿔 줘: [재무관리 / 마케팅 / 인사 / 운영]
+각 직무마다 자주 쓰는 상황 예시 3개씩 같이 보여 줘.
+예시를 누르면 그 상황이 바로 입력란에 들어가게 만들어 줘.</span><button class="cp" data-cpid="cp-b3" title="복사" aria-label="복사"></button></div></div>
+</div>
+<div class="callout warn"><b>Publish(게시)</b> — 오른쪽 위 Publish → 주소 복사 → <b>옆 사람 폰으로 열어 본다.</b> 열리면 성공이에요. 공개 범위와 보안 안내는 누르기 전에 읽습니다. 실제 개인정보는 넣지 않아요.</div>
+</section>
+
+<section id="s-labC">
+<div class="shead"><h2>실습 C 팀 주제 — PRD 한 장에서 첫 화면까지</h2><span class="tag mono">LAB C · 10 MIN · TEAM</span></div>
+<p class="slead">팀별로 모입니다. <b>계획은 채팅에서, 만들기는 한 번만.</b> 다 만들려고 하지 말고 첫 화면 하나만 만들어요. 아래 두 칸을 채우면 프롬프트가 완성됩니다(이 브라우저에만 저장).</p>
+<div class="two">
+<div class="obs-line" style="margin:0"><label for="c-who">누구의</label><input id="c-who" type="text" placeholder="예: 첫 자취방을 구하는 대학생"></div>
+<div class="obs-line" style="margin:0"><label for="c-when">어떤 순간이 불편한가</label><input id="c-when" type="text" placeholder="예: 계약 직전에 무엇을 확인해야 할지 모르는 순간"></div>
+</div>
+<h3 class="sub">프롬프트 — PRD부터 받는다 <small>채팅 AI에 붙여 넣기</small></h3>
+<div class="pblock"><span class="lbl">실습 C · PRD 먼저</span><span id="cp-c1"></span><button class="cp" data-cpid="cp-c1" title="복사" aria-label="복사"></button></div>
+<ol class="ol" style="margin-top:16px">
+<li><span class="sn">1</span><div>PRD가 나오면 <b>팀이 읽고 고친다</b> — 기능은 세 개까지, 가짜 데이터에는 '가상' 표시</div></li>
+<li><span class="sn">2</span><div>고친 PRD를 캔버스나 빌더에 넣어 <b>첫 화면 하나만</b> 만든다</div></li>
+<li class="hot"><span class="sn">3</span><div>링크나 캡처를 패들릿 '팀' 칸에 올린다</div></li>
+</ol>
+<div class="key"><b>기말 결과물 세 형태</b>(웹 · 앱 / 챗봇 / 에이전트 워크플로) 가운데 '웹 · 앱'의 첫 초안이 오늘 나옵니다. 제출은 <b>12월 10일(목) 23:59</b>, 발표는 12월 11일 · 18일. 심사위원이 링크를 직접 눌러 봐요.</div>
+</section>
+
+<section id="s-stuck">
+<div class="shead"><h2>막혔을 때 쓰는 말 5</h2><span class="tag mono">WHEN STUCK</span></div>
+<p class="slead">코드를 읽지 못해도 됩니다. 코드를 읽는 대신 <b>설명하게</b> 하세요.</p>
+<div class="rec-wrap"><table class="rt stk">
+<thead><tr><th style="width:190px">상황</th><th>이렇게 말한다</th><th style="width:280px">왜</th></tr></thead>
+<tbody>
+<tr><th scope="row">빨간 오류가 떴다</th><td data-l="이렇게 말한다"><div class="pblock"><span id="cp-s1">이 에러 메시지를 그대로 붙일게. 원인과 고칠 곳을 먼저 설명하고, 내가 좋다고 하면 고쳐 줘.</span><button class="cp" data-cpid="cp-s1" title="복사" aria-label="복사"></button></div></td><td data-l="왜">설명 없이 고치게 하면 다른 곳이 깨진다</td></tr>
+<tr><th scope="row">고쳤더니 더 나빠졌다</th><td data-l="이렇게 말한다"><div class="pblock"><span id="cp-s2">방금 변경 전으로 되돌려 줘.</span><button class="cp" data-cpid="cp-s2" title="복사" aria-label="복사"></button></div></td><td data-l="왜">덧대어 고치는 것보다 되돌리기가 싸다</td></tr>
+<tr><th scope="row">큰 걸 시키려 한다</th><td data-l="이렇게 말한다"><div class="pblock"><span id="cp-s3">코드를 쓰기 전에 계획부터 보여 줘. 내가 확인한 다음에 시작하자.</span><button class="cp" data-cpid="cp-s3" title="복사" aria-label="복사"></button></div></td><td data-l="왜">계획 단계에서 고치면 크레딧이 거의 안 든다</td></tr>
+<tr><th scope="row">무슨 코드인지 모르겠다</th><td data-l="이렇게 말한다"><div class="pblock"><span id="cp-s4">이 화면이 어떤 조각으로 이뤄졌는지 사이트맵으로 정리해 줘. 코딩을 모르는 사람이 읽을 수 있게.</span><button class="cp" data-cpid="cp-s4" title="복사" aria-label="복사"></button></div></td><td data-l="왜">구조를 알아야 어디를 고칠지 말할 수 있다</td></tr>
+<tr><th scope="row">한도가 끝났다</th><td data-l="이렇게 말한다"><div class="pblock"><span id="cp-s5">지금까지의 전체 코드를 파일 하나로 내보내 줘.</span><button class="cp" data-cpid="cp-s5" title="복사" aria-label="복사"></button></div></td><td data-l="왜">코드는 내 것 — 다른 AI에 붙여 이어서 한다</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s-padlet">
+<div class="shead"><h2>패들릿에 올릴 것</h2><span class="tag mono">PADLET</span></div>
+<p class="slead">출석 확인을 겸합니다. 잘 만든 화면보다 <b>무엇을 시켰고 무엇이 달라졌나</b>를 적은 글이 다음 주 재료가 돼요.</p>
+<div class="pads">
+<div class="pad"><span class="no">개인</span><h3>실습 A · B</h3><ul><li>결과 화면 캡처(또는 주소)</li><li>프롬프트에 쓴 용어 세 개</li><li>AI가 제멋대로 채운 곳 한 줄</li></ul></div>
+<div class="pad"><span class="no">팀</span><h3>실습 C</h3><ul><li>팀 문제 한 문장</li><li>PRD에서 남긴 기능 세 개</li><li>첫 화면 링크 또는 캡처</li></ul></div>
+<div class="pad"><span class="no">질문</span><h3>막힌 곳</h3><ul><li>어디서 멈췄는지 한 줄</li><li>에러 메시지는 그대로 붙인다</li><li>다음 주 수업 시작에 모아서 답한다</li></ul></div>
+</div>
+<div class="cta"><a class="padlink" href="https://padlet.com/itcl/uos1120" target="_blank" rel="noopener">패들릿 열기 → padlet.com/itcl/uos1120</a></div>
+<h3 class="sub">이번 주 할 일 <small>다음 수업(11월 27일 · 시장조사와 경쟁 분석) 전까지</small></h3>
+<div class="checks" data-key="w11-todo" data-prog="tdp">
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle"><span class="cgrp">개인</span>실습 A를 끝까지 — HTML 파일로 받아 친구 폰에서 열어 본다</span></span></button>
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle"><span class="cgrp">팀</span>PRD 한 장 확정 — 기능 세 개 · 주요 사용자 · 첫 화면 · 역할 넷(문제 · 리서치 · 빌드 · 스토리)</span></span></button>
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle"><span class="cgrp">팀</span>작업 공간 만들기 — 챗GPT 팀 프로젝트나 공유 폴더 하나에 PRD · 프롬프트 · 링크를 모은다</span></span></button>
+<button class="check" aria-pressed="false"><span class="box"></span><span><span class="ctitle"><span class="cgrp">안전</span>지난주에 깐 에이전트 앱 점검 — 연결한 계정을 확인하고, 안 쓰면 연결 해제 뒤 탈퇴</span></span></button>
+</div>
+<p class="cprog" id="tdp"></p>
+</section>
+
+<footer>
+<span>김덕진 · IT커뮤니케이션연구소(ITCL) · 서울시립대학교 경영학부 AI실무활용과 스마트비즈니스</span>
+<span>가상 자료는 수업 연습용 — 실제 인물·조사 아님 · 도구 요금·한도는 2026.11 확인 기준</span>
+</footer>
+</main>
+
+<div class="toast" id="ts" role="status" aria-live="polite">복사했습니다</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const CPI='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1.5 1.5 0 0 0-1.5-1.5H3.5A1.5 1.5 0 0 0 2 3.5V9a1.5 1.5 0 0 0 1.5 1.5h2"/></svg>';
+const OKI='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3.5 3.5L13 5"/></svg>';
+const DLI='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg>';
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* 용어 카드 24 */
+const TERMS=[
+["화면","HTML · CSS · JavaScript","뼈대 · 꾸밈 · 움직임. 웹 화면을 이루는 세 가지","HTML 파일 하나로(CSS · JS 포함) 만들어 줘."],
+["화면","반응형","화면 크기에 따라 배치가 바뀌는 것","PC에서는 2단, 모바일에서는 한 줄로 보이게 반응형으로 만들어 줘."],
+["화면","컴포넌트","버튼 · 카드처럼 여러 번 다시 쓰는 화면 조각","결과 카드를 컴포넌트 하나로 만들어서 4개에 똑같이 적용해 줘."],
+["화면","히어로 섹션","첫 화면 맨 위의 큰 영역","히어로 섹션에 한 줄 소개와 시작 버튼을 넣어 줘."],
+["화면","와이어프레임","색 · 그림 없이 배치만 그린 설계도","만들기 전에 와이어프레임을 글로 먼저 보여 줘."],
+["화면","UI · UX","보이는 화면 · 쓰는 사람의 경험","세 번 안에 결과에 도달하는 UX로 줄여 줘."],
+["처리 · 저장","API","프로그램끼리 정해진 형식으로 주고받는 창구","환율은 공개 API에서 가져오게 해 줘."],
+["처리 · 저장","API 키 · 환경 변수","내 이름으로 API를 쓰는 비밀번호 · 그것을 코드 밖에 숨겨 두는 자리","API 키는 코드에 쓰지 말고 환경 변수로 빼 줘."],
+["처리 · 저장","데이터베이스 · 테이블","데이터를 표로 쌓아 두는 창고 · 그 안의 표 하나","응답을 DB에 저장하고 관리자 화면에서 표로 보게 해 줘."],
+["처리 · 저장","인증(로그인)","누구인지 확인하는 절차","로그인 없이 쓸 수 있게 해 줘."],
+["처리 · 저장","CRUD","만들기 · 읽기 · 고치기 · 지우기. 데이터 기본 동작 넷","메모를 추가 · 수정 · 삭제할 수 있게(CRUD) 해 줘."],
+["처리 · 저장","로컬 스토리지","서버 없이 내 브라우저 안에만 저장","DB 없이 로컬 스토리지에 저장해 줘."],
+["공개","배포(Deploy · Publish)","내 컴퓨터 밖, 남이 접속할 수 있는 곳에 올리기","이걸 배포하려면 어떤 순서로 해야 하는지 알려 줘."],
+["공개","호스팅","올린 것을 24시간 켜 두는 자리","깃허브 Pages에 올릴 수 있게 파일로 정리해 줘."],
+["공개","도메인 · URL","사이트의 이름 · 그 페이지의 주소","게시한 뒤 받은 주소(URL)를 알려 줘."],
+["공개","깃 · 깃허브 · 커밋","버전을 기록하는 도구 · 그 기록을 올려 두는 곳 · 저장 한 번","깃허브에 연결해서 변경할 때마다 커밋해 줘."],
+["공개","로컬호스트","내 컴퓨터 안에서만 열리는 주소","지금 주소가 localhost인데, 남도 볼 수 있는 주소로 내보내려면?"],
+["공개","롤백(되돌리기)","이전 버전으로 돌아가기","방금 변경 전으로 되돌려 줘."],
+["과정","PRD","제품 요구사항 문서. 무엇을 왜 만드는지 적은 한 장","코드 전에 PRD부터 써 줘. 내가 고치고 나서 만들자."],
+["과정","MVP","핵심 기능만 넣은 최소 제품(Minimum Viable Product)","MVP는 기능 3개만. 나머지는 다음 버전으로 미뤄 줘."],
+["과정","프로토타입","눌러 볼 수 있는 시제품","가짜 데이터로 프로토타입을 만들고 화면에 '가상'이라고 표시해 줘."],
+["과정","디버깅 · 에러 로그","오류의 원인을 찾아 고치기 · 오류가 남긴 기록","이 에러 로그를 보고 원인부터 설명해 줘."],
+["과정","프레임워크 · 라이브러리","미리 만들어 둔 뼈대 · 가져다 쓰는 부품(React, Tailwind 등)","React 없이 순수 HTML로 만들어 줘."],
+["과정","토큰 · 크레딧","AI가 읽고 쓴 양 · 도구가 매기는 사용권","수정 사항 세 개를 한 번에 반영해 줘."]
+];
+let tg='all',tq='';
+function drawTerms(){
+  const q=tq.trim().toLowerCase();
+  const list=TERMS.map((t,i)=>[t,i]).filter(([t])=>(tg==='all'||t[0]===tg)&&(!q||(t[1]+' '+t[2]+' '+t[3]).toLowerCase().includes(q)));
+  $('tgrid').innerHTML=list.map(([t,i])=>'<div class="card"><div class="chead"><div class="meta"><span class="badge'+(t[0]==='화면'?' hot':t[0]==='과정'?' ok':'')+'">'+esc(t[0])+'</span></div><h3>'+esc(t[1])+'</h3></div>'+
+    '<div class="cbody"><p>'+esc(t[2])+'</p><div class="pblock"><span class="lbl">프롬프트에 이렇게</span><span id="cp-t'+i+'">'+esc(t[3])+'</span><button class="cp" data-cpid="cp-t'+i+'" title="복사" aria-label="복사">'+CPI+'</button></div></div></div>').join('')
+    ||'<p class="muted">맞는 용어가 없어요. 다른 말로 찾아보세요.</p>';
+  $('tcount').textContent=list.length+' / '+TERMS.length;
+}
+drawTerms();
+$('tsearch').addEventListener('input',e=>{tq=e.target.value;drawTerms()});
+
+/* 실습 C — 팀 문제 문장으로 프롬프트 조립 */
+const CKEY='w11-team';
+let team=store.get(CKEY)||{};
+if(typeof team!=='object'||Array.isArray(team))team={};
+$('c-who').value=team.who||'';$('c-when').value=team.when||'';
+function drawC(){
+  const who=($('c-who').value||'').trim()||'[누구]';
+  const when=($('c-when').value||'').trim()||'[어떤 순간]';
+  $('cp-c1').textContent='우리 팀의 문제는 이거야: '+who+'의 '+when+'이(가) 불편하다.\n이 문제를 푸는 웹 서비스의 PRD를 한 장으로 써 줘.\n- 한 줄 설명 / 주요 사용자 / 사용 상황\n- MVP 핵심 기능 3개(그 이상은 \'다음 버전\'으로)\n- 첫 화면의 와이어프레임을 글로\n- 데이터: 실제 개인정보를 쓰지 않고, 가짜 데이터에는 \'가상\'이라고 표시\n- 로그인 없이, DB 없이 시작\n코드는 아직 쓰지 마. 내가 PRD를 고친 다음에 만들자.\n쓰기 전에 나한테 물어볼 것이 있으면 먼저 물어봐.';
+}
+drawC();
+['c-who','c-when'].forEach(id=>$(id).addEventListener('input',()=>{team={who:$('c-who').value,when:$('c-when').value};store.set(CKEY,team);drawC()}));
+
+/* 아이콘 채우기 */
+document.querySelectorAll('.cp').forEach(b=>{if(!b.innerHTML)b.innerHTML=CPI});
+document.querySelectorAll('.box').forEach(b=>b.innerHTML=OKI);
+document.querySelectorAll('a.btn[download]').forEach(a=>a.insertAdjacentHTML('afterbegin',DLI));
+
+/* 토스트 · 복사 */
+let toastT;
+function toast(msg){const t=$('ts');t.textContent=msg;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2000)}
+async function copy(txt,btn){
+  let ok=false;
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(txt);ok=true}}catch(e){}
+  if(!ok){try{const a=document.createElement('textarea');a.value=txt;a.setAttribute('readonly','');a.style.position='fixed';a.style.top='0';a.style.left='0';a.style.opacity='0';document.body.appendChild(a);a.select();a.setSelectionRange(0,txt.length);ok=document.execCommand('copy');a.remove()}catch(e){ok=false}}
+  if(ok){toast('복사했습니다');if(btn&&btn.classList.contains('cp')){btn.innerHTML=OKI;btn.classList.add('done');setTimeout(()=>{btn.innerHTML=CPI;btn.classList.remove('done')},1400)}}
+  else toast('복사에 실패했습니다. 텍스트를 직접 선택해 주세요.');
+}
+
+/* 체크리스트 */
+function ckProgress(wrap){const p=$(wrap.dataset.prog);if(!p)return;const all=[...wrap.querySelectorAll('.check')];const n=all.filter(b=>b.getAttribute('aria-pressed')==='true').length;p.textContent=n+' / '+all.length+' 확인'+(n===all.length?' — 끝':'')}
+document.querySelectorAll('.checks[data-key]').forEach(w=>{
+  const saved=store.get(w.dataset.key)||[];
+  w.querySelectorAll('.check').forEach((b,i)=>b.setAttribute('aria-pressed',saved[i]?'true':'false'));
+  ckProgress(w);
+});
+
+/* 클릭 하나로 처리 */
+document.addEventListener('click',e=>{
+  const t=e.target;
+  const cp=t.closest('[data-cpid]');if(cp){const el=$(cp.dataset.cpid);if(el)copy(el.textContent,cp);return}
+  const ck=t.closest('.check');if(ck){const w=ck.closest('.checks');const on=ck.getAttribute('aria-pressed')!=='true';ck.setAttribute('aria-pressed',on?'true':'false');
+    store.set(w.dataset.key,[...w.querySelectorAll('.check')].map(b=>b.getAttribute('aria-pressed')==='true'));ckProgress(w);return}
+  const fb=t.closest('#tfilter button');if(fb){tg=fb.dataset.g;document.querySelectorAll('#tfilter button').forEach(b=>b.setAttribute('aria-pressed',b===fb?'true':'false'));drawTerms();return}
+});
+
+/* 밝기 */
+let dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+$('tt').addEventListener('click',()=>{dark=!dark;document.documentElement.setAttribute('data-theme',dark?'dark':'light')});
+
+/* 미니 내비 — 지금 보는 섹션 표시 */
+(function(){
+  const links=[...document.querySelectorAll('#nav a')];const nav=$('nav');
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  let curId='';
+  function setOn(id){if(id===curId)return;curId=id;links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+id));
+    const a=map.get(id);if(a){nav.scrollTo({left:Math.max(0,a.offsetLeft-16),behavior:'smooth'})}}
+  const secs=[...map.keys()].map(id=>document.getElementById(id)).filter(Boolean);
+  function onScroll(){const y=window.scrollY+130;let id='';for(const s of secs){if(s.offsetTop<=y)id=s.id}setOn(id)}
+  window.addEventListener('scroll',()=>requestAnimationFrame(onScroll),{passive:true});onScroll();
+})();
+</script>
+<a href="../" data-uos-portal style="position:fixed;left:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:99px;background:#181818;color:#fff;font:600 12px/1 system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.18);opacity:.9">← 학기 포털</a>
+</body>
+</html>
