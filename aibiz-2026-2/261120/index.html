@@ -601,9 +601,13 @@ HTML 파일 하나로(CSS · JS 포함), 미리보기로 바로 볼 수 있게.<
 <li><span class="sn">1</span><div><a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a> → <span class="ui">Sign Up</span> → <span class="ui">Hobby</span>(개인용) → <span class="ui">Continue with GitHub</span></div></li>
 <li><span class="sn">2</span><div>깃허브 창에서 <span class="ui">Authorize Vercel</span>. 저장소 접근을 물으면 <span class="ui">Only select repositories</span>로 오늘 만든 저장소만 골라도 됩니다</div></li>
 <li><span class="sn">3</span><div><span class="ui">Add New</span> → <span class="ui">Project</span> → 내 저장소 옆 <span class="ui">Import</span></div></li>
-<li><span class="sn">4</span><div><span class="ui">Framework Preset</span>은 <span class="ui">Other</span> 그대로 두고 <span class="ui">Deploy</span></div></li>
-<li><span class="sn">5</span><div>1분쯤 뒤 주소가 나옵니다 — <span class="ui mono">프로젝트이름.vercel.app</span></div></li>
+<li><span class="sn">4</span><div><span class="ui">Application Preset</span>은 <span class="ui">Other</span> 그대로 두고 검은 버튼 <span class="ui">Deploy</span>. 메일로 6자리 확인 코드를 물으면 <span class="ui">Send Code</span> → 코드 입력</div></li>
+<li><span class="sn">5</span><div><span class="ui">Deployed to Production</span>이 뜨면 <span class="ui">Continue to Project</span> → <span class="ui">Domains</span> 아래가 내 주소예요</div></li>
 </ol>
+</div>
+<div class="two" style="margin-top:14px">
+<figure class="rshot"><img src="vc_config.jpg" alt="Vercel New Project 설정 화면. Importing from GitHub, Project Name, Root Directory, Application Preset은 Other, 아래에 검은 Deploy 버튼." loading="lazy"><figcaption><b>Import를 누른 뒤</b> — 고칠 것 없이 Deploy (2026.11.20 실제 화면, 계정 이름은 가렸습니다)</figcaption></figure>
+<figure class="rshot"><img src="vc_done.jpg" alt="Vercel 프로젝트 Overview 화면. Domains 아래에 uos-gamma.vercel.app, Status는 Ready, Source는 main 브랜치." loading="lazy"><figcaption><b>수업 중에 직접 해 본 결과</b> — Deploy에서 완료까지 3초. 이 수업 저장소가 <a href="https://uos-gamma.vercel.app" target="_blank" rel="noopener">uos-gamma.vercel.app</a>으로도 열립니다. 이름이 이미 쓰이고 있으면 주소 뒤에 단어가 붙어요.</figcaption></figure>
 </div>
 <p class="when" style="margin-top:8px">Hobby 요금제는 무료이고 개인 · 비상업용만 쓸 수 있어요(수업 실습은 해당). 전화번호 확인이나 2단계 인증 안내가 나오면 직접 하세요. 화면 문구는 조금 다를 수 있습니다.</p>
 <h3 class="sub">W-6 고쳐 본다 <small>2분 · Vercel에서는 아무것도 누르지 않는다</small></h3>
@@ -611,6 +615,7 @@ HTML 파일 하나로(CSS · JS 포함), 미리보기로 바로 볼 수 있게.<
 <li><span class="sn">1</span><div>깃허브 저장소에서 <span class="ui mono">index.html</span>을 열고 연필 아이콘 → 제목 한 줄을 바꾸고 <span class="ui">Commit changes</span></div></li>
 <li><span class="sn">2</span><div>1분쯤 뒤 Vercel 주소를 새로 고칩니다. 바뀌어 있으면 <b>자동 배포</b>가 된 거예요</div></li>
 </ol>
+<figure class="rshot" style="margin-top:12px"><img src="vc_deploys.jpg" alt="Vercel Deployments 화면. 커밋 메시지 한 줄, Ready, Production, main 브랜치가 보인다." loading="lazy"><figcaption><b>Deployments</b> — 커밋 한 번에 한 줄씩 쌓입니다. 방금 깃허브에 올린 커밋 메시지가 그대로 보여요.</figcaption></figure>
 <h3 class="sub">막힐 때 <small>대부분 이름과 기다림의 문제</small></h3>
 <div class="rec-wrap"><table class="rt stk">
 <thead><tr><th style="width:230px">상황</th><th>확인할 것</th><th>이유</th></tr></thead>
